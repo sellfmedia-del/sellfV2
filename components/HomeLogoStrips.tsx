@@ -43,7 +43,7 @@ function LogoStrip({ logos, reverse = false }: { logos: string[]; reverse?: bool
             <img
               src={logo}
               alt={`Brand Logo ${(index % logos.length) + 1}`}
-              className="max-h-8 max-w-full object-contain grayscale opacity-50 transition-[opacity,filter] duration-300 hover:grayscale-0 hover:opacity-90 md:max-h-9"
+              className="max-h-9 max-w-full object-contain grayscale opacity-70 transition-[opacity,filter] duration-300 hover:grayscale-0 hover:opacity-100 md:max-h-10"
             />
           </div>
         ))}
@@ -65,9 +65,7 @@ export default function HomeLogoStrips() {
         }
       `}} />
       <LogoStrip logos={logoRow1} />
-      <div className="border-t border-black/[.08]">
-        <LogoStrip logos={logoRow2} reverse />
-      </div>
+      <LogoStrip logos={logoRow2} reverse />
     </section>
   );
 }
