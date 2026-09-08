@@ -221,7 +221,7 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="bg-[#101313] text-white border-y border-white/[.08]">
+      <section className="bg-[#0c0e0e] text-white border-y border-white/[.08]">
         <div className="grid grid-cols-2 lg:grid-cols-4">
           {t.stats.map((stat, index) => (
             <div
