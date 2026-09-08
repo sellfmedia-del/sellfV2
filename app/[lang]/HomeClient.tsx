@@ -221,8 +221,6 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <HomeLogoStrips />
-
       <section className="bg-[#101313] text-white border-y border-white/[.08]">
         <div className="grid grid-cols-2 lg:grid-cols-4">
           {t.stats.map((stat, index) => (
@@ -236,6 +234,8 @@ export default function HomeClient() {
           ))}
         </div>
       </section>
+
+      <HomeLogoStrips />
 
       <BentoGrid />
       <Ecosystem />
