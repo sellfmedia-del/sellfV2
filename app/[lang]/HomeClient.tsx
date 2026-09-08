@@ -16,16 +16,39 @@ const dict = {
     scrollHint: "Aşağı Kaydır",
     heroTitle: "Büyüme, Veriyle",
     heroHighlight: "İnşa Edildi.",
-    heroDesc: "Sellf bir Ajans değildir. Sellf; sürdürülebilirlik, verimlilik ve ölçülebilir büyüme için partnerinizdir."
+    heroDesc: "Sellf bir Ajans değildir. Sellf; sürdürülebilirlik, verimlilik ve ölçülebilir büyüme için partnerinizdir.",
+    seeWork: "İşlerimizi Gör",
+    trusted: "Global ekiplerin güvendiği büyüme partneri",
+    stats: [
+      { value: "+230%", label: "Ortalama Lead Artışı" },
+      { value: "1:24", label: "ROI (Reklam Harcaması)" },
+      { value: "$12M", label: "Üretilen Brüt Kâr" },
+      { value: "700%", label: "En Yüksek ROI" },
+    ],
   },
   en: {
     videoBtn: "Sound On & Watch Fullscreen",
     scrollHint: "Scroll Down",
     heroTitle: "Growth, Engineered by",
     heroHighlight: "Data.",
-    heroDesc: "Sellf is not an Agency. Sellf is your partner for sustainability, efficiency and measurable growth."
+    heroDesc: "Sellf is not an Agency. Sellf is your partner for sustainability, efficiency and measurable growth.",
+    seeWork: "See Our Work",
+    trusted: "Trusted by ambitious teams around the world",
+    stats: [
+      { value: "+230%", label: "Average Lead Growth" },
+      { value: "1:24", label: "ROI (Ad Spend)" },
+      { value: "$12M", label: "Generated Gross Profit" },
+      { value: "700%", label: "Highest ROI Achieved" },
+    ],
   }
 };
+
+const trustMarks = [
+  { src: "https://cdn.sellfmedia.workers.dev/essentials/logoasce.png", alt: "ASCE GYO" },
+  { src: "https://cdn.sellfmedia.workers.dev/essentials/logofundora.png", alt: "Fundora" },
+  { src: "https://cdn.sellfmedia.workers.dev/essentials/logoinwest.png", alt: "Inwest Group" },
+  { src: "https://cdn.sellfmedia.workers.dev/essentials/logoqashe.png", alt: "Qashe" },
+];
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const heroVideo = "https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4";
@@ -105,6 +128,7 @@ export default function HomeClient() {
               >
                 {t.heroTitle}<br/><span className="text-white/58">{t.heroHighlight}</span>
               </motion.h1>
+
               <motion.p
                 className="mt-9 max-w-[31rem] text-sm md:text-[15px] leading-[1.75] text-white/64"
                 initial={{ opacity: 0, y: 16 }}
@@ -113,6 +137,38 @@ export default function HomeClient() {
               >
                 {t.heroDesc}
               </motion.p>
+
+              <motion.div
+                className="mt-8 flex flex-col gap-6"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.34, ease }}
+              >
+                <a
+                  href={`/${currentLang}/portfolio`}
+                  className="group inline-flex w-fit items-center gap-2 text-[11px] font-semibold text-white/88 underline decoration-white/35 underline-offset-4 transition-colors hover:text-white"
+                >
+                  {t.seeWork}
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                </a>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-2.5">
+                    {trustMarks.map((mark, index) => (
+                      <div
+                        key={mark.alt}
+                        className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-full border border-white/35 bg-white p-1 shadow-[0_4px_14px_rgba(0,0,0,.18)]"
+                        style={{ zIndex: trustMarks.length - index }}
+                      >
+                        <img src={mark.src} alt={mark.alt} className="h-full w-full object-contain grayscale" />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="max-w-[180px] text-[9px] font-semibold uppercase leading-[1.45] tracking-[.18em] text-white/50">
+                    {t.trusted}
+                  </p>
+                </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -125,7 +181,6 @@ export default function HomeClient() {
             </motion.div>
           </div>
 
-          {/* Desktop layout placeholder. The actual video sits absolutely above both columns so it can open across the whole hero. */}
           <div className="min-h-[460px] md:min-h-[650px]" aria-hidden="true" />
 
           <motion.button
@@ -163,6 +218,20 @@ export default function HomeClient() {
               {t.videoBtn} ↗
             </motion.div>
           </motion.button>
+        </div>
+      </section>
+
+      <section className="bg-[#101313] text-white border-y border-white/[.08]">
+        <div className="grid grid-cols-2 lg:grid-cols-4">
+          {t.stats.map((stat, index) => (
+            <div
+              key={stat.value}
+              className={`relative flex min-h-[118px] flex-col items-center justify-center px-4 py-6 text-center ${index > 0 ? "lg:before:absolute lg:before:left-0 lg:before:top-1/2 lg:before:h-12 lg:before:w-px lg:before:-translate-y-1/2 lg:before:bg-white/[.18]" : ""}`}
+            >
+              <div className="text-[2rem] md:text-[2.35rem] font-semibold tracking-[-.045em] leading-none">{stat.value}</div>
+              <div className="mt-2 text-[10px] md:text-[11px] text-white/58">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
