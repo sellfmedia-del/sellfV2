@@ -1,0 +1,137 @@
+name: Render Sellf Offline Reel V6
+
+on:
+  push:
+    branches: [reel-render-v6]
+    paths:
+      - '.github/workflows/render-offline-reel-v6.yml'
+
+permissions:
+  contents: write
+
+env:
+  OUT: reel-output/sellf_hero_reel_v6_cinematic.mp4
+
+jobs:
+  render:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel-render-v6
+
+      - name: Prepare tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --quiet gdown
+          mkdir -p src clips reel-output
+
+      - name: Download selected premium source footage
+        shell: bash
+        run: |
+          set -euo pipefail
+          dl() { gdown "https://drive.google.com/uc?id=$1" -O "$2"; }
+          # Fashion / catalogue / product / lifestyle / event only.
+          dl 1f9kaSmFRlm4iZXNDHKE5uKf94wto28K6 src/umu.mp4
+          dl 1wIbo1BkMATXxqSJExaVRhHCrVlCdcxFf src/moshiqa.mp4
+          dl 1B8h8sCxJMFJF0w3m95aat5ivxhhgYy9o src/stilevs.mp4
+          dl 1MzQj0GgIN7RBeWv-ZWN8n7goPXIaxxbX src/barilla.mp4
+          dl 1KuaY5fyCZNyPgy4HQwT1wwNtVVhm4kOY src/fashion.mp4
+          dl 1X2sUkRWkQQi4yv_3kAOPb_EePDt2pcIN src/mion.mp4
+          dl 17ByjQGmWnAD1rjqLHLdX7rJWskywQcZH src/eataly.mp4
+          dl 13KwB8IEn1Rf0LVYG2NkWe05PphYLwt1a src/tefal.mp4
+          dl 1MxYmNIvvHM2VPmPv02cFul7zc3GY2whL src/unilever.mp4
+          curl -L --fail --retry 3 -o src/hero-original.mp4 https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4
+          curl -L --fail --retry 3 -o src/logo.png https://raw.githubusercontent.com/sellfmedia-del/sellfV2/main/public/logo-beyaz.png
+
+      - name: Build cinematic agency-style cut
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Deliberately no interviews, factory explainers, subtitles or corporate documentary shots.
+          # All cuts are short visual moments: beauty shots, macros, fashion, event atmosphere and b-roll.
+          make_timed() {
+            local input="$1" output="$2" start="$3" len="$4" mode="$5"
+            local vf
+            case "$mode" in
+              cropbottom)
+                vf="crop=iw:ih*0.78:0:0,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1,eq=contrast=1.085:saturation=0.91:brightness=-0.012:gamma=0.985,vignette=PI/11,unsharp=5:5:0.25:5:5:0.0" ;;
+              event)
+                vf="crop=iw:ih*0.86:0:ih*0.02,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1,eq=contrast=1.09:saturation=0.90:brightness=-0.014:gamma=0.98,vignette=PI/10,unsharp=5:5:0.24:5:5:0.0" ;;
+              *)
+                vf="scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1,eq=contrast=1.085:saturation=0.92:brightness=-0.010:gamma=0.985,vignette=PI/11,unsharp=5:5:0.24:5:5:0.0" ;;
+            esac
+            ffmpeg -hide_banner -loglevel error -ss "$start" -i "$input" -t "$len" -vf "$vf" -an -c:v libx264 -preset fast -crf 17 -pix_fmt yuv420p -movflags +faststart "$output" -y
+          }
+
+          make_fraction() {
+            local input="$1" output="$2" fraction="$3" len="$4" mode="$5"
+            local dur start
+            dur=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$input")
+            start=$(python -c 'import sys; D=float(sys.argv[1]); f=float(sys.argv[2]); L=float(sys.argv[3]); print(f"{max(.2,min(D*f,D-L-.3)):.3f}")' "$dur" "$fraction" "$len")
+            make_timed "$input" "$output" "$start" "$len" "$mode"
+          }
+
+          # Opening: graphic fashion/product punch. Shorter durations create a premium reel cadence.
+          make_fraction src/umu.mp4       clips/01.mp4 0.12 1.05 normal
+          make_timed    src/moshiqa.mp4   clips/02.mp4 7.75 1.00 normal
+          make_timed    src/stilevs.mp4   clips/03.mp4 18.45 1.05 normal
+          make_fraction src/barilla.mp4   clips/04.mp4 0.23 1.10 normal
+          make_timed    src/fashion.mp4   clips/05.mp4 37.75 1.05 event
+          make_fraction src/mion.mp4      clips/06.mp4 0.24 1.00 normal
+          make_fraction src/eataly.mp4    clips/07.mp4 0.18 1.10 cropbottom
+          make_fraction src/umu.mp4       clips/08.mp4 0.68 1.05 normal
+
+          # Preserve the user's approved kinetic typography sequence exactly.
+          ffmpeg -hide_banner -loglevel error -ss 6 -i src/hero-original.mp4 -t 8 -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1" -an -c:v libx264 -preset fast -crf 17 -pix_fmt yuv420p clips/09_typography.mp4 -y
+
+          # Second movement: catalogue / food / beauty / event atmosphere; no talking heads.
+          make_timed    src/moshiqa.mp4   clips/10.mp4 22.80 1.05 normal
+          make_timed    src/stilevs.mp4   clips/11.mp4 41.90 1.00 normal
+          make_fraction src/tefal.mp4     clips/12.mp4 0.63 1.05 cropbottom
+          make_timed    src/moshiqa.mp4   clips/13.mp4 46.70 0.95 normal
+          make_timed    src/stilevs.mp4   clips/14.mp4 63.80 1.00 normal
+          make_fraction src/barilla.mp4   clips/15.mp4 0.67 1.05 normal
+          make_fraction src/unilever.mp4  clips/16.mp4 0.62 1.05 normal
+          make_timed    src/fashion.mp4   clips/17.mp4 46.40 1.10 event
+          make_fraction src/eataly.mp4    clips/18.mp4 0.72 1.05 cropbottom
+          make_fraction src/mion.mp4      clips/19.mp4 0.73 1.00 normal
+          make_timed    src/stilevs.mp4   clips/20.mp4 75.30 1.00 normal
+          make_timed    src/fashion.mp4   clips/21.mp4 30.70 1.10 event
+          make_timed    src/moshiqa.mp4   clips/22.mp4 52.80 1.05 normal
+
+          # Clean end card. Logo and domain are visually separated.
+          ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=black:s=1920x1080:r=30:d=3.0 -loop 1 -i src/logo.png -filter_complex "[1:v]scale=360:-1[lg];[0:v][lg]overlay=(W-w)/2:235:shortest=1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='sellfmedia.com':fontcolor=white:fontsize=30:x=(w-text_w)/2:y=785,fade=t=in:st=0:d=0.28,fade=t=out:st=2.55:d=0.45,fps=30,setsar=1" -t 3 -an -c:v libx264 -preset fast -crf 17 -pix_fmt yuv420p clips/23_outro.mp4 -y
+
+          printf "%s\n" \
+            "file '01.mp4'" "file '02.mp4'" "file '03.mp4'" "file '04.mp4'" \
+            "file '05.mp4'" "file '06.mp4'" "file '07.mp4'" "file '08.mp4'" \
+            "file '09_typography.mp4'" \
+            "file '10.mp4'" "file '11.mp4'" "file '12.mp4'" "file '13.mp4'" \
+            "file '14.mp4'" "file '15.mp4'" "file '16.mp4'" "file '17.mp4'" \
+            "file '18.mp4'" "file '19.mp4'" "file '20.mp4'" "file '21.mp4'" \
+            "file '22.mp4'" "file '23_outro.mp4'" > clips/list.txt
+
+          ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i clips/list.txt -an -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -movflags +faststart reel-output/v6_picture.mp4 -y
+
+          # Keep the audio bed from the original approved hero video, as requested.
+          ffmpeg -hide_banner -loglevel error -i reel-output/v6_picture.mp4 -i src/hero-original.mp4 -filter_complex "[1:a]asetpts=N/SR/TB,loudnorm=I=-15:TP=-1.5:LRA=8,afade=t=in:st=0:d=0.20[a]" -map 0:v:0 -map "[a]" -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart "$OUT" -y
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 "$OUT"
+
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sellf-hero-reel-v6-cinematic
+          path: ${{ env.OUT }}
+          if-no-files-found: error
+
+      - name: Publish review release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete reel-v6-cinematic --yes --cleanup-tag 2>/dev/null || true
+          gh release create reel-v6-cinematic "$OUT#Sellf Hero Reel V6 — cinematic cut" --target "$GITHUB_SHA" --title "Sellf Hero Reel V6 Cinematic" --notes "Aesthetic-first agency reel. Corporate interviews/factory explainers removed. Fashion, catalogue, product beauty shots, event atmosphere and b-roll prioritized. Original hero audio retained. No Runway polish yet."
