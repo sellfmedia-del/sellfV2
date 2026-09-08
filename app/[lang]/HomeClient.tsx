@@ -60,6 +60,7 @@ export default function HomeClient() {
   const videoRef = useRef<HTMLIFrameElement>(null);
   const videoContainerRef = useRef<HTMLButtonElement>(null);
   const [videoExpanded, setVideoExpanded] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [videoFrameStyle, setVideoFrameStyle] = useState({ width: "100%", height: "100%" });
 
   const sendVimeoCommand = (method: string, value?: unknown) => {
@@ -69,9 +70,18 @@ export default function HomeClient() {
   };
 
   const ensureVideoPlaying = () => {
-    if (document.fullscreenElement) return;
+    const fullscreenElement = document.fullscreenElement || (document as any).webkitFullscreenElement;
+    if (fullscreenElement === videoContainerRef.current) return;
     sendVimeoCommand("setMuted", true);
     sendVimeoCommand("play");
+  };
+
+  const handleVideoMouseEnter = () => {
+    setVideoExpanded(true);
+    if (!isFullscreen) {
+      sendVimeoCommand("setMuted", true);
+      sendVimeoCommand("play");
+    }
   };
 
   useEffect(() => {
@@ -97,7 +107,15 @@ export default function HomeClient() {
     if (videoContainerRef.current) resizeObserver.observe(videoContainerRef.current);
 
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) {
+      const fullscreenElement = document.fullscreenElement || (document as any).webkitFullscreenElement;
+      const fullscreen = fullscreenElement === videoContainerRef.current;
+      setIsFullscreen(fullscreen);
+
+      if (fullscreen) {
+        sendVimeoCommand("setMuted", false);
+        sendVimeoCommand("setVolume", 1);
+        sendVimeoCommand("play");
+      } else {
         sendVimeoCommand("setMuted", true);
         sendVimeoCommand("play");
       }
@@ -114,12 +132,15 @@ export default function HomeClient() {
 
   const handleVideoClick = () => {
     const video = videoRef.current;
-    if (!video) return;
+    const container = videoContainerRef.current;
+    if (!video || !container) return;
+
     sendVimeoCommand("setMuted", false);
     sendVimeoCommand("setVolume", 1);
     sendVimeoCommand("play");
-    if (video.requestFullscreen) video.requestFullscreen();
-    else if ((video as any).webkitRequestFullscreen) (video as any).webkitRequestFullscreen();
+
+    if (container.requestFullscreen) container.requestFullscreen();
+    else if ((container as any).webkitRequestFullscreen) (container as any).webkitRequestFullscreen();
   };
 
   return (
@@ -205,10 +226,10 @@ export default function HomeClient() {
           <motion.button
             ref={videoContainerRef}
             type="button"
-            onMouseEnter={() => setVideoExpanded(true)}
+            onMouseEnter={handleVideoMouseEnter}
             onMouseLeave={() => setVideoExpanded(false)}
             onClick={handleVideoClick}
-            className={`group z-20 w-full min-h-[460px] md:min-h-[650px] overflow-hidden text-left will-change-[width] lg:absolute lg:inset-y-0 lg:right-0 transition-[width] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "lg:w-full" : "lg:w-[58%]"}`}
+            className={`group z-20 w-full min-h-[460px] md:min-h-[650px] overflow-hidden bg-black text-left will-change-[width] lg:absolute lg:inset-y-0 lg:right-0 transition-[width] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "lg:w-full" : "lg:w-[58%]"}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.08, ease }}
@@ -228,15 +249,15 @@ export default function HomeClient() {
               allowFullScreen
               onLoad={ensureVideoPlaying}
               style={videoFrameStyle}
-              className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-0 transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
+              className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-0 transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${isFullscreen ? "scale-100 grayscale-0 contrast-[1.05]" : videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
             />
 
-            <div className={`absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-500 ${videoExpanded ? "opacity-45" : "opacity-100"}`} />
-            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/32 to-transparent" />
+            <div className={`absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-500 ${isFullscreen ? "opacity-0" : videoExpanded ? "opacity-45" : "opacity-100"}`} />
+            <div className={`absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/32 to-transparent transition-opacity duration-300 ${isFullscreen ? "opacity-0" : "opacity-100"}`} />
 
             <motion.div
-              className="absolute left-6 md:left-10 bottom-6 md:bottom-10 rounded-full border border-white/18 bg-black/22 backdrop-blur-xl px-4 py-2 text-[9px] uppercase tracking-[.18em] text-white/78 shadow-[0_10px_35px_rgba(0,0,0,.16)]"
-              animate={{ opacity: videoExpanded ? 0.94 : 0.78, y: videoExpanded ? -2 : 0 }}
+              className={`absolute left-6 md:left-10 bottom-6 md:bottom-10 rounded-full border border-white/18 bg-black/22 backdrop-blur-xl px-4 py-2 text-[9px] uppercase tracking-[.18em] text-white/78 shadow-[0_10px_35px_rgba(0,0,0,.16)] ${isFullscreen ? "pointer-events-none" : ""}`}
+              animate={{ opacity: isFullscreen ? 0 : videoExpanded ? 0.94 : 0.78, y: videoExpanded && !isFullscreen ? -2 : 0 }}
               transition={{ duration: 0.3 }}
             >
               {t.videoBtn} ↗
