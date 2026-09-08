@@ -24,6 +24,8 @@ jobs:
 
       - name: Prepare tools
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
           python -m pip install --quiet gdown
           ffmpeg -version | head -n 1
           mkdir -p src clips reel-output
@@ -67,6 +69,7 @@ jobs:
             ffmpeg -hide_banner -loglevel error -ss "$start" -i "$input" -t 2.15 -vf "$vf" -an -c:v libx264 -preset fast -crf 19 -pix_fmt yuv420p -movflags +faststart "$output" -y
           }
 
+          # Advertising / product / fashion / event first. Every source appears only once.
           make_clip src/umu.mp4          clips/01.mp4 0.45 normal
           make_clip src/stilevs.mp4      clips/02.mp4 0.32 normal
           make_clip src/barilla.mp4      clips/03.mp4 0.55 normal
@@ -75,16 +78,18 @@ jobs:
           make_clip src/tefal.mp4        clips/06.mp4 0.52 normal
           make_clip src/castrol.mp4      clips/07.mp4 0.42 event
 
+          # Preserve the requested original typographic sequence exactly: 00:06–00:14.
           ffmpeg -hide_banner -loglevel error -ss 6 -i src/hero-original.mp4 -t 8 -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1" -an -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p clips/08_typography.mp4 -y
 
           make_clip src/moshiqa.mp4      clips/09.mp4 0.58 normal
           make_clip src/unilever.mp4     clips/10.mp4 0.48 normal
-          make_clip src/eataly.mp4       clips/11.mp4 0.56 normal
+          make_clip src/eataly.mp4       clips/11.mp4 0.56 event
           make_clip src/magazacilik.mp4  clips/12.mp4 0.43 event
           make_clip src/helal.mp4        clips/13.mp4 0.52 event
           make_clip src/cagdas.mp4       clips/14.mp4 0.44 normal
           make_clip src/disan.mp4        clips/15.mp4 0.55 normal
 
+          # Clean end card: logo + sellfmedia.com only.
           ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=black:s=1920x1080:r=30:d=3 -loop 1 -i src/logo.png -filter_complex "[1:v]scale=500:-1[lg];[0:v][lg]overlay=(W-w)/2:(H-h)/2-45:shortest=1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='sellfmedia.com':fontcolor=white:fontsize=29:x=(w-text_w)/2:y=h/2+115,fade=t=in:st=0:d=0.35,fade=t=out:st=2.55:d=0.45,fps=30,setsar=1" -t 3 -an -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p clips/16_outro.mp4 -y
 
           printf "%s\n" \
