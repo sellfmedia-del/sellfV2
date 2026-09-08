@@ -26,6 +26,7 @@ jobs:
           gh run download 34270194368 --name sellf-hero-reel-v7-1-clean-typography --dir tmp
           cp tmp/runway/01_fashion_umu.mp4 public/runway-temp/
           cp tmp/runway/02_product_stilevs.mp4 public/runway-temp/
+          cp tmp/runway/03_event_fashion.mp4 public/runway-temp/
           cp tmp/runway/04_moshiqa_detail.mp4 public/runway-temp/
           cp tmp/runway/05_eataly_macro.mp4 public/runway-temp/
           cp tmp/runway/06_barilla_lifestyle.mp4 public/runway-temp/
