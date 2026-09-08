@@ -24,14 +24,14 @@ jobs:
         shell: bash
         run: |
           set -e
-          script -q -c "vercel login" /tmp/vercel-login-session.txt &
+          script -q -c "vercel login --no-color" /dev/null > /tmp/vercel-login-live.txt 2>&1 &
           LOGIN_PID=$!
           PUBLISHED=0
-          for i in $(seq 1 60); do
+          for i in $(seq 1 90); do
             sleep 1
-            if [ -f /tmp/vercel-login-session.txt ]; then
-              sed -E 's/\x1B\[[0-9;?]*[ -\/]*[@-~]//g' /tmp/vercel-login-session.txt | tr -d '\r' > vercel-login.txt || true
-              if grep -Eqi 'https?://|device|code|log in|login' vercel-login.txt; then
+            if [ -s /tmp/vercel-login-live.txt ]; then
+              sed -E 's/\x1B\[[0-9;?]*[ -\/]*[@-~]//g' /tmp/vercel-login-live.txt | tr -d '\r' > vercel-login.txt || true
+              if grep -Eq 'https://vercel\.com/oauth/device\?user_code=' vercel-login.txt; then
                 git config user.name "github-actions[bot]"
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                 git add vercel-login.txt
@@ -43,10 +43,11 @@ jobs:
             fi
           done
           if [ "$PUBLISHED" -ne 1 ]; then
-            echo "Could not capture Vercel login instructions" >&2
+            cat /tmp/vercel-login-live.txt || true
             kill "$LOGIN_PID" || true
             exit 1
           fi
+          cat vercel-login.txt
           wait "$LOGIN_PID"
       - name: Link existing V2 project
         run: vercel link --yes --project sellfwebsitev2
