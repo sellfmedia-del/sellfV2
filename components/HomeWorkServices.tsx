@@ -7,13 +7,15 @@ import { serviceData } from "@/data/ServiceData";
 const dict = {
   tr: {
     expertise: "Uzmanlığımız",
-    whatWeDo: "Genelde Ne ",
-    whatWeDoSpan: "Yaparız...",
+    worksKicker: "Seçili İşler",
+    worksTitle: "KANIT,\nİŞLERİMİZDE.",
+    operations: "Operasyonlarımız.",
   },
   en: {
     expertise: "Our Expertise",
-    whatWeDo: "What we usually ",
-    whatWeDoSpan: "Do...",
+    worksKicker: "Selected Works",
+    worksTitle: "THE PROOF IS IN\nOUR WORKS.",
+    operations: "Our Operations.",
   },
 };
 
@@ -124,17 +126,6 @@ export default function HomeWorkServices() {
           padding: 0 !important;
         }
         .home-work-services .home-work > .sellf-container > .grid:first-child {
-          display: block !important;
-          margin: 0 0 24px !important;
-          padding-top: 12px;
-        }
-        .home-work-services .home-work > .sellf-container > .grid:first-child .sellf-display {
-          font-size: clamp(2.15rem, 3vw, 3.15rem) !important;
-          line-height: .94 !important;
-          max-width: 8.5ch;
-          letter-spacing: -.055em;
-        }
-        .home-work-services .home-work > .sellf-container > .grid:first-child > div:last-child {
           display: none !important;
         }
         .home-work-services .home-work > .sellf-container > .grid:nth-child(2) {
@@ -166,6 +157,50 @@ export default function HomeWorkServices() {
         .home-work-services .home-work article > div:first-child {
           height: 47% !important;
           border-radius: 11px 11px 0 0;
+        }
+        .home-work-services .home-work article > div:first-child > div:first-child {
+          background-size: cover !important;
+          background-position: center !important;
+        }
+        .home-work-services .home-work article:nth-child(1) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/fDFrmPe1sOA/download?force=true&w=1200") !important;
+          background-position: center 45% !important;
+        }
+        .home-work-services .home-work article:nth-child(2) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/eiur1LM3KLw/download?force=true&w=1200") !important;
+          background-position: center !important;
+        }
+        .home-work-services .home-work article:nth-child(3) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/PKMvkg7vnUo/download?force=true&w=1200") !important;
+          background-position: center 32% !important;
+        }
+        .home-work-services .home-work article:nth-child(4) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/W-7k72ThEr0/download?force=true&w=1200") !important;
+          background-position: center !important;
+        }
+        .home-work-services .home-work article:nth-child(6) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/KCLuRlZxITU/download?force=true&w=1200") !important;
+          background-position: center 38% !important;
+        }
+        .home-work-services .home-work article:nth-child(7) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/j6XRT3kA_64/download?force=true&w=1200") !important;
+          background-position: center 35% !important;
+        }
+        .home-work-services .home-work article:nth-child(8) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/pwcKF7L4-no/download?force=true&w=1200") !important;
+          background-position: center !important;
+        }
+        .home-work-services .home-work article:nth-child(9) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/EtOMMg1nSR8/download?force=true&w=1200") !important;
+          background-position: center 52% !important;
+        }
+        .home-work-services .home-work article:nth-child(10) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/9e9PD9blAto/download?force=true&w=1200") !important;
+          background-position: center !important;
+        }
+        .home-work-services .home-work article:nth-child(12) > div:first-child > div:first-child {
+          background-image: url("https://unsplash.com/photos/Sc5RKXLBjGg/download?force=true&w=1200") !important;
+          background-position: center !important;
         }
         .home-work-services .home-work article > .relative.z-10 {
           min-height: 326px !important;
@@ -213,6 +248,12 @@ export default function HomeWorkServices() {
 
       <div className="grid lg:grid-cols-[minmax(0,1.42fr)_minmax(0,1fr)]">
         <div className="min-w-0 px-5 py-11 sm:px-8 md:px-9 md:py-12 lg:border-r lg:border-black/[.045] lg:px-10 lg:py-14 xl:px-12 xl:py-16">
+          <div className="mb-6 md:mb-7">
+            <p className="sellf-kicker mb-3 text-black/38">{t.worksKicker}</p>
+            <h2 className="sellf-display whitespace-pre-line max-w-[10ch] text-[2.2rem] leading-[.94] tracking-[-.055em] text-black sm:text-[2.55rem] xl:text-[3.15rem]">
+              {t.worksTitle}
+            </h2>
+          </div>
           <BentoGrid />
         </div>
 
@@ -220,7 +261,7 @@ export default function HomeWorkServices() {
           <div className="mb-7 md:mb-8">
             <p className="sellf-kicker mb-3 text-black/38">{t.expertise}</p>
             <h2 className="sellf-display max-w-[10.5ch] text-[2.2rem] leading-[.94] tracking-[-.055em] text-black sm:text-[2.55rem] xl:text-[2.9rem]">
-              {t.whatWeDo}<span className="text-black/34">{t.whatWeDoSpan}</span>
+              {t.operations}
             </h2>
           </div>
 
