@@ -50,11 +50,26 @@ export default function HomeClient() {
     };
   }, []);
 
+  const handleVideoEnter = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.controls = false;
+    void video.play().catch(() => undefined);
+  };
+
+  const handleVideoLeave = () => {
+    const video = videoRef.current;
+    if (!video || document.fullscreenElement) return;
+    video.pause();
+  };
+
   const handleVideoClick = () => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = false;
     video.controls = true;
+    void video.play().catch(() => undefined);
     if (video.requestFullscreen) video.requestFullscreen();
     else if ((video as any).webkitRequestFullscreen) (video as any).webkitRequestFullscreen();
   };
@@ -102,20 +117,26 @@ export default function HomeClient() {
 
           <motion.button
             type="button"
+            onMouseEnter={handleVideoEnter}
+            onMouseLeave={handleVideoLeave}
             onClick={handleVideoClick}
-            className="group relative min-h-[460px] md:min-h-[650px] overflow-hidden text-left"
+            className="group relative min-h-[460px] md:min-h-[650px] overflow-hidden text-left will-change-transform"
             initial={{ opacity: 0, scale: 1.015 }}
             animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.008 }}
             transition={{ duration: 1.15, delay: 0.12, ease }}
           >
             <video
               ref={videoRef}
               src="https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4"
               poster="https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png"
-              autoPlay loop muted playsInline
-              className="absolute inset-0 h-full w-full object-cover grayscale-[14%] contrast-[1.03] transition-transform duration-[1600ms] ease-out group-hover:scale-[1.022]"
+              preload="auto"
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover grayscale-[14%] contrast-[1.03] transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.035] group-hover:grayscale-0 group-hover:contrast-[1.06]"
             />
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-700 group-hover:opacity-70" />
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/28 to-transparent" />
             <motion.div
               className="absolute left-6 md:left-10 bottom-6 md:bottom-10 rounded-full border border-white/18 bg-black/22 backdrop-blur-xl px-4 py-2 text-[9px] uppercase tracking-[.18em] text-white/78 shadow-[0_10px_35px_rgba(0,0,0,.16)]"
