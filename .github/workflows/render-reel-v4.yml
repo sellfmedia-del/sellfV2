@@ -1,0 +1,160 @@
+name: Render Sellf Reel V4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/render-reel-v4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install --quiet gdown
+
+      - name: Download source footage
+        run: |
+          mkdir -p /tmp/reel/src /tmp/reel/clips
+          python - <<'PY'
+          import gdown, os
+          files = {
+            'umu.mp4': '1f9kaSmFRlm4iZXNDHKE5uKf94wto28K6',
+            'barilla.mp4': '1MzQj0GgIN7RBeWv-ZWN8n7goPXIaxxbX',
+            'tefal.mp4': '12gS7ZX6J8w86jpe3CTtuqdGTLyuZ8XXC',
+            'stilevs.mp4': '1B8h8sCxJMFJF0w3m95aat5ivxhhgYy9o',
+            'moshiqa.mp4': '1wIbo1BkMATXxqSJExaVRhHCrVlCdcxFf',
+            'fashion.mp4': '1KuaY5fyCZNyPgy4HQwT1wwNtVVhm4kOY',
+            'magazacilik.mp4': '1fbFmlBz8H_WHiG851gCJVOMfpptujbS2',
+            'eataly.mp4': '17ByjQGmWnAD1rjqLHLdX7rJWskywQcZH',
+            'inan.mp4': '1BdXku1ErdKtX_oaeqm_sQZAzAhAfBL1j',
+          }
+          for name, fid in files.items():
+              out = f'/tmp/reel/src/{name}'
+              print('Downloading', name)
+              got = gdown.download(id=fid, output=out, quiet=False, fuzzy=True)
+              if not got or not os.path.exists(out):
+                  raise SystemExit(f'Failed to download {name}')
+          PY
+          curl -L --fail --retry 3 -o /tmp/reel/src/hero-original.mp4 'https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4'
+          curl -L --fail --retry 3 -o /tmp/reel/src/logo.png 'https://raw.githubusercontent.com/sellfmedia-del/sellfV2/main/public/logo-beyaz.png'
+
+      - name: Build unique-shot offline cut
+        run: |
+          python - <<'PY'
+          import subprocess, json, os, math
+
+          SRC='/tmp/reel/src'
+          CL='/tmp/reel/clips'
+          os.makedirs(CL, exist_ok=True)
+
+          def duration(path):
+              out=subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','json',path])
+              return float(json.loads(out)['format']['duration'])
+
+          def make_clip(idx, filename, pct, length=1.45, crop_bottom=False):
+              path=f'{SRC}/{filename}'
+              d=duration(path)
+              start=max(0.0, min(d-length-0.15, d*pct))
+              if crop_bottom:
+                  vf="crop=iw:ih*0.88:0:0,scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1,fps=30"
+              else:
+                  vf="scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1,fps=30"
+              out=f'{CL}/{idx:02d}.mp4'
+              subprocess.run([
+                  'ffmpeg','-y','-loglevel','error','-ss',f'{start:.3f}','-i',path,'-t',str(length),
+                  '-vf',vf,'-an','-c:v','libx264','-preset','veryfast','-crf','20','-pix_fmt','yuv420p',out
+              ],check=True)
+              print(idx, filename, 'start', round(start,2), 'dur', length)
+
+          # Every entry is a distinct time range. Commercial/product/fashion/event dominate by design.
+          timeline = [
+              ('umu.mp4',        0.12, 1.45, False),
+              ('barilla.mp4',    0.16, 1.45, False),
+              ('tefal.mp4',      0.12, 1.45, False),
+              ('stilevs.mp4',    0.15, 1.45, False),
+              ('moshiqa.mp4',    0.18, 1.45, False),
+              ('fashion.mp4',    0.18, 1.45, True),
+              ('magazacilik.mp4',0.22, 1.45, True),
+              ('eataly.mp4',     0.18, 1.45, True),
+              ('umu.mp4',        0.52, 1.45, False),
+              ('barilla.mp4',    0.48, 1.45, False),
+              ('tefal.mp4',      0.43, 1.45, False),
+          ]
+          for i, args in enumerate(timeline,1):
+              make_clip(i,*args)
+
+          # Exact original typographic punctuation section: 00:06-00:14.
+          subprocess.run([
+              'ffmpeg','-y','-loglevel','error','-ss','6','-i',f'{SRC}/hero-original.mp4','-t','8',
+              '-vf','scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1,fps=30',
+              '-an','-c:v','libx264','-preset','veryfast','-crf','18','-pix_fmt','yuv420p',f'{CL}/12.mp4'
+          ],check=True)
+
+          after = [
+              ('stilevs.mp4',    0.54, 1.45, False),
+              ('moshiqa.mp4',    0.58, 1.45, False),
+              ('fashion.mp4',    0.45, 1.45, True),
+              ('magazacilik.mp4',0.53, 1.45, True),
+              ('eataly.mp4',     0.53, 1.45, True),
+              ('umu.mp4',        0.82, 1.45, False),
+              ('tefal.mp4',      0.72, 1.45, False),
+              ('barilla.mp4',    0.76, 1.45, False),
+              ('fashion.mp4',    0.74, 1.45, True),
+              ('magazacilik.mp4',0.78, 1.45, True),
+              ('inan.mp4',       0.38, 1.45, False),
+              ('stilevs.mp4',    0.82, 1.45, False),
+          ]
+          for j,args in enumerate(after,13):
+              make_clip(j,*args)
+
+          # Clean outro: official logo only + sellfmedia.com. No "Sellf Media" subtitle.
+          subprocess.run([
+              'ffmpeg','-y','-loglevel','error','-f','lavfi','-i','color=c=black:s=1280x720:r=30:d=2.8',
+              '-loop','1','-i',f'{SRC}/logo.png','-t','2.8',
+              '-filter_complex',
+              "[1:v]scale=320:-1[lg];[0:v][lg]overlay=(W-w)/2:(H-h)/2-34:format=auto,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='sellfmedia.com':fontcolor=white:fontsize=26:x=(w-text_w)/2:y=(h/2)+92:alpha='if(lt(t,0.35),t/0.35,if(gt(t,2.35),(2.8-t)/0.45,1))'",
+              '-an','-c:v','libx264','-preset','veryfast','-crf','18','-pix_fmt','yuv420p',f'{CL}/25.mp4'
+          ],check=True)
+
+          # Validate count and build concat list.
+          expected=25
+          files=[f'{CL}/{i:02d}.mp4' for i in range(1,expected+1)]
+          missing=[x for x in files if not os.path.exists(x)]
+          if missing: raise SystemExit('Missing clips: '+str(missing))
+          with open('/tmp/reel/concat.txt','w') as f:
+              for p in files: f.write(f"file '{p}'\n")
+          PY
+
+          ffmpeg -y -loglevel error -f concat -safe 0 -i /tmp/reel/concat.txt \
+            -an -c:v libx264 -preset medium -crf 21 -pix_fmt yuv420p -movflags +faststart \
+            /tmp/reel/sellf_hero_reel_v4_offline.mp4
+
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 /tmp/reel/sellf_hero_reel_v4_offline.mp4
+
+      - name: Publish preview release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG='reel-v4-offline'
+          gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" /tmp/reel/sellf_hero_reel_v4_offline.mp4 \
+            --title 'Sellf Hero Reel V4 Offline' \
+            --notes 'Offline review cut. No music. Unique shots only. Runway polish intentionally not applied yet.'
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sellf-hero-reel-v4-offline
+          path: /tmp/reel/sellf_hero_reel_v4_offline.mp4
+          retention-days: 7
