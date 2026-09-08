@@ -1,0 +1,78 @@
+name: Render Sellf Reel V7.2 Watermark-Free Typography
+
+on:
+  push:
+    branches: [reel-render-v7-1]
+    paths:
+      - '.github/workflows/render-offline-reel-v7-2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel-render-v7-1
+
+      - name: Prepare tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          mkdir -p work output
+
+      - name: Build V7.2 from approved V7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 -o work/v7_1.mp4 \
+            https://github.com/sellfmedia-del/sellfV2/releases/download/reel-v7-1-clean/sellf_hero_reel_v7_1_clean_typography.mp4
+
+          # V7.1 picture timing places the 8-second typography block at 06.391-14.391.
+          # The Clideo watermark sits entirely in the bottom strip of that source block.
+          # Instead of blurring, cloning, or inpainting over the typography, remove the contaminated
+          # strip from the frame and use a 16:9 optical punch-in so the actual typography remains clean.
+          ffmpeg -hide_banner -loglevel error -i work/v7_1.mp4 -t 6.391 \
+            -vf "fps=30,setsar=1" -an -c:v libx264 -preset medium -crf 16 -pix_fmt yuv420p work/pre.mp4 -y
+
+          ffmpeg -hide_banner -loglevel error -ss 6.391 -i work/v7_1.mp4 -t 8.000 \
+            -vf "crop=1600:900:160:0,scale=1920:1080:flags=lanczos,fps=30,setsar=1" \
+            -an -c:v libx264 -preset medium -crf 15 -pix_fmt yuv420p work/typography_clean.mp4 -y
+
+          ffmpeg -hide_banner -loglevel error -ss 14.391 -i work/v7_1.mp4 \
+            -vf "fps=30,setsar=1" -an -c:v libx264 -preset medium -crf 16 -pix_fmt yuv420p work/post.mp4 -y
+
+          printf "%s\n" "file 'pre.mp4'" "file 'typography_clean.mp4'" "file 'post.mp4'" > work/list.txt
+          ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i work/list.txt -an \
+            -c:v libx264 -preset medium -crf 16 -pix_fmt yuv420p -movflags +faststart work/picture.mp4 -y
+
+          ffmpeg -hide_banner -loglevel error -i work/picture.mp4 -i work/v7_1.mp4 \
+            -map 0:v:0 -map 1:a:0? -c:v copy -c:a copy -shortest -movflags +faststart \
+            output/sellf_hero_reel_v7_2_watermark_free.mp4 -y
+
+          ffmpeg -hide_banner -loglevel error -ss 11 -i output/sellf_hero_reel_v7_2_watermark_free.mp4 \
+            -frames:v 1 -q:v 2 output/typography_qc_v7_2.jpg -y
+
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 output/sellf_hero_reel_v7_2_watermark_free.mp4
+
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sellf-hero-reel-v7-2-watermark-free
+          path: output/*
+          if-no-files-found: error
+
+      - name: Publish review release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete reel-v7-2-clean --yes --cleanup-tag 2>/dev/null || true
+          gh release create reel-v7-2-clean \
+            "output/sellf_hero_reel_v7_2_watermark_free.mp4#Sellf Hero Reel V7.2 — watermark-free typography" \
+            "output/typography_qc_v7_2.jpg#Typography QC frame" \
+            --target "$GITHUB_SHA" \
+            --title "Sellf Hero Reel V7.2 Watermark-Free Typography" \
+            --notes "Same approved V7.1 edit. Only the typography block is reframed with a clean optical punch-in that excludes the Clideo watermark. No Runway credits used."
