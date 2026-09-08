@@ -30,37 +30,63 @@ export default function ServicesClient() {
   const activeServiceData = serviceData.find((s) => s.id === selectedId);
 
   return (
-    <main className="min-h-screen bg-[#f1f0ec] pt-28 md:pt-36 pb-20 md:pb-28">
+    <main className="min-h-screen bg-white pb-20 pt-28 md:pb-28 md:pt-36">
       <section className="sellf-container">
-        <div className="grid lg:grid-cols-[.72fr_1.28fr] gap-10 lg:gap-16 items-end mb-12 md:mb-16">
+        <div className="grid items-end gap-8 border-b border-black/[.07] pb-10 md:pb-14 lg:grid-cols-[1.08fr_.92fr] lg:gap-20">
           <div>
-            <p className="sellf-kicker text-black/45 mb-5">{t.expertise}</p>
-            <h1 className="sellf-display text-5xl md:text-7xl lg:text-8xl text-black">
-              {t.whatWeDo}<span className="text-black/35">{t.whatWeDoSpan}</span>
+            <p className="sellf-kicker mb-5 text-black/38">{t.expertise}</p>
+            <h1 className="sellf-display max-w-[10ch] text-[3.35rem] leading-[.9] tracking-[-.06em] text-black sm:text-6xl md:text-7xl lg:text-[5.4rem]">
+              {t.whatWeDo}<span className="text-black/30">{t.whatWeDoSpan}</span>
             </h1>
           </div>
-          <div className="hidden lg:block h-px bg-black/15 mb-2" />
+          <div className="hidden lg:flex items-end justify-end pb-1">
+            <div className="flex w-full max-w-sm items-center gap-4">
+              <span className="h-px flex-1 bg-black/[.08]" />
+              <span className="text-[9px] font-medium tracking-[.16em] text-black/25">01 — 08</span>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-l border-t border-black/15 bg-[#f8f7f3]">
-          {services.map((service, index) => (
-            <motion.button
-              key={service.id}
-              type="button"
-              layoutId={service.id}
-              onClick={() => setSelectedId(service.id)}
-              className="group min-h-[260px] md:min-h-[300px] text-left border-r border-b border-black/15 p-6 flex flex-col justify-between hover:bg-white transition-colors"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <span className="text-[9px] uppercase tracking-[.18em] text-black/35">0{index + 1}</span>
-                <span className="text-sm text-black/35 group-hover:text-black transition-colors">↗</span>
-              </div>
-              <div className="relative w-20 h-20 md:w-24 md:h-24 grayscale opacity-65 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105 origin-left">
-                <Image src={service.icon} alt={service.title[currentLang]} fill className="object-contain object-left" unoptimized />
-              </div>
-              <h2 className="text-lg md:text-xl font-semibold tracking-[-.035em] leading-tight max-w-[14ch]">{service.title[currentLang]}</h2>
-            </motion.button>
-          ))}
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {services.map((service, index) => {
+            const detail = serviceData.find((item) => item.id === service.id);
+
+            return (
+              <motion.button
+                key={service.id}
+                type="button"
+                layoutId={service.id}
+                onClick={() => setSelectedId(service.id)}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative flex min-h-[300px] overflow-hidden rounded-[18px] border border-black/[.055] bg-[#f7f7f4] p-5 text-left shadow-[0_2px_12px_rgba(11,13,13,.018)] transition-[background-color,border-color,box-shadow] duration-300 hover:border-black/[.10] hover:bg-white hover:shadow-[0_16px_38px_rgba(11,13,13,.065)] md:min-h-[330px] md:p-6"
+              >
+                <div className="flex w-full flex-col">
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-[9px] font-medium uppercase tracking-[.18em] text-black/25">0{index + 1}</span>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[.07] bg-white/75 text-[12px] text-black/35 transition-all duration-300 group-hover:border-black/15 group-hover:bg-black group-hover:text-white">↗</span>
+                  </div>
+
+                  <div className="mt-8 flex h-[86px] items-center md:mt-10 md:h-[94px]">
+                    <div className="relative h-16 w-20 origin-left grayscale opacity-80 transition-[filter,opacity,transform] duration-300 group-hover:scale-[1.06] group-hover:grayscale-0 group-hover:opacity-100 md:h-[72px] md:w-24">
+                      <Image src={service.icon} alt={service.title[currentLang]} fill className="object-contain object-left" unoptimized />
+                    </div>
+                  </div>
+
+                  <div className="mt-auto pt-8">
+                    <h2 className="max-w-[15ch] text-[1.08rem] font-semibold leading-[1.08] tracking-[-.04em] text-black md:text-[1.2rem]">
+                      {service.title[currentLang]}
+                    </h2>
+                    {detail && (
+                      <p className="mt-3 line-clamp-3 max-w-[30ch] text-[10px] leading-[1.5] text-black/42 md:text-[11px]">
+                        {detail.heroText[currentLang]}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </motion.button>
+            );
+          })}
         </div>
       </section>
 
