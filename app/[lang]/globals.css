@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/*
+  Sellf Website V2 visual system.
+  Important: route/content/business logic is intentionally unchanged.
+  The redesign lives almost entirely in shared visual tokens + component markup.
+*/
+@theme {
+  --color-sellf-primary: #1f5f9f;
+  --color-sellf-accent: #6ea7d5;
+  --color-sellf-grey: #747877;
+  --color-sellf-black: #0b0d0d;
+  --color-sellf-surface: #f1f0ec;
+  --color-sellf-white: #fbfaf7;
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --sellf-ink: #0b0d0d;
+  --sellf-paper: #f1f0ec;
+  --sellf-card: #f8f7f3;
+  --sellf-line: rgba(11, 13, 13, 0.14);
+  --sellf-line-dark: rgba(255, 255, 255, 0.13);
+  --sellf-muted: #747877;
+  --sellf-radius: 22px;
+  --sellf-max: 1400px;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--sellf-paper);
+  }
+
+  body {
+    margin: 0;
+    background: var(--sellf-paper);
+    color: var(--sellf-ink);
+    font-family: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    color: #fff;
+    background: #1f5f9f;
+  }
+
+  a, button { -webkit-tap-highlight-color: transparent; }
+}
+
+@layer utilities {
+  .sellf-container {
+    width: min(calc(100% - 2rem), var(--sellf-max));
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .sellf-container { width: min(calc(100% - 5rem), var(--sellf-max)); }
+  }
+
+  .sellf-kicker {
+    @apply text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.28em];
+  }
+
+  .sellf-display {
+    @apply font-semibold tracking-[-0.055em] leading-[0.95];
+  }
+
+  .sellf-rule { border-color: var(--sellf-line); }
+  .sellf-rule-dark { border-color: var(--sellf-line-dark); }
+
+  .sellf-card {
+    background: var(--sellf-card);
+    border: 1px solid var(--sellf-line);
+    border-radius: var(--sellf-radius);
+  }
+
+  .sellf-btn-dark,
+  .sellf-btn-light {
+    @apply inline-flex items-center justify-center gap-3 rounded-full px-5 py-3 text-xs font-semibold transition-all duration-300;
+  }
+
+  .sellf-btn-dark {
+    color: #fff;
+    background: var(--sellf-ink);
+    border: 1px solid var(--sellf-ink);
+  }
+
+  .sellf-btn-dark:hover { transform: translateY(-1px); background: #1a1d1c; }
+
+  .sellf-btn-light {
+    color: var(--sellf-ink);
+    background: #fff;
+    border: 1px solid rgba(255,255,255,.5);
+  }
+
+  .sellf-btn-light:hover { transform: translateY(-1px); background: #f5f4f0; }
+
+  .sellf-link {
+    @apply inline-flex items-center gap-2 border-b border-current pb-1 text-xs font-semibold transition-opacity duration-300;
+  }
+  .sellf-link:hover { opacity: .62; }
+
+  .sellf-noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .07;
+    mix-blend-mode: soft-light;
+    background-image: radial-gradient(rgba(255,255,255,.5) .6px, transparent .6px);
+    background-size: 5px 5px;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { scrollbar-width: none; }
+}

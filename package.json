@@ -1,0 +1,40 @@
+{
+  "name": "sellfwebsitev2",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
+    "@heroicons/react": "^2.2.0",
+    "@next/third-parties": "^16.1.6",
+    "@portabletext/react": "^6.0.3",
+    "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^4.22.0",
+    "@vercel/speed-insights": "^1.3.1",
+    "framer-motion": "^12.34.5",
+    "next": "16.1.6",
+    "next-sanity": "^11.6.12",
+    "nodemailer": "^8.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "recharts": "^3.7.0",
+    "sanity": "^4.22.0",
+    "styled-components": "^6.3.11"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.11",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
