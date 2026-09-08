@@ -4,6 +4,6 @@ Vercel CLI 59.11.7 (Node.js 22.23.2)
 > You can learn more, including how to opt-out if you'd not like to participate in this program, by visiting the following URL:
 > https://vercel.com/docs/cli/about-telemetry
 > 
-  Visit https://vercel.com/oauth/device?user_code=CXPK-QSMS
+  Visit https://vercel.com/oauth/device?user_code=FLHQ-NXTB
 
 - Waiting for authentication...
