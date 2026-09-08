@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import BentoGrid from "@/components/BentoGrid";
@@ -28,20 +28,42 @@ const dict = {
 };
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const heroVideo = "https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4";
 
 export default function HomeClient() {
   const params = useParams();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoExpanded, setVideoExpanded] = useState(false);
+
+  const ensureVideoPlaying = () => {
+    const video = videoRef.current;
+    if (!video || document.fullscreenElement) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.controls = false;
+    void video.play().catch(() => undefined);
+  };
 
   useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.load();
+      void video.play().catch(() => undefined);
+    }
+
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement && videoRef.current) {
         videoRef.current.muted = true;
         videoRef.current.controls = false;
+        void videoRef.current.play().catch(() => undefined);
       }
     };
+
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     return () => {
@@ -49,20 +71,6 @@ export default function HomeClient() {
       document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
     };
   }, []);
-
-  const handleVideoEnter = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = true;
-    video.controls = false;
-    void video.play().catch(() => undefined);
-  };
-
-  const handleVideoLeave = () => {
-    const video = videoRef.current;
-    if (!video || document.fullscreenElement) return;
-    video.pause();
-  };
 
   const handleVideoClick = () => {
     const video = videoRef.current;
@@ -76,12 +84,14 @@ export default function HomeClient() {
 
   return (
     <div className="w-full bg-sellf-surface overflow-hidden">
+      <link rel="preload" href={heroVideo} as="video" type="video/mp4" />
       <link rel="preload" href="https://res.cloudinary.com/doal5qa8c/image/upload/f_auto,q_auto/v1777887416/Screenshot_2026-05-04_at_12.36.49_PM_ehtznc.png" as="image" fetchPriority="high" />
 
       <section className="home-hero relative bg-[#0b0d0d] text-white pt-24 md:pt-28">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(255,255,255,.055),transparent_32%)]" />
-        <div className="sellf-container relative grid lg:grid-cols-[.84fr_1.16fr]">
-          <div className="min-h-[560px] md:min-h-[650px] px-5 py-16 md:px-10 md:py-24 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/[.07]">
+
+        <div className="sellf-container relative grid lg:grid-cols-[.84fr_1.16fr] overflow-hidden">
+          <div className="relative z-0 min-h-[560px] md:min-h-[650px] px-5 py-16 md:px-10 md:py-24 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/[.07]">
             <motion.div
               initial={{ opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
@@ -115,33 +125,40 @@ export default function HomeClient() {
             </motion.div>
           </div>
 
+          {/* Desktop layout placeholder. The actual video sits absolutely above both columns so it can open across the whole hero. */}
+          <div className="min-h-[460px] md:min-h-[650px]" aria-hidden="true" />
+
           <motion.button
             type="button"
-            onMouseEnter={handleVideoEnter}
-            onMouseLeave={handleVideoLeave}
+            onMouseEnter={() => setVideoExpanded(true)}
+            onMouseLeave={() => setVideoExpanded(false)}
             onClick={handleVideoClick}
-            className="group relative min-h-[460px] md:min-h-[650px] overflow-hidden text-left will-change-transform"
-            initial={{ opacity: 0, scale: 1.015 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.008 }}
-            transition={{ duration: 1.15, delay: 0.12, ease }}
+            className={`group z-20 w-full min-h-[460px] md:min-h-[650px] overflow-hidden text-left will-change-[width] lg:absolute lg:inset-y-0 lg:right-0 transition-[width] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "lg:w-full" : "lg:w-[58%]"}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.08, ease }}
           >
             <video
               ref={videoRef}
-              src="https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4"
+              src={heroVideo}
               poster="https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png"
               preload="auto"
+              autoPlay
               loop
               muted
               playsInline
-              className="absolute inset-0 h-full w-full object-cover grayscale-[14%] contrast-[1.03] transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.035] group-hover:grayscale-0 group-hover:contrast-[1.06]"
+              onLoadedData={ensureVideoPlaying}
+              onCanPlay={ensureVideoPlaying}
+              className={`absolute inset-0 h-full w-full object-cover transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
             />
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-700 group-hover:opacity-70" />
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/28 to-transparent" />
+
+            <div className={`absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-500 ${videoExpanded ? "opacity-45" : "opacity-100"}`} />
+            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/32 to-transparent" />
+
             <motion.div
               className="absolute left-6 md:left-10 bottom-6 md:bottom-10 rounded-full border border-white/18 bg-black/22 backdrop-blur-xl px-4 py-2 text-[9px] uppercase tracking-[.18em] text-white/78 shadow-[0_10px_35px_rgba(0,0,0,.16)]"
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.25 }}
+              animate={{ opacity: videoExpanded ? 0.94 : 0.78, y: videoExpanded ? -2 : 0 }}
+              transition={{ duration: 0.3 }}
             >
               {t.videoBtn} ↗
             </motion.div>
