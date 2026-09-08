@@ -38,12 +38,12 @@ function LogoStrip({ logos, reverse = false }: { logos: string[]; reverse?: bool
         {[...logos, ...logos].map((logo, index) => (
           <div
             key={`${logo}-${index}`}
-            className="flex h-[78px] w-[132px] shrink-0 items-center justify-center px-5 sm:w-[150px] md:h-[88px] md:w-[172px] md:px-7 xl:w-[188px]"
+            className="flex h-[78px] w-[132px] shrink-0 items-center justify-center px-4 sm:w-[150px] md:h-[88px] md:w-[172px] md:px-6 xl:w-[188px]"
           >
             <img
               src={logo}
               alt={`Brand Logo ${(index % logos.length) + 1}`}
-              className="max-h-9 max-w-full object-contain grayscale opacity-70 transition-[opacity,filter] duration-300 hover:grayscale-0 hover:opacity-100 md:max-h-10"
+              className="max-h-10 max-w-full object-contain grayscale opacity-70 transition-[opacity,filter] duration-300 hover:grayscale-0 hover:opacity-100 md:max-h-12"
             />
           </div>
         ))}
@@ -54,7 +54,7 @@ function LogoStrip({ logos, reverse = false }: { logos: string[]; reverse?: bool
 
 export default function HomeLogoStrips() {
   return (
-    <section className="home-logo-strips overflow-hidden border-y border-black/[.08] bg-[#f3f1ed]">
+    <section className="home-logo-strips overflow-hidden border-y border-black/[.08] bg-white">
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes homeLogoStripLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         @keyframes homeLogoStripRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
