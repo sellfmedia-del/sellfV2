@@ -1,0 +1,30 @@
+name: Connect Vercel Git
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/connect-vercel.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  connect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Login to Vercel
+        run: script -q -e -c "vercel login" /dev/null
+      - name: Link existing V2 project
+        run: vercel link --yes --project sellfwebsitev2
+      - name: Connect GitHub repository
+        run: vercel git connect --yes
+      - name: Inspect project
+        run: vercel project inspect sellfwebsitev2
