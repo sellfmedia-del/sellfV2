@@ -1,0 +1,127 @@
+name: Render Sellf Offline Reel V5
+
+on:
+  push:
+    branches: [reel-render-v5]
+    paths:
+      - '.github/workflows/render-offline-reel-v5.yml'
+
+permissions:
+  contents: write
+
+env:
+  OUT: reel-output/sellf_hero_reel_v5_offline_no_music.mp4
+
+jobs:
+  render:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel-render-v5
+
+      - name: Prepare tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --quiet gdown
+          mkdir -p src clips reel-output
+
+      - name: Download source footage
+        shell: bash
+        run: |
+          set -euo pipefail
+          dl() { gdown "https://drive.google.com/uc?id=$1" -O "$2"; }
+          dl 1f9kaSmFRlm4iZXNDHKE5uKf94wto28K6 src/umu.mp4
+          dl 1B8h8sCxJMFJF0w3m95aat5ivxhhgYy9o src/stilevs.mp4
+          dl 1MzQj0GgIN7RBeWv-ZWN8n7goPXIaxxbX src/barilla.mp4
+          dl 1KuaY5fyCZNyPgy4HQwT1wwNtVVhm4kOY src/fashion.mp4
+          dl 1X2sUkRWkQQi4yv_3kAOPb_EePDt2pcIN src/mion.mp4
+          dl 13KwB8IEn1Rf0LVYG2NkWe05PphYLwt1a src/tefal.mp4
+          dl 1Z1Fse1qbSrCFyfbhPUcZ2Rg_aRk0u8c6 src/castrol.mp4
+          dl 1wIbo1BkMATXxqSJExaVRhHCrVlCdcxFf src/moshiqa.mp4
+          dl 1MxYmNIvvHM2VPmPv02cFul7zc3GY2whL src/unilever.mp4
+          dl 17ByjQGmWnAD1rjqLHLdX7rJWskywQcZH src/eataly.mp4
+          dl 1fbFmlBz8H_WHiG851gCJVOMfpptujbS2 src/magazacilik.mp4
+          dl 10v0arP95ISHkZvXVOFKK8xQHenSMwpL5 src/helal.mp4
+          dl 1TtKJWt9tlyeKclt6XAdkEPD8DL3esOxW src/cagdas.mp4
+          dl 1tl2ytyu_eGmeMcr9nzXbZ8zh-fT9c6Lk src/disan.mp4
+          dl 19fZUWx6ZoEfqJaDigwDft-Sj_IYPuX_Z src/eker.mp4
+          curl -L --fail --retry 3 -o src/hero-original.mp4 https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4
+          curl -L --fail --retry 3 -o src/logo.png https://raw.githubusercontent.com/sellfmedia-del/sellfV2/main/public/logo-beyaz.png
+
+      - name: Build V3-style curated V4-sector cut
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Shorter, cleaner, more cinematic cuts than V4. Fractions are deliberately
+          # shifted away from the previous V4 selections to avoid reusing its weaker moments.
+          make_clip() {
+            local input="$1" output="$2" fraction="$3" cropmode="$4" len="$5"
+            local dur start vf
+            dur=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$input")
+            start=$(python -c 'import sys; D=float(sys.argv[1]); f=float(sys.argv[2]); L=float(sys.argv[3]); s=max(0.25,min(D*f,max(0.25,D-L-0.4))); print(f"{s:.3f}")' "$dur" "$fraction" "$len")
+
+            # V3-inspired treatment: decisive composition, restrained saturation,
+            # deeper blacks, slight vignette and very subtle texture.
+            if [ "$cropmode" = "event" ]; then
+              vf="crop=iw:ih*0.80:0:ih*0.035,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1,eq=contrast=1.075:saturation=0.88:brightness=-0.012:gamma=0.99,vignette=PI/8,unsharp=5:5:0.30:5:5:0.0,noise=alls=1.0:allf=t"
+            elif [ "$cropmode" = "lowerthird" ]; then
+              vf="crop=iw:ih*0.82:0:0,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1,eq=contrast=1.075:saturation=0.90:brightness=-0.010:gamma=0.99,vignette=PI/8,unsharp=5:5:0.30:5:5:0.0,noise=alls=1.0:allf=t"
+            else
+              vf="scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1,eq=contrast=1.075:saturation=0.90:brightness=-0.010:gamma=0.99,vignette=PI/8,unsharp=5:5:0.30:5:5:0.0,noise=alls=1.0:allf=t"
+            fi
+            ffmpeg -hide_banner -loglevel error -ss "$start" -i "$input" -t "$len" -vf "$vf" -an -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p -movflags +faststart "$output" -y
+          }
+
+          # Advertising / fashion / product — clean, graphic, premium close-up driven opening.
+          make_clip src/umu.mp4          clips/01.mp4 0.27 normal     1.55
+          make_clip src/stilevs.mp4      clips/02.mp4 0.10 lowerthird 1.45
+          make_clip src/barilla.mp4      clips/03.mp4 0.34 normal     1.55
+          make_clip src/moshiqa.mp4      clips/04.mp4 0.31 normal     1.50
+          make_clip src/mion.mp4         clips/05.mp4 0.18 normal     1.45
+          make_clip src/tefal.mp4        clips/06.mp4 0.24 lowerthird 1.55
+          make_clip src/fashion.mp4      clips/07.mp4 0.38 event      1.50
+          make_clip src/castrol.mp4      clips/08.mp4 0.29 event      1.45
+
+          # Exact brand typography requested by the user — untouched content from 00:06–00:14.
+          ffmpeg -hide_banner -loglevel error -ss 6 -i src/hero-original.mp4 -t 8 -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,setsar=1" -an -c:v libx264 -preset fast -crf 17 -pix_fmt yuv420p clips/09_typography.mp4 -y
+
+          # Return with commercial/product/event emphasis; factory work is only punctuation.
+          make_clip src/unilever.mp4     clips/10.mp4 0.27 normal     1.50
+          make_clip src/eataly.mp4       clips/11.mp4 0.24 lowerthird 1.55
+          make_clip src/magazacilik.mp4  clips/12.mp4 0.29 event      1.50
+          make_clip src/helal.mp4        clips/13.mp4 0.27 event      1.45
+          make_clip src/eker.mp4         clips/14.mp4 0.22 lowerthird 1.45
+          make_clip src/cagdas.mp4       clips/15.mp4 0.31 normal     1.40
+          make_clip src/disan.mp4        clips/16.mp4 0.67 normal     1.40
+
+          # End card: only Sellf mark + domain.
+          ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=black:s=1920x1080:r=30:d=3.0 -loop 1 -i src/logo.png -filter_complex "[1:v]scale=470:-1[lg];[0:v][lg]overlay=(W-w)/2:(H-h)/2-35:shortest=1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='sellfmedia.com':fontcolor=white:fontsize=28:x=(w-text_w)/2:y=h/2+108,fade=t=in:st=0:d=0.28,fade=t=out:st=2.55:d=0.45,fps=30,setsar=1" -t 3 -an -c:v libx264 -preset fast -crf 17 -pix_fmt yuv420p clips/17_outro.mp4 -y
+
+          printf "%s\n" \
+            "file '01.mp4'" "file '02.mp4'" "file '03.mp4'" "file '04.mp4'" \
+            "file '05.mp4'" "file '06.mp4'" "file '07.mp4'" "file '08.mp4'" \
+            "file '09_typography.mp4'" \
+            "file '10.mp4'" "file '11.mp4'" "file '12.mp4'" "file '13.mp4'" \
+            "file '14.mp4'" "file '15.mp4'" "file '16.mp4'" "file '17_outro.mp4'" > clips/list.txt
+
+          ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i clips/list.txt -an -c:v libx264 -preset medium -crf 19 -pix_fmt yuv420p -movflags +faststart "$OUT" -y
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 "$OUT"
+
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sellf-hero-reel-v5-offline
+          path: ${{ env.OUT }}
+          if-no-files-found: error
+
+      - name: Publish review release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete reel-v5-offline --yes --cleanup-tag 2>/dev/null || true
+          gh release create reel-v5-offline "$OUT#Sellf Hero Reel V5 — no music" --target "$GITHUB_SHA" --title "Sellf Hero Reel V5 Offline" --notes "V4 sector mix with V3-style shot curation. No music and no Runway polish yet. Every source is used once; shorter, more cinematic shots and clean crops are prioritized."
