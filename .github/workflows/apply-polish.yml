@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/apply-polish.yml'
-      - '.polish/polish.tgz'
+      - '.polish/**'
 
 permissions:
   contents: write
@@ -13,18 +13,26 @@ permissions:
 jobs:
   apply-and-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Reassemble and verify polish package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .polish/chunk_00 .polish/chunk_01 .polish/chunk_02 .polish/chunk_03 .polish/chunk_04 .polish/chunk_05 .polish/chunk_06 > /tmp/polish.b64
+          base64 -d /tmp/polish.b64 > /tmp/polish.tgz
+          echo "6d5b558883a5ce7818585be9d94193d769bd2145be2ef49248f74b719c308230  /tmp/polish.tgz" | sha256sum -c -
+          gzip -t /tmp/polish.tgz
+
       - name: Apply polished source files
         run: |
-          tar -xzf .polish/polish.tgz
-          rm -f .polish/polish.tgz
-          rm -f .github/workflows/apply-polish.yml
+          set -euo pipefail
+          tar -xzf /tmp/polish.tgz
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
@@ -34,6 +42,9 @@ jobs:
 
       - name: Commit polished V2
         run: |
+          set -euo pipefail
+          rm -rf .polish
+          rm -f .github/workflows/apply-polish.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
