@@ -8,13 +8,13 @@ const dict = {
   tr: {
     expertise: "Uzmanlığımız",
     worksKicker: "Seçili İşler",
-    worksTitle: "KANIT,\nİŞLERİMİZDE.",
+    worksTitle: "İŞLER",
     operations: "Operasyonlarımız.",
   },
   en: {
     expertise: "Our Expertise",
     worksKicker: "Selected Works",
-    worksTitle: "THE PROOF IS IN\nOUR WORKS.",
+    worksTitle: "WORKS",
     operations: "Our Operations.",
   },
 };
