@@ -32,20 +32,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gdown --id 1f9kaSmFRlm4iZXNDHKE5uKf94wto28K6 -O src/umu.mp4
-          gdown --id 1B8h8sCxJMFJF0w3m95aat5ivxhhgYy9o -O src/stilevs.mp4
-          gdown --id 1MzQj0GgIN7RBeWv-ZWN8n7goPXIaxxbX -O src/barilla.mp4
-          gdown --id 1KuaY5fyCZNyPgy4HQwT1wwNtVVhm4kOY -O src/fashion.mp4
-          gdown --id 1X2sUkRWkQQi4yv_3kAOPb_EePDt2pcIN -O src/mion.mp4
-          gdown --id 13KwB8IEn1Rf0LVYG2NkWe05PphYLwt1a -O src/tefal.mp4
-          gdown --id 1Z1Fse1qbSrCFyfbhPUcZ2Rg_aRk0u8c6 -O src/castrol.mp4
-          gdown --id 1wIbo1BkMATXxqSJExaVRhHCrVlCdcxFf -O src/moshiqa.mp4
-          gdown --id 1MxYmNIvvHM2VPmPv02cFul7zc3GY2whL -O src/unilever.mp4
-          gdown --id 17ByjQGmWnAD1rjqLHLdX7rJWskywQcZH -O src/eataly.mp4
-          gdown --id 1fbFmlBz8H_WHiG851gCJVOMfpptujbS2 -O src/magazacilik.mp4
-          gdown --id 10v0arP95ISHkZvXVOFKK8xQHenSMwpL5 -O src/helal.mp4
-          gdown --id 1TtKJWt9tlyeKclt6XAdkEPD8DL3esOxW -O src/cagdas.mp4
-          gdown --id 1tl2ytyu_eGmeMcr9nzXbZ8zh-fT9c6Lk -O src/disan.mp4
+          dl() { gdown "https://drive.google.com/uc?id=$1" -O "$2"; }
+          dl 1f9kaSmFRlm4iZXNDHKE5uKf94wto28K6 src/umu.mp4
+          dl 1B8h8sCxJMFJF0w3m95aat5ivxhhgYy9o src/stilevs.mp4
+          dl 1MzQj0GgIN7RBeWv-ZWN8n7goPXIaxxbX src/barilla.mp4
+          dl 1KuaY5fyCZNyPgy4HQwT1wwNtVVhm4kOY src/fashion.mp4
+          dl 1X2sUkRWkQQi4yv_3kAOPb_EePDt2pcIN src/mion.mp4
+          dl 13KwB8IEn1Rf0LVYG2NkWe05PphYLwt1a src/tefal.mp4
+          dl 1Z1Fse1qbSrCFyfbhPUcZ2Rg_aRk0u8c6 src/castrol.mp4
+          dl 1wIbo1BkMATXxqSJExaVRhHCrVlCdcxFf src/moshiqa.mp4
+          dl 1MxYmNIvvHM2VPmPv02cFul7zc3GY2whL src/unilever.mp4
+          dl 17ByjQGmWnAD1rjqLHLdX7rJWskywQcZH src/eataly.mp4
+          dl 1fbFmlBz8H_WHiG851gCJVOMfpptujbS2 src/magazacilik.mp4
+          dl 10v0arP95ISHkZvXVOFKK8xQHenSMwpL5 src/helal.mp4
+          dl 1TtKJWt9tlyeKclt6XAdkEPD8DL3esOxW src/cagdas.mp4
+          dl 1tl2ytyu_eGmeMcr9nzXbZ8zh-fT9c6Lk src/disan.mp4
           curl -L --fail --retry 3 -o src/hero-original.mp4 https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4
           curl -L --fail --retry 3 -o src/logo.png https://raw.githubusercontent.com/sellfmedia-del/sellfV2/main/public/logo-beyaz.png
 
@@ -53,7 +54,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           make_clip() {
             local input="$1" output="$2" fraction="$3" cropmode="$4"
             local dur start vf
@@ -88,22 +88,10 @@ jobs:
           ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=black:s=1920x1080:r=30:d=3 -loop 1 -i src/logo.png -filter_complex "[1:v]scale=500:-1[lg];[0:v][lg]overlay=(W-w)/2:(H-h)/2-45:shortest=1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='sellfmedia.com':fontcolor=white:fontsize=29:x=(w-text_w)/2:y=h/2+115,fade=t=in:st=0:d=0.35,fade=t=out:st=2.55:d=0.45,fps=30,setsar=1" -t 3 -an -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p clips/16_outro.mp4 -y
 
           printf "%s\n" \
-            "file '01.mp4'" \
-            "file '02.mp4'" \
-            "file '03.mp4'" \
-            "file '04.mp4'" \
-            "file '05.mp4'" \
-            "file '06.mp4'" \
-            "file '07.mp4'" \
-            "file '08_typography.mp4'" \
-            "file '09.mp4'" \
-            "file '10.mp4'" \
-            "file '11.mp4'" \
-            "file '12.mp4'" \
-            "file '13.mp4'" \
-            "file '14.mp4'" \
-            "file '15.mp4'" \
-            "file '16_outro.mp4'" > clips/list.txt
+            "file '01.mp4'" "file '02.mp4'" "file '03.mp4'" "file '04.mp4'" \
+            "file '05.mp4'" "file '06.mp4'" "file '07.mp4'" "file '08_typography.mp4'" \
+            "file '09.mp4'" "file '10.mp4'" "file '11.mp4'" "file '12.mp4'" \
+            "file '13.mp4'" "file '14.mp4'" "file '15.mp4'" "file '16_outro.mp4'" > clips/list.txt
 
           ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i clips/list.txt -an -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -movflags +faststart "$OUT" -y
           ffprobe -v error -show_entries format=duration,size -of default=nw=1 "$OUT"
