@@ -7,7 +7,7 @@ import BentoGrid from "@/components/BentoGrid";
 import Ecosystem from "@/components/Ecosystem";
 import ProcessEngine from "@/components/ProcessEngine";
 import VisionaryQuote from "@/components/VisionaryQuote";
-import Logofolio from "@/components/Logofolio";
+import HomeLogoStrips from "@/components/HomeLogoStrips";
 import CallToAction from "@/components/CallToAction";
 
 const dict = {
@@ -221,6 +221,8 @@ export default function HomeClient() {
         </div>
       </section>
 
+      <HomeLogoStrips />
+
       <section className="bg-[#101313] text-white border-y border-white/[.08]">
         <div className="grid grid-cols-2 lg:grid-cols-4">
           {t.stats.map((stat, index) => (
@@ -239,7 +241,6 @@ export default function HomeClient() {
       <Ecosystem />
       <ProcessEngine />
       <VisionaryQuote />
-      <Logofolio />
       <CallToAction />
     </div>
   );
