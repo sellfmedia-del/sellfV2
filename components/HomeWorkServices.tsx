@@ -155,7 +155,7 @@ export default function HomeWorkServices() {
           transition: flex-basis 520ms cubic-bezier(.22,1,.36,1), width 520ms cubic-bezier(.22,1,.36,1), box-shadow 350ms ease, border-color 350ms ease !important;
         }
         .home-work-services .home-work article > div:first-child {
-          height: 47% !important;
+          height: 154px !important;
           border-radius: 11px 11px 0 0;
         }
         .home-work-services .home-work article > div:first-child > div:first-child {
@@ -203,8 +203,13 @@ export default function HomeWorkServices() {
           background-position: center !important;
         }
         .home-work-services .home-work article > .relative.z-10 {
+          height: auto !important;
           min-height: 326px !important;
-          padding: 14px !important;
+          padding: 168px 14px 14px !important;
+          justify-content: flex-start !important;
+        }
+        .home-work-services .home-work article > .relative.z-10 > div {
+          padding-top: 0 !important;
         }
         .home-work-services .home-work article .text-sm {
           font-size: 11px !important;
