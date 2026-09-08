@@ -51,45 +51,62 @@ const trustMarks = [
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const heroVideo = "https://cdn.sellfmedia.workers.dev/videos/website_main_video.mp4";
+const heroVideo = "https://player.vimeo.com/video/1225074289?h=0f91056daa&background=1&autoplay=1&loop=1&muted=1&autopause=0&playsinline=1&preload=auto&controls=0&title=0&byline=0&portrait=0";
 
 export default function HomeClient() {
   const params = useParams();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLIFrameElement>(null);
+  const videoContainerRef = useRef<HTMLButtonElement>(null);
   const [videoExpanded, setVideoExpanded] = useState(false);
+  const [videoFrameStyle, setVideoFrameStyle] = useState({ width: "100%", height: "100%" });
+
+  const sendVimeoCommand = (method: string, value?: unknown) => {
+    const player = videoRef.current?.contentWindow;
+    if (!player) return;
+    player.postMessage(value === undefined ? { method } : { method, value }, "https://player.vimeo.com");
+  };
 
   const ensureVideoPlaying = () => {
-    const video = videoRef.current;
-    if (!video || document.fullscreenElement) return;
-    video.muted = true;
-    video.defaultMuted = true;
-    video.controls = false;
-    void video.play().catch(() => undefined);
+    if (document.fullscreenElement) return;
+    sendVimeoCommand("setMuted", true);
+    sendVimeoCommand("play");
   };
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = true;
-      video.defaultMuted = true;
-      video.playsInline = true;
-      video.load();
-      void video.play().catch(() => undefined);
-    }
+    const updateVideoCover = () => {
+      const container = videoContainerRef.current;
+      if (!container) return;
+
+      const { width, height } = container.getBoundingClientRect();
+      if (!width || !height) return;
+
+      const videoAspect = 16 / 9;
+      const containerAspect = width / height;
+
+      if (containerAspect > videoAspect) {
+        setVideoFrameStyle({ width: "100%", height: `${(containerAspect / videoAspect) * 100}%` });
+      } else {
+        setVideoFrameStyle({ width: `${(videoAspect / containerAspect) * 100}%`, height: "100%" });
+      }
+    };
+
+    updateVideoCover();
+    const resizeObserver = new ResizeObserver(updateVideoCover);
+    if (videoContainerRef.current) resizeObserver.observe(videoContainerRef.current);
 
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement && videoRef.current) {
-        videoRef.current.muted = true;
-        videoRef.current.controls = false;
-        void videoRef.current.play().catch(() => undefined);
+      if (!document.fullscreenElement) {
+        sendVimeoCommand("setMuted", true);
+        sendVimeoCommand("play");
       }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     return () => {
+      resizeObserver.disconnect();
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
       document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
     };
@@ -98,16 +115,18 @@ export default function HomeClient() {
   const handleVideoClick = () => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = false;
-    video.controls = true;
-    void video.play().catch(() => undefined);
+    sendVimeoCommand("setMuted", false);
+    sendVimeoCommand("setVolume", 1);
+    sendVimeoCommand("play");
     if (video.requestFullscreen) video.requestFullscreen();
     else if ((video as any).webkitRequestFullscreen) (video as any).webkitRequestFullscreen();
   };
 
   return (
     <div className="w-full bg-sellf-surface overflow-hidden">
-      <link rel="preload" href={heroVideo} as="video" type="video/mp4" />
+      <link rel="preconnect" href="https://player.vimeo.com" />
+      <link rel="preconnect" href="https://i.vimeocdn.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://f.vimeocdn.com" crossOrigin="anonymous" />
       <link rel="preload" href="https://res.cloudinary.com/doal5qa8c/image/upload/f_auto,q_auto/v1777887416/Screenshot_2026-05-04_at_12.36.49_PM_ehtznc.png" as="image" fetchPriority="high" />
 
       <section className="home-hero relative bg-[#0b0d0d] text-white pt-24 md:pt-28">
@@ -184,6 +203,7 @@ export default function HomeClient() {
           <div className="min-h-[460px] md:min-h-[650px]" aria-hidden="true" />
 
           <motion.button
+            ref={videoContainerRef}
             type="button"
             onMouseEnter={() => setVideoExpanded(true)}
             onMouseLeave={() => setVideoExpanded(false)}
@@ -193,18 +213,22 @@ export default function HomeClient() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.08, ease }}
           >
-            <video
+            <img
+              src="https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png"
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+            />
+            <iframe
               ref={videoRef}
               src={heroVideo}
-              poster="https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png"
-              preload="auto"
-              autoPlay
-              loop
-              muted
-              playsInline
-              onLoadedData={ensureVideoPlaying}
-              onCanPlay={ensureVideoPlaying}
-              className={`absolute inset-0 h-full w-full object-cover transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
+              title="Sellf Media showreel"
+              loading="eager"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              onLoad={ensureVideoPlaying}
+              style={videoFrameStyle}
+              className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-0 transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
             />
 
             <div className={`absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-500 ${videoExpanded ? "opacity-45" : "opacity-100"}`} />
