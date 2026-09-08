@@ -10,12 +10,16 @@ const dict = {
     worksKicker: "Seçili İşler",
     worksTitle: "İŞLER",
     operations: "Operasyonlarımız.",
+    viewWorks: "Tüm İşleri Gör",
+    viewServices: "Tüm Hizmetleri Gör",
   },
   en: {
     expertise: "Our Expertise",
     worksKicker: "Selected Works",
     worksTitle: "WORKS",
     operations: "Our Operations.",
+    viewWorks: "View All Works",
+    viewServices: "View All Services",
   },
 };
 
@@ -253,21 +257,39 @@ export default function HomeWorkServices() {
 
       <div className="grid lg:grid-cols-[minmax(0,1.42fr)_minmax(0,1fr)]">
         <div className="min-w-0 px-5 py-11 sm:px-8 md:px-9 md:py-12 lg:border-r lg:border-black/[.045] lg:px-10 lg:py-14 xl:px-12 xl:py-16">
-          <div className="mb-6 md:mb-7">
-            <p className="sellf-kicker mb-3 text-black/38">{t.worksKicker}</p>
-            <h2 className="sellf-display whitespace-pre-line max-w-[10ch] text-[2.2rem] leading-[.94] tracking-[-.055em] text-black sm:text-[2.55rem] xl:text-[3.15rem]">
-              {t.worksTitle}
-            </h2>
+          <div className="mb-6 flex items-end justify-between gap-5 md:mb-7">
+            <div>
+              <p className="sellf-kicker mb-3 text-black/38">{t.worksKicker}</p>
+              <h2 className="sellf-display whitespace-pre-line max-w-[10ch] text-[2.2rem] leading-[.94] tracking-[-.055em] text-black sm:text-[2.55rem] xl:text-[3.15rem]">
+                {t.worksTitle}
+              </h2>
+            </div>
+            <a
+              href={`/${currentLang}/portfolio`}
+              className="group mb-1 inline-flex shrink-0 items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[.12em] text-black/38 transition-colors hover:text-black sm:text-[10px]"
+            >
+              {t.viewWorks}
+              <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+            </a>
           </div>
           <BentoGrid />
         </div>
 
         <div className="min-w-0 px-5 py-11 sm:px-8 md:px-9 md:py-12 lg:px-8 lg:py-14 xl:px-10 xl:py-16">
-          <div className="mb-7 md:mb-8">
-            <p className="sellf-kicker mb-3 text-black/38">{t.expertise}</p>
-            <h2 className="sellf-display max-w-[10.5ch] text-[2.2rem] leading-[.94] tracking-[-.055em] text-black sm:text-[2.55rem] xl:text-[2.9rem]">
-              {t.operations}
-            </h2>
+          <div className="mb-7 flex items-end justify-between gap-5 md:mb-8">
+            <div>
+              <p className="sellf-kicker mb-3 text-black/38">{t.expertise}</p>
+              <h2 className="sellf-display max-w-[10.5ch] text-[2.2rem] leading-[.94] tracking-[-.055em] text-black sm:text-[2.55rem] xl:text-[2.9rem]">
+                {t.operations}
+              </h2>
+            </div>
+            <a
+              href={`/${currentLang}/services`}
+              className="group mb-1 inline-flex shrink-0 items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[.12em] text-black/38 transition-colors hover:text-black sm:text-[10px]"
+            >
+              {t.viewServices}
+              <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+            </a>
           </div>
 
           <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 xl:gap-3">
