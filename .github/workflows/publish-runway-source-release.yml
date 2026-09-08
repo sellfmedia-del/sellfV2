@@ -1,0 +1,31 @@
+name: Publish Runway Source Release
+
+on:
+  push:
+    branches: [reel-render-v7-1]
+    paths:
+      - '.github/workflows/publish-runway-source-release.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel-render-v7-1
+      - name: Publish source clips as release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete runway-polish-sources --yes --cleanup-tag 2>/dev/null || true
+          gh release create runway-polish-sources \
+            public/runway-temp/01_fashion_umu.mp4 \
+            public/runway-temp/04_moshiqa_detail.mp4 \
+            public/runway-temp/05_eataly_macro.mp4 \
+            public/runway-temp/06_barilla_lifestyle.mp4 \
+            --target "$GITHUB_SHA" \
+            --title "Runway Polish Sources" \
+            --notes "Temporary source clips for final Sellf cinematic polish."
