@@ -1,0 +1,64 @@
+name: Render Sellf Reel V7.3 Final Watermark Cleanup
+
+on:
+  push:
+    branches: [reel-render-v7-1]
+    paths:
+      - '.github/workflows/render-offline-reel-v7-3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel-render-v7-1
+
+      - name: Prepare tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          mkdir -p work output
+
+      - name: Build V7.3 from approved V7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 -o work/v7_2.mp4 \
+            https://github.com/sellfmedia-del/sellfV2/releases/download/reel-v7-2-clean/sellf_hero_reel_v7_2_watermark_free.mp4
+
+          # User QC showed the only remaining Clideo mark during the final ~2 seconds of the typography section,
+          # where the legitimate frame background in that lower-right region is pure black.
+          # Cover ONLY that lower-right area and ONLY for that short interval; preserve every other pixel/frame.
+          ffmpeg -hide_banner -loglevel error -i work/v7_2.mp4 \
+            -vf "drawbox=x=1300:y=885:w=620:h=195:color=black@1:t=fill:enable='between(t,13.20,15.75)',fps=30,setsar=1" \
+            -c:v libx264 -preset medium -crf 15 -pix_fmt yuv420p \
+            -c:a copy -movflags +faststart output/sellf_hero_reel_v7_3_final_watermark_free.mp4 -y
+
+          ffmpeg -hide_banner -loglevel error -ss 14.0 -i output/sellf_hero_reel_v7_3_final_watermark_free.mp4 -frames:v 1 -q:v 2 output/qc_14s.jpg -y
+          ffmpeg -hide_banner -loglevel error -ss 15.0 -i output/sellf_hero_reel_v7_3_final_watermark_free.mp4 -frames:v 1 -q:v 2 output/qc_15s.jpg -y
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 output/sellf_hero_reel_v7_3_final_watermark_free.mp4
+
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sellf-hero-reel-v7-3-final-watermark-free
+          path: output/*
+          if-no-files-found: error
+
+      - name: Publish review release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete reel-v7-3-clean --yes --cleanup-tag 2>/dev/null || true
+          gh release create reel-v7-3-clean \
+            "output/sellf_hero_reel_v7_3_final_watermark_free.mp4#Sellf Hero Reel V7.3 — final watermark cleanup" \
+            "output/qc_14s.jpg#QC at 14 seconds" \
+            "output/qc_15s.jpg#QC at 15 seconds" \
+            --target "$GITHUB_SHA" \
+            --title "Sellf Hero Reel V7.3 Final Watermark Cleanup" \
+            --notes "Same approved V7.2 edit. Only the remaining lower-right Clideo watermark during the final two typography seconds is covered over the already-black background. No Runway credits used."
