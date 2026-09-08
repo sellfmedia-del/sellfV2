@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import BentoGrid from "@/components/BentoGrid";
+import HomeWorkServices from "@/components/HomeWorkServices";
 import Ecosystem from "@/components/Ecosystem";
 import ProcessEngine from "@/components/ProcessEngine";
 import VisionaryQuote from "@/components/VisionaryQuote";
@@ -237,7 +237,7 @@ export default function HomeClient() {
 
       <HomeLogoStrips />
 
-      <BentoGrid />
+      <HomeWorkServices />
       <Ecosystem />
       <ProcessEngine />
       <VisionaryQuote />
