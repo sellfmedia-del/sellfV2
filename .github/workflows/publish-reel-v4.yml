@@ -1,0 +1,39 @@
+name: Publish Sellf Reel V4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-reel-v4.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download completed V4 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: sellf-hero-reel-v4-offline
+          path: /tmp/reel
+          github-token: ${{ github.token }}
+          run-id: 34256743646
+
+      - name: Publish release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          FILE=$(find /tmp/reel -type f -name '*.mp4' | head -1)
+          test -n "$FILE"
+          TAG='reel-v4-offline'
+          gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" "$FILE#sellf_hero_reel_v4_offline.mp4" \
+            --title 'Sellf Hero Reel V4 Offline' \
+            --notes 'Review cut: no music yet, no Runway polish yet. Repeated shots removed; commercial, product, fashion/catalog and event footage weighted more heavily.'
