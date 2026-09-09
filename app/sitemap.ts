@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/sanity/lib/client";
+import { solutionSlugs } from "@/data/SolutionIndex";
 
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
@@ -44,6 +45,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: now,
         changeFrequency: path === "" ? "weekly" : "monthly",
         priority: path === "" ? 1 : 0.7,
+      });
+    }
+  }
+
+  // Solution detail sayfaları statik veri kaynağından gelir.
+  // Blog/Sanity mantığını değiştirmeden her iki dilde sitemap'e eklenir.
+  for (const locale of locales) {
+    for (const slug of solutionSlugs) {
+      entries.push({
+        url: `${baseUrl}/${locale}/services/${slug}`,
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.7,
       });
     }
   }
