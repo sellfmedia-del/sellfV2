@@ -5,6 +5,11 @@ import { solutionSlugs } from "@/data/SolutionIndex";
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
 
+// Sitemap'i request-time üret: Sanity'den blog slug'ları build aşamasında çekilmeye
+// zorlanmaz. Sanity geçici olarak erişilemezse aşağıdaki mevcut fallback davranışı
+// statik sayfaları yine de döndürmeye devam eder.
+export const dynamic = "force-dynamic";
+
 // Statik sayfalar — sabit route'lar, her iki dil için de üretilecek.
 // "thank-you" bilerek dışarıda bırakıldı: bu bir dönüşüm-sonrası sayfası,
 // arama sonuçlarında görünmesi anlamlı değil.
@@ -34,15 +39,23 @@ async function getBlogSlugs(): Promise<BlogSlugEntry[]> {
   }
 }
 
+function languageAlternates(path: string) {
+  return {
+    languages: {
+      tr: `${baseUrl}/tr${path}`,
+      en: `${baseUrl}/en${path}`,
+    },
+  };
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of locales) {
     for (const path of staticPaths) {
       entries.push({
         url: `${baseUrl}/${locale}${path}`,
-        lastModified: now,
+        alternates: languageAlternates(path),
         changeFrequency: path === "" ? "weekly" : "monthly",
         priority: path === "" ? 1 : 0.7,
       });
@@ -53,9 +66,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog/Sanity mantığını değiştirmeden her iki dilde sitemap'e eklenir.
   for (const locale of locales) {
     for (const slug of solutionSlugs) {
+      const path = `/services/${slug}`;
       entries.push({
-        url: `${baseUrl}/${locale}/services/${slug}`,
-        lastModified: now,
+        url: `${baseUrl}/${locale}${path}`,
+        alternates: languageAlternates(path),
         changeFrequency: "monthly",
         priority: 0.7,
       });
@@ -65,9 +79,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogSlugs = await getBlogSlugs();
   for (const locale of locales) {
     for (const { slug, updatedAt } of blogSlugs) {
+      const path = `/blog/${slug}`;
       entries.push({
-        url: `${baseUrl}/${locale}/blog/${slug}`,
+        url: `${baseUrl}/${locale}${path}`,
         lastModified: new Date(updatedAt),
+        alternates: languageAlternates(path),
         changeFrequency: "monthly",
         priority: 0.6,
       });

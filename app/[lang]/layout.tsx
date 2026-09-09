@@ -61,23 +61,29 @@ export default async function RootLayout({
   // SITEWIDE ORGANIZATION JSON-LD
   // Tek bir yerde tanımlanıp her sayfaya otomatik yayılıyor — Google ve AI motorları
   // "Sellf Media" markasını tek, tutarlı bir varlık (entity) olarak tanıyabiliyor.
-  // Kullanılan bilgiler (LinkedIn, Instagram, e-posta, adres) zaten
+  // Kullanılan bilgiler (LinkedIn, Instagram, YouTube, telefon, e-posta ve adres)
   // footer.tsx ve contact sayfasında görünür şekilde var — burada uydurma bilgi yok.
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": "https://www.sellfmedia.com/#organization",
     name: "Sellf Media",
+    legalName: "Konuk Reklam, Pazarlama ve Ticaret LTD.",
     url: "https://www.sellfmedia.com",
-    logo: "https://www.sellfmedia.com/logo-siyah.svg",
+    logo: "https://www.sellfmedia.com/logo-beyaz.png",
     email: "team@sellfmedia.com",
+    telephone: "+90 535 013 16 78",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Istanbul",
+      streetAddress: "Hüseyinağa Mahallesi, İstiklal Cad. No:56/58, Kat:3 Daire 5",
+      addressLocality: "Beyoğlu",
+      addressRegion: "İstanbul",
       addressCountry: "TR",
     },
     sameAs: [
       "https://www.linkedin.com/company/sellf-media",
       "https://www.instagram.com/sellfmedia",
+      "https://www.youtube.com/@sellfmedia",
     ],
   };
 

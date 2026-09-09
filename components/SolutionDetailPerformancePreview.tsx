@@ -55,10 +55,14 @@ const proofLogos: Record<string, string | null> = {
   "Sfera.ai": "https://cdn.sellfmedia.workers.dev/essentials/logosfera.png",
 };
 
+// Solution-specific visuals are painted by the existing route-level CSS map.
+// Keep the fallback <img> nodes network-free so they do not trigger three hidden
+// CDN downloads underneath those CSS backgrounds.
+const transparentPixel = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 const visualAssets = {
-  primary: "https://cdn.sellfmedia.workers.dev/portfolio/fizyowebsite1.png",
-  secondary: "https://cdn.sellfmedia.workers.dev/portfolio/insta-cilt-nbak%C4%B1m-mockup.jpg",
-  tertiary: "https://cdn.sellfmedia.workers.dev/portfolio/fizyowebsite2.png",
+  primary: transparentPixel,
+  secondary: transparentPixel,
+  tertiary: transparentPixel,
 };
 
 function localized<T extends { tr: string; en: string }>(value: T, lang: SupportedSolutionLang) {

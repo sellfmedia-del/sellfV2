@@ -93,7 +93,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const t = dict[currentLang];
 
   if (!post) {
-    return { title: currentLang === "en" ? 'Article Not Found' : 'Makale Bulunamadı' }
+    notFound();
   }
 
   const metaTitle = truncateTitle(post.title, "Sellf Media");
@@ -129,11 +129,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
   const relatedPosts = post ? await getRelatedPosts(slug, currentLang, post.categoryRefs) : [];
 
   if (!post) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-zinc-500">
-        {t.notFound}
-      </div>
-    )
+    notFound();
   }
 
   const dateLocale = currentLang === "tr" ? "tr-TR" : "en-US";
@@ -155,11 +151,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
     ...(post.coverImage && { image: [post.coverImage] }),
     ...(post.category && { articleSection: post.category }),
     mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
-    author: { "@type": "Organization", name: "Sellf Media", url: "https://www.sellfmedia.com" },
+    author: {
+      "@type": "Organization",
+      "@id": "https://www.sellfmedia.com/#organization",
+      name: "Sellf Media",
+      url: "https://www.sellfmedia.com",
+    },
     publisher: {
       "@type": "Organization",
+      "@id": "https://www.sellfmedia.com/#organization",
       name: "Sellf Media",
-      logo: { "@type": "ImageObject", url: "https://www.sellfmedia.com/logo-siyah.svg" },
+      url: "https://www.sellfmedia.com",
+      logo: { "@type": "ImageObject", url: "https://www.sellfmedia.com/logo-beyaz.png" },
     },
   };
 
