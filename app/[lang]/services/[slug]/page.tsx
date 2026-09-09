@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SolutionDetail from "@/components/SolutionDetail";
 import { getSolutionIndexItem, solutionSlugs } from "@/data/SolutionIndex";
-import { getSolutionContent, type SupportedSolutionLang } from "@/data/SolutionContent";
+import { getSolutionContent } from "@/data/getSolutionContent";
+import type { SupportedSolutionLang } from "@/data/SolutionContent";
 
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
