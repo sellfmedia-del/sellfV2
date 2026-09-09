@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import BentoGrid from "@/components/BentoGrid";
-import { serviceData } from "@/data/ServiceData";
+import SolutionIcon from "@/components/SolutionIcon";
+import { solutionIndex } from "@/data/SolutionIndex";
 
 const dict = {
   tr: {
@@ -11,7 +13,7 @@ const dict = {
     worksTitle: "İŞLER",
     operations: "Çözümlerimiz.",
     viewWorks: "Tüm İşleri Gör",
-    viewServices: "Tüm Hizmetleri Gör",
+    viewServices: "Tüm Çözümleri Gör",
   },
   en: {
     expertise: "Our Expertise",
@@ -19,97 +21,9 @@ const dict = {
     worksTitle: "WORKS",
     operations: "Our Solutions.",
     viewWorks: "View All Works",
-    viewServices: "View All Services",
+    viewServices: "View All Solutions",
   },
 };
-
-function ServiceIcon({ id }: { id: string }) {
-  const common = {
-    width: 30,
-    height: 30,
-    viewBox: "0 0 32 32",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2.2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-  };
-
-  switch (id) {
-    case "integrated-growth":
-      return (
-        <svg {...common}>
-          <path d="M5 25V15M11 25V10M17 25V17M23 25V6" />
-          <path d="M4 27h24" />
-          <path d="m5 12 6-5 6 5 8-7" />
-        </svg>
-      );
-    case "digital-ads":
-      return (
-        <svg {...common}>
-          <circle cx="16" cy="16" r="10" />
-          <circle cx="16" cy="16" r="4" />
-          <path d="M24 8l4-4M24 8h4V4" />
-        </svg>
-      );
-    case "social-media":
-      return (
-        <svg {...common}>
-          <circle cx="8" cy="10" r="3" />
-          <circle cx="24" cy="8" r="3" />
-          <circle cx="22" cy="24" r="3" />
-          <path d="m11 11 10-2M10 13l10 9M24 11l-1 10" />
-        </svg>
-      );
-    case "design":
-      return (
-        <svg {...common}>
-          <rect x="5" y="6" width="13" height="13" rx="2" />
-          <rect x="14" y="13" width="13" height="13" rx="2" />
-          <path d="m8 23 12-12" />
-        </svg>
-      );
-    case "seo":
-      return (
-        <svg {...common}>
-          <circle cx="14" cy="14" r="8" />
-          <path d="m20 20 7 7" />
-          <path d="M10 14h8M14 10v8" />
-        </svg>
-      );
-    case "influencer":
-      return (
-        <svg {...common}>
-          <circle cx="11" cy="11" r="4" />
-          <path d="M4 25c1-5 4-8 7-8s6 3 7 8" />
-          <path d="M21 9h6M24 6v6M20 18c4 0 7 2 8 6" />
-        </svg>
-      );
-    case "e-com":
-      return (
-        <svg {...common}>
-          <path d="M7 12h18l-2 14H9L7 12Z" />
-          <path d="M12 12V9a4 4 0 0 1 8 0v3" />
-          <path d="M12 18h8" />
-        </svg>
-      );
-    case "productions":
-      return (
-        <svg {...common}>
-          <rect x="4" y="7" width="24" height="18" rx="3" />
-          <path d="m13 12 8 4-8 4v-8Z" />
-        </svg>
-      );
-    default:
-      return (
-        <svg {...common}>
-          <circle cx="16" cy="16" r="10" />
-          <path d="M10 16h12M16 10v12" />
-        </svg>
-      );
-  }
-}
 
 export default function HomeWorkServices() {
   const params = useParams();
@@ -144,7 +58,7 @@ export default function HomeWorkServices() {
           align-items: flex-start !important;
         }
         .home-work-services .home-work > .sellf-container > .grid:nth-child(2)::-webkit-scrollbar {
-          display: none;
+          display: none !important;
         }
         .home-work-services .home-work article {
           flex: 0 0 min(80vw, 240px) !important;
@@ -293,27 +207,30 @@ export default function HomeWorkServices() {
           </div>
 
           <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 xl:gap-3">
-            {serviceData.map((service, index) => (
-              <article
-                key={service.id}
-                className="group flex min-h-[158px] flex-col rounded-[10px] border border-black/[.045] bg-white p-3.5 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-black/[.09] hover:shadow-[0_10px_26px_rgba(11,13,13,.055)] xl:min-h-[172px] xl:p-4"
+            {solutionIndex.map((solution) => (
+              <Link
+                key={solution.slug}
+                href={`/${currentLang}/services/${solution.slug}`}
+                className="group flex min-h-[132px] flex-col rounded-[10px] border border-black/[.045] bg-white p-3.5 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-black/[.09] hover:shadow-[0_10px_26px_rgba(11,13,13,.055)] xl:min-h-[142px] xl:p-4"
               >
-                <div className="mb-5 flex items-start justify-between gap-2">
-                  <div className="text-black transition-transform duration-300 group-hover:scale-[1.08]">
-                    <ServiceIcon id={service.id} />
+                <div className="mb-4 flex items-start justify-between gap-2">
+                  <div className="text-black/70 transition-[color,transform] duration-300 group-hover:scale-[1.08] group-hover:text-black">
+                    <SolutionIcon slug={solution.slug} size={30} />
                   </div>
-                  <span className="text-[8px] font-medium tracking-[.14em] text-black/18">0{index + 1}</span>
+                  <span className="text-[8px] font-medium tracking-[.14em] text-black/18">
+                    {String(solution.index).padStart(2, "0")}
+                  </span>
                 </div>
 
                 <div className="mt-auto">
-                  <h3 className="mb-2 text-[11px] font-semibold leading-[1.14] tracking-[-.03em] text-black xl:text-[12px]">
-                    {service.title[currentLang]}
+                  <h3 className="mb-1.5 text-[10px] font-semibold leading-[1.14] tracking-[-.03em] text-black xl:text-[11px]">
+                    {solution.title[currentLang]}
                   </h3>
-                  <p className="line-clamp-3 text-[9px] leading-[1.45] text-black/40 xl:text-[9.5px]">
-                    {service.heroText[currentLang]}
+                  <p className="line-clamp-2 text-[8.5px] leading-[1.42] text-black/38 xl:text-[9px]">
+                    {solution.description[currentLang]}
                   </p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
