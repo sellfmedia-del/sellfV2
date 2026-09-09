@@ -58,7 +58,7 @@ export default function HomeWorkServices() {
           align-items: flex-start !important;
         }
         .home-work-services .home-work > .sellf-container > .grid:nth-child(2)::-webkit-scrollbar {
-          display: none !important;
+          display: none;
         }
         .home-work-services .home-work article {
           flex: 0 0 min(80vw, 240px) !important;
