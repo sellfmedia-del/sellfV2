@@ -51,6 +51,70 @@ const previewDToneCss = `
   .solution-preview-d-cool .group:hover .group-hover\\:text-\\[\\#1f5f9f\\] {
     color: #111313 !important;
   }
+  .solution-preview-d-cool .solution-d-drift {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+  .solution-preview-d-cool .solution-d-drift > img {
+    opacity: 0 !important;
+  }
+  .solution-preview-d-cool[data-solution="integrated-consulting"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/blackbork1.png");
+    background-position: center top;
+  }
+  .solution-preview-d-cool[data-solution="export-international-growth"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/toys1.png");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="b2b-marketing"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/tiib1.png");
+    background-position: left top;
+  }
+  .solution-preview-d-cool[data-solution="brand-strategy-branding"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/qashe%201.jpg");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="performance-marketing"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/ascepostASCE%20S%CC%A7UBAT%202026%20GRID%20.jpg");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="digital-products-software-development"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/fizyowebsite1.png");
+    background-position: left top;
+  }
+  .solution-preview-d-cool[data-solution="growth-management-consulting"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/fundora1.png");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="offline-marketing-media"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/dedeman1.png");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="project-management"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/kervan1.png");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="design-creative"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/Screenshot%202025-12-25%20at%2010.39.30%E2%80%AFAM.png");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="pr-crisis-management"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/blackbork2.png");
+    background-position: center;
+  }
+  .solution-preview-d-cool[data-solution="seo-organic-growth"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/argeron1.png");
+    background-position: left top;
+  }
+  .solution-preview-d-cool[data-solution="conversion-funnel-optimization"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/nutralen1.png");
+    background-position: left top;
+  }
+  .solution-preview-d-cool[data-solution="ecommerce-growth"] .solution-d-drift {
+    background-image: url("https://cdn.sellfmedia.workers.dev/portfolio/grey1.png");
+    background-position: center;
+  }
 `;
 
 type RouteParams = {
@@ -215,7 +279,7 @@ export default async function SolutionPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <div className="solution-preview-d-cool">
+      <div className="solution-preview-d-cool" data-solution={solution.slug}>
         <style dangerouslySetInnerHTML={{ __html: previewDToneCss }} />
         <SolutionDetailPerformancePreview lang={currentLang} solution={solution} content={content} />
       </div>
