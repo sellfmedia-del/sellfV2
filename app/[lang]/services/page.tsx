@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import ServicesClient from "./ServicesClient";
-import { serviceData } from "@/data/ServiceData";
+import { solutionIndex } from "@/data/SolutionIndex";
+
+const baseUrl = "https://www.sellfmedia.com";
 
 export async function generateMetadata({
   params,
@@ -9,20 +11,33 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const isEn = lang === "en";
+  const currentLang = isEn ? "en" : "tr";
+  const canonical = `${baseUrl}/${currentLang}/services`;
+  const title = isEn
+    ? "Growth Solutions | Sellf Media"
+    : "Büyüme Çözümleri | Sellf Media";
+  const description = isEn
+    ? "Explore Sellf Media solutions across integrated consulting, international growth, B2B, branding, performance, software, SEO, conversion, e-commerce and more."
+    : "Entegre danışmanlıktan uluslararası büyümeye, B2B, branding, performans, yazılım, SEO, dönüşüm ve e-ticarete uzanan Sellf Media büyüme çözümlerini keşfedin.";
 
   return {
-    title: isEn
-      ? "Services | Sellf Media — B2B Growth Engineering"
-      : "Hizmetler | Sellf Media — B2B Büyüme Mühendisliği",
-    description: isEn
-      ? "Integrated growth partnership, digital advertising, SEO, social media, and production services for enterprise and C-level decision makers."
-      : "Üst düzey karar vericiler ve C-Level yöneticiler için entegre büyüme partnerliği, dijital reklam, SEO, sosyal medya ve prodüksiyon hizmetleri.",
+    title,
+    description,
     alternates: {
-      canonical: `https://www.sellfmedia.com/${lang}/services`,
+      canonical,
       languages: {
-        tr: "https://www.sellfmedia.com/tr/services",
-        en: "https://www.sellfmedia.com/en/services",
+        tr: `${baseUrl}/tr/services`,
+        en: `${baseUrl}/en/services`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "Sellf Media",
+      locale: isEn ? "en_US" : "tr_TR",
+      alternateLocale: isEn ? ["tr_TR"] : ["en_US"],
+      type: "website",
     },
   };
 }
@@ -33,65 +48,53 @@ export default async function ServicesPage({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  const currentLang = (lang as "tr" | "en") || "tr";
+  const currentLang = (lang === "en" ? "en" : "tr") as "tr" | "en";
 
-  // JSON-LD — arama motorları ve AI crawler'ları için yapılandırılmış,
-  // görsel tasarımdan tamamen bağımsız bir veri katmanı.
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: serviceData.map((service, index) => ({
-      "@type": "Service",
-      position: index + 1,
-      name: service.title[currentLang],
-      description: service.description[currentLang],
-      provider: {
-        "@type": "Organization",
-        name: "Sellf Media",
-        url: "https://www.sellfmedia.com",
-      },
-    })),
+    name: currentLang === "tr" ? "Sellf Media Çözümleri" : "Sellf Media Solutions",
+    numberOfItems: solutionIndex.length,
+    itemListElement: solutionIndex.map((solution, index) => {
+      const url = `${baseUrl}/${currentLang}/services/${solution.slug}`;
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Service",
+          "@id": `${url}#service`,
+          name: solution.title[currentLang],
+          description: solution.description[currentLang],
+          url,
+          provider: {
+            "@type": "Organization",
+            name: "Sellf Media",
+            url: baseUrl,
+          },
+        },
+      };
+    }),
   };
 
   return (
     <>
-      {/* Mevcut animasyonlu / interaktif tasarım — hiç değişmedi */}
       <ServicesClient />
 
-      {/* JSON-LD: Google ve AI crawler'lar için temiz, garantili özet */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* sr-only: Görsel olarak gizli, ama HTML'de her zaman var.
-          Ekran okuyucular için de standart bir erişilebilirlik pattern'i —
-          cloaking değil, aynı içeriğin JS-bağımsız bir kopyası. */}
       <div className="sr-only">
-        {serviceData.map((service) => (
-          <article key={service.id}>
-            <h2>{service.title[currentLang]}</h2>
-            <p>{service.heroText[currentLang]}</p>
-            <p>{service.description[currentLang]}</p>
-
-            {service.process?.length > 0 && (
-              <div>
-                {service.process.map((step, idx) => (
-                  <div key={idx}>
-                    <h3>{step.title[currentLang]}</h3>
-                    <p>{step.description[currentLang]}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {service.deliverables?.length > 0 && (
-              <ul>
-                {service.deliverables.map((item, idx) => (
-                  <li key={idx}>{item[currentLang]}</li>
-                ))}
-              </ul>
-            )}
+        {solutionIndex.map((solution) => (
+          <article key={solution.slug}>
+            <h2>{solution.title[currentLang]}</h2>
+            <p>{solution.heroTitle[currentLang]}</p>
+            <p>{solution.description[currentLang]}</p>
+            <a href={`/${currentLang}/services/${solution.slug}`}>
+              {solution.title[currentLang]}
+            </a>
           </article>
         ))}
       </div>
