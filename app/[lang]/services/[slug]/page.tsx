@@ -9,6 +9,51 @@ import type { SupportedSolutionLang } from "@/data/SolutionContent";
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
 
+const previewDToneCss = `
+  .solution-preview-d-cool .bg-\\[\\#133b66\\] {
+    background-color: #111313 !important;
+  }
+  .solution-preview-d-cool .text-\\[\\#133b66\\] {
+    color: #252929 !important;
+  }
+  .solution-preview-d-cool .bg-\\[\\#1f5f9f\\] {
+    background-color: #1b1e1e !important;
+  }
+  .solution-preview-d-cool .text-\\[\\#1f5f9f\\]\\/38 {
+    color: rgba(11, 13, 13, 0.32) !important;
+  }
+  .solution-preview-d-cool .bg-\\[\\#eaf1ff\\] {
+    background-color: #ecebe7 !important;
+  }
+  .solution-preview-d-cool .bg-\\[\\#e9eef4\\] {
+    background-color: #e8e7e3 !important;
+  }
+  .solution-preview-d-cool .bg-\\[\\#1f5f9f\\]\\/18,
+  .solution-preview-d-cool .bg-\\[\\#6ea7d5\\]\\/10 {
+    background-color: rgba(255, 255, 255, 0.028) !important;
+  }
+  .solution-preview-d-cool .from-\\[\\#0b0d0d\\]\\/55 {
+    --tw-gradient-from: rgba(11, 13, 13, 0.5) var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgba(11, 13, 13, 0) var(--tw-gradient-to-position) !important;
+  }
+  .solution-preview-d-cool .from-\\[\\#1f5f9f\\]\\/18 {
+    --tw-gradient-from: rgba(11, 13, 13, 0.14) var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgba(11, 13, 13, 0) var(--tw-gradient-to-position) !important;
+  }
+  .solution-preview-d-cool .to-\\[\\#1f5f9f\\]\\/12 {
+    --tw-gradient-to: rgba(255, 255, 255, 0.025) var(--tw-gradient-to-position) !important;
+  }
+  .solution-preview-d-cool svg[aria-hidden="true"] {
+    filter: grayscale(1) saturate(0) contrast(1.04);
+  }
+  .solution-preview-d-cool .group:hover .group-hover\\:bg-\\[\\#133b66\\] {
+    background-color: #111313 !important;
+  }
+  .solution-preview-d-cool .group:hover .group-hover\\:text-\\[\\#1f5f9f\\] {
+    color: #111313 !important;
+  }
+`;
+
 type RouteParams = {
   lang: string;
   slug: string;
@@ -172,7 +217,10 @@ export default async function SolutionPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       {slug === "performance-marketing" ? (
-        <SolutionDetailPerformancePreview lang={currentLang} solution={solution} content={content} />
+        <div className="solution-preview-d-cool">
+          <style dangerouslySetInnerHTML={{ __html: previewDToneCss }} />
+          <SolutionDetailPerformancePreview lang={currentLang} solution={solution} content={content} />
+        </div>
       ) : (
         <SolutionDetail lang={currentLang} solution={solution} content={content} />
       )}
