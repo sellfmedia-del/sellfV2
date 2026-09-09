@@ -7,8 +7,8 @@ import { useParams } from "next/navigation";
 import { serviceData } from "@/data/ServiceData";
 
 const dict = {
-  tr: { expertise: "Uzmanlığımız", whatWeDo: "Ne ", whatWeDoSpan: "Yapıyoruz", processHeader: "Süreç & Metodoloji", deliverablesHeader: "Çıktılar", showcaseHeader: "Örnek Projeler" },
-  en: { expertise: "Our Expertise", whatWeDo: "What We ", whatWeDoSpan: "Do", processHeader: "Process & Framework", deliverablesHeader: "Deliverables", showcaseHeader: "Showcase" }
+  tr: { expertise: "Uzmanlığımız", whatWeDo: "Çözümlerimiz", whatWeDoSpan: "", processHeader: "Süreç & Metodoloji", deliverablesHeader: "Çıktılar", showcaseHeader: "Örnek Projeler" },
+  en: { expertise: "Our Expertise", whatWeDo: "Our ", whatWeDoSpan: "Solutions", processHeader: "Process & Framework", deliverablesHeader: "Deliverables", showcaseHeader: "Showcase" }
 };
 
 const services = [
