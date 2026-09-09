@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import SolutionDetail from "@/components/SolutionDetail";
 import SolutionDetailPerformancePreview from "@/components/SolutionDetailPerformancePreview";
 import { getSolutionIndexItem, solutionSlugs } from "@/data/SolutionIndex";
 import { getSolutionContent } from "@/data/getSolutionContent";
@@ -216,14 +215,10 @@ export default async function SolutionPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      {slug === "performance-marketing" ? (
-        <div className="solution-preview-d-cool">
-          <style dangerouslySetInnerHTML={{ __html: previewDToneCss }} />
-          <SolutionDetailPerformancePreview lang={currentLang} solution={solution} content={content} />
-        </div>
-      ) : (
-        <SolutionDetail lang={currentLang} solution={solution} content={content} />
-      )}
+      <div className="solution-preview-d-cool">
+        <style dangerouslySetInnerHTML={{ __html: previewDToneCss }} />
+        <SolutionDetailPerformancePreview lang={currentLang} solution={solution} content={content} />
+      </div>
     </>
   );
 }
