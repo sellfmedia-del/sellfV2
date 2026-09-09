@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SolutionDetail from "@/components/SolutionDetail";
+import SolutionDetailPerformancePreview from "@/components/SolutionDetailPerformancePreview";
 import { getSolutionIndexItem, solutionSlugs } from "@/data/SolutionIndex";
 import { getSolutionContent } from "@/data/getSolutionContent";
 import type { SupportedSolutionLang } from "@/data/SolutionContent";
@@ -170,7 +171,11 @@ export default async function SolutionPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <SolutionDetail lang={currentLang} solution={solution} content={content} />
+      {slug === "performance-marketing" ? (
+        <SolutionDetailPerformancePreview lang={currentLang} solution={solution} content={content} />
+      ) : (
+        <SolutionDetail lang={currentLang} solution={solution} content={content} />
+      )}
     </>
   );
 }
