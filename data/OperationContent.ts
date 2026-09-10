@@ -1,3 +1,4 @@
+import { applyOperationAuthorityQa } from "@/data/OperationContentAuthorityQa";
 import { creativeDigitalOperationContent } from "@/data/OperationContentCreativeDigital";
 import { ecommerceOperationContent } from "@/data/OperationContentEcommerce";
 import { performanceOperationContent } from "@/data/OperationContentPerformance";
@@ -20,7 +21,7 @@ const allOperationContent: OperationContent[] = [
   ...ecommerceOperationContent,
   ...seoOperationContent,
   ...creativeDigitalOperationContent,
-];
+].map(applyOperationAuthorityQa);
 
 export const operationContent: Record<string, OperationContent> = Object.fromEntries(
   allOperationContent.map((item) => [item.slug, item]),
