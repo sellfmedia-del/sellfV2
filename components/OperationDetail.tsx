@@ -16,11 +16,14 @@ const labels = {
     scope: "Operasyon Kapsamı",
     process: "Nasıl Çalışıyoruz?",
     evidence: "İlgili Deneyim",
+    evidenceIntro: "Uzmanlığı sloganla değil, operasyonun gerçek karar mantığı, kontrol noktaları ve çalışma bağlamıyla gösteriyoruz.",
     decisions: "Karar Vermeden Önce",
     faq: "Sık Sorulan Sorular",
     related: "İlgili Operasyonlar",
     parent: "Bağlı Olduğu Çözüm",
     searchIntent: "Arama Niyeti",
+    operation: "Operasyon / Hizmet",
+    signals: ["Niyet", "Sistem", "Sonuç"],
     future: "Yakında",
   },
   en: {
@@ -34,11 +37,14 @@ const labels = {
     scope: "Operational Scope",
     process: "How We Work",
     evidence: "Relevant Experience",
+    evidenceIntro: "We show expertise through the operation's real decision logic, control points and working context—not generic claims.",
     decisions: "Before You Decide",
     faq: "Frequently Asked Questions",
     related: "Related Operations",
     parent: "Parent Solution",
     searchIntent: "Search Intent",
+    operation: "Operation / Service",
+    signals: ["Intent", "System", "Outcome"],
     future: "Coming soon",
   },
 } as const;
@@ -92,7 +98,7 @@ export default function OperationDetail({ lang, content }: { lang: OperationLang
             <div>
               <div className="mb-6 flex items-center gap-4">
                 {parent && <SolutionHubIcon slug={parent.slug} size={48} />}
-                <span className="text-[9px] font-semibold uppercase tracking-[.22em] text-white/28">Operation / Service</span>
+                <span className="text-[9px] font-semibold uppercase tracking-[.22em] text-white/28">{t.operation}</span>
               </div>
               <p className="sellf-kicker mb-5 text-white/36">{content.label[lang]}</p>
               <h1 className="sellf-display max-w-[11ch] text-[3.4rem] leading-[.94] tracking-[-.058em] sm:text-[4.2rem] md:text-[4.85rem] lg:text-[5.5rem] xl:text-[6.1rem]">
@@ -118,9 +124,9 @@ export default function OperationDetail({ lang, content }: { lang: OperationLang
                   ))}
                 </div>
                 <div className="mt-6 grid grid-cols-3 gap-2 text-center text-[8px] font-semibold uppercase tracking-[.13em] text-white/24">
-                  <span className="rounded-full border border-white/[.06] px-2 py-2">Demand</span>
-                  <span className="rounded-full border border-white/[.06] px-2 py-2">Conversion</span>
-                  <span className="rounded-full border border-white/[.06] px-2 py-2">Revenue</span>
+                  {t.signals.map((signal) => (
+                    <span key={signal} className="rounded-full border border-white/[.06] px-2 py-2">{signal}</span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -175,7 +181,7 @@ export default function OperationDetail({ lang, content }: { lang: OperationLang
             <div><p className="sellf-kicker text-white/34">{t.scope}</p></div>
             <div>
               <p className="max-w-4xl text-[1.8rem] font-medium leading-[1.2] tracking-[-.04em] text-white/90 md:text-[2.65rem] md:leading-[1.12]">
-                {lang === "tr" ? "Google Ads hesabını tek bir kampanya ekranı değil, birbirine bağlı talep ve ölçüm sistemi olarak yönetiyoruz." : "We manage Google Ads as a connected demand and measurement system, not as a collection of isolated campaigns."}
+                {localized(content.scopeIntro, lang)}
               </p>
               <div className="mt-14 grid gap-3 sm:grid-cols-2 xl:grid-cols-4 md:mt-16">
                 {content.scope.map((item, index) => (
@@ -212,7 +218,7 @@ export default function OperationDetail({ lang, content }: { lang: OperationLang
             <div><p className="sellf-kicker text-black/34">{t.evidence}</p></div>
             <div>
               <p className="max-w-4xl text-[1.8rem] font-medium leading-[1.2] tracking-[-.04em] md:text-[2.65rem] md:leading-[1.12]">
-                {lang === "tr" ? "Kanıtı kanala uydurmuyoruz. İlgili deneyimi, gerçekten yürütüldüğü daha geniş sistemin bağlamıyla birlikte gösteriyoruz." : "We do not force proof into a channel claim. Relevant experience is shown in the context of the wider system in which the work actually happened."}
+                {t.evidenceIntro}
               </p>
               <div className="mt-12 grid gap-3 md:grid-cols-3 md:mt-14">
                 {content.evidence.map((item) => (
