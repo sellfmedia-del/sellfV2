@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/sanity/lib/client";
+import { operationSlugs } from "@/data/OperationContent";
 import { solutionSlugs } from "@/data/SolutionIndex";
 
 const baseUrl = "https://www.sellfmedia.com";
@@ -72,6 +73,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         alternates: languageAlternates(path),
         changeFrequency: "monthly",
         priority: 0.7,
+      });
+    }
+  }
+
+  // Yalnızca gerçek, canonical standalone operation sayfaları sitemap'e alınır.
+  // Alias URL'ler redirect ile canonical URL'ye taşındığı için burada yer almaz.
+  for (const locale of locales) {
+    for (const slug of operationSlugs) {
+      const path = `/services/${slug}`;
+      entries.push({
+        url: `${baseUrl}/${locale}${path}`,
+        alternates: languageAlternates(path),
+        changeFrequency: "monthly",
+        priority: 0.65,
       });
     }
   }
