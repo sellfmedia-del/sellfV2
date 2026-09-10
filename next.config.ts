@@ -1,4 +1,13 @@
 import type { NextConfig } from "next";
+import { canonicalOperationRules } from "./data/OperationCanonicalRules";
+
+const operationAliasRedirects = canonicalOperationRules.flatMap(({ canonical, aliases = [] }) =>
+  aliases.map((alias) => ({
+    source: `/:lang(tr|en)/services/${alias}`,
+    destination: `/:lang/services/${canonical}`,
+    permanent: true,
+  })),
+);
 
 const nextConfig: NextConfig = {
   images: {
@@ -34,6 +43,7 @@ async redirects() {
     { source: '/en/post/:slug', destination: '/en/blog/:slug', permanent: true },
     { source: '/en/blog/categories/:category', destination: '/en/blog', permanent: true },
     { source: '/en/seo-danismanligi', destination: '/en/services', permanent: true },
+    ...operationAliasRedirects,
   ];
 },
 };
