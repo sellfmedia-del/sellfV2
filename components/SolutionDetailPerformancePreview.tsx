@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SolutionCta from "@/components/SolutionCta";
 import SolutionHubIcon from "@/components/SolutionHubIcon";
+import { getOperationContentByDisplayLabel } from "@/data/OperationContent";
 import { getSolutionIndexItem, type SolutionIndexItem } from "@/data/SolutionIndex";
 import type { SolutionContent, SupportedSolutionLang } from "@/data/SolutionContent";
 
@@ -301,12 +302,26 @@ export default function SolutionDetailPerformancePreview({ lang, solution, conte
                   <p className="text-xs font-semibold uppercase tracking-[.18em] text-black/38">{group.label}</p>
                 </div>
                 <div className="grid gap-x-10 gap-y-3 md:grid-cols-2 xl:grid-cols-3">
-                  {group.items.map((operation) => (
-                    <div key={`${group.key}-${operation}`} className="group flex min-h-[72px] items-center justify-between gap-5 rounded-[18px] bg-white px-5 py-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(10,12,12,.055)]">
-                      <span className="text-sm font-medium leading-5 tracking-[-.02em] text-black/68">{operation}</span>
-                      <span className="text-[#1f5f9f]/38 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#1f5f9f]">→</span>
-                    </div>
-                  ))}
+                  {group.items.map((operation) => {
+                    const operationDetail = getOperationContentByDisplayLabel(operation);
+                    const className = "group flex min-h-[72px] items-center justify-between gap-5 rounded-[18px] bg-white px-5 py-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(10,12,12,.055)]";
+                    const body = (
+                      <>
+                        <span className="text-sm font-medium leading-5 tracking-[-.02em] text-black/68">{operation}</span>
+                        <span className="text-[#1f5f9f]/38 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#1f5f9f]">→</span>
+                      </>
+                    );
+
+                    return operationDetail ? (
+                      <Link key={`${group.key}-${operation}`} href={`/${lang}/services/${operationDetail.slug}`} className={className}>
+                        {body}
+                      </Link>
+                    ) : (
+                      <div key={`${group.key}-${operation}`} className={className}>
+                        {body}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
