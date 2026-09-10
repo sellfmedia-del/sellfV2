@@ -64,6 +64,9 @@ export function renderOperationPage(slug: string, lang: string) {
 
   const canonicalUrl = `${baseUrl}/${lang}/services/${slug}`;
   const parentUrl = `${baseUrl}/${lang}/services/${parent.slug}`;
+  const relatedServices = content.relatedSlugs
+    .map((relatedSlug) => getOperationContent(relatedSlug))
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
   const serviceJsonLd = {
     "@type": "Service",
@@ -79,12 +82,23 @@ export function renderOperationPage(slug: string, lang: string) {
       name: "Sellf Media",
       url: baseUrl,
     },
-    isRelatedTo: {
-      "@type": "Service",
-      "@id": `${parentUrl}#service`,
-      name: parent.title[lang],
-      url: parentUrl,
-    },
+    isRelatedTo: [
+      {
+        "@type": "Service",
+        "@id": `${parentUrl}#service`,
+        name: parent.title[lang],
+        url: parentUrl,
+      },
+      ...relatedServices.map((related) => {
+        const relatedUrl = `${baseUrl}/${lang}/services/${related.slug}`;
+        return {
+          "@type": "Service",
+          "@id": `${relatedUrl}#service`,
+          name: related.label[lang],
+          url: relatedUrl,
+        };
+      }),
+    ],
   };
 
   const breadcrumbJsonLd = {
