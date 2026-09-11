@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import BhsFrameworkPage from "@/components/BhsFrameworkPage";
+import { bhsReportDataUri } from "@/data/bhsReportAsset";
 import styles from "./bhs-report.module.css";
 
 const baseUrl = "https://www.sellfmedia.com";
@@ -129,13 +131,17 @@ export default async function BhsPage({ params }: { params: Promise<RouteParams>
     "@graph": [webPageJsonLd, definedTermJsonLd, breadcrumbJsonLd],
   };
 
+  const reportStyle = {
+    "--bhs-report-image": `url("${bhsReportDataUri}")`,
+  } as CSSProperties;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <div className={styles.page}>
+      <div className={styles.page} style={reportStyle}>
         <BhsFrameworkPage lang={currentLang} />
       </div>
     </>
