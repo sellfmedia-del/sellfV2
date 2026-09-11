@@ -1,15 +1,16 @@
 .page {
-  --rgi-hero: url('/framework/rgi/hero.webp');
-  --rgi-glance: url('/framework/rgi/glance.webp');
-  --rgi-bridge: url('/framework/rgi/bridge.webp');
-  --rgi-axes: url('/framework/rgi/axes.webp');
-  --rgi-layers: url('/framework/rgi/layers.webp');
-  --rgi-funnel: url('/framework/rgi/funnel.webp');
-  --rgi-cadence: url('/framework/rgi/cadence.webp');
-  --rgi-output: url('/framework/rgi/output-exact.svg');
+  --rgi-hero: url('/framework/rgi/hero.svg');
+  --rgi-glance: url('/framework/rgi/glance.svg');
+  --rgi-bridge: url('/framework/rgi/bridge.svg');
+  --rgi-axes: url('/framework/rgi/axes.svg');
+  --rgi-layers: url('/framework/rgi/layers.svg');
+  --rgi-funnel: url('/framework/rgi/funnel.svg');
+  --rgi-cadence: url('/framework/rgi/cadence.svg');
+  --rgi-output: url('/framework/rgi/output.svg');
 }
 
-/* The approved mockup artwork is used directly. No CSS redraws. */
+/* Keep the approved mockup composition, but render the visual modules as vectors
+   so they stay sharp on retina / large desktop displays. */
 .page article > section:first-of-type :global(.sellf-container) > div:last-child,
 .page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child,
 .page #bhs-rgi :global(.sellf-container) > div:last-child,
@@ -29,7 +30,7 @@
 }
 
 .page article > section:first-of-type :global(.sellf-container) > div:last-child {
-  aspect-ratio: 385 / 345;
+  aspect-ratio: 400 / 350;
   max-width: 560px;
   background-image: var(--rgi-hero) !important;
 }
@@ -59,7 +60,7 @@
 }
 
 .page #funnel :global(.sellf-container) > div:last-child {
-  aspect-ratio: 490 / 185;
+  aspect-ratio: 500 / 190;
   max-width: 650px;
   background-image: var(--rgi-funnel) !important;
 }
@@ -71,12 +72,13 @@
 }
 
 .page #output :global(.sellf-container) > div:last-child {
+  position: relative;
   aspect-ratio: 485 / 170;
   max-width: 670px;
   background-image: var(--rgi-output) !important;
 }
 
-/* Remove only the previous programmatic visual layers underneath the approved artwork. */
+/* Remove only the old programmatic drawings underneath the approved visual modules. */
 .page article > section:first-of-type :global(.sellf-container) > div:last-child > *,
 .page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child > *,
 .page #bhs-rgi :global(.sellf-container) > div:last-child > *,
@@ -86,6 +88,24 @@
 .page #cadence :global(.sellf-container) > div:last-child > *,
 .page #output :global(.sellf-container) > div:last-child > * {
   display: none !important;
+}
+
+/* The CTA is visually part of the approved artwork, but remains a real link. */
+.page #output :global(.sellf-container) > div:last-child > :global(.rgi-output-link) {
+  display: block !important;
+  position: absolute;
+  z-index: 5;
+  left: 75.5%;
+  top: 67%;
+  width: 15.5%;
+  height: 16.5%;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.page #output :global(.sellf-container) > div:last-child > :global(.rgi-output-link):focus-visible {
+  outline: 2px solid #17222b;
+  outline-offset: 3px;
 }
 
 @media (max-width: 767px) {
