@@ -1,108 +1,96 @@
-.page {
-  --rgi-atlas: url('/framework/rgi/reference-atlas.webp');
-}
-
 .page article > section:first-of-type {
   background: linear-gradient(180deg, #fafbfc 0%, #f5f7f8 100%) !important;
 }
 
-/* HERO — exact approved mockup visual crop */
+/* HERO */
 .page article > section:first-of-type :global(.sellf-container) > div:last-child {
   min-height: 0 !important;
-  aspect-ratio: 500 / 438;
+  aspect-ratio: 400 / 350;
   max-width: 560px !important;
   margin-inline: auto;
-  background-image: var(--rgi-atlas) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% auto !important;
-  background-position: center 0% !important;
+  background: url('/framework/rgi/hero.svg') center / contain no-repeat !important;
 }
 
 .page article > section:first-of-type :global(.sellf-container) > div:last-child > * {
   display: none !important;
 }
 
-/* RGI AT A GLANCE — keep structure, only soften cards to match reference */
-.page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child > div {
-  border: 1px solid rgba(118, 143, 162, .10) !important;
-  background: rgba(255,255,255,.76) !important;
-  box-shadow: 0 8px 24px rgba(55,78,96,.035) !important;
+/* RGI AT A GLANCE */
+.page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child {
+  min-height: 0 !important;
+  aspect-ratio: 465 / 175;
+  width: 100%;
+  max-width: 650px;
+  margin-inline: auto;
+  background: url('/framework/rgi/glance.svg') center / contain no-repeat !important;
 }
 
-/* BHS → RGI — exact approved diagram */
+.page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child > * {
+  display: none !important;
+}
+
+/* BHS → RGI */
 .page #bhs-rgi {
   background: #141f27 !important;
 }
 
 .page #bhs-rgi :global(.sellf-container) > div:last-child {
-  aspect-ratio: 500 / 222;
+  aspect-ratio: 405 / 180;
   min-height: 0 !important;
   width: 100%;
   max-width: 620px;
   margin-inline: auto;
-  background-image: var(--rgi-atlas) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% auto !important;
-  background-position: center 28.96% !important;
+  background: url('/framework/rgi/bridge.svg') center / contain no-repeat !important;
 }
 
 .page #bhs-rgi :global(.sellf-container) > div:last-child > * {
   display: none !important;
 }
 
-/* BRAND / PRODUCT — exact approved card artwork */
+/* BRAND / PRODUCT */
 .page #axes :global(.sellf-container) > div:last-child {
-  aspect-ratio: 500 / 181;
+  aspect-ratio: 480 / 180;
   width: 100%;
   max-width: 650px;
   margin-inline: auto;
-  background-image: var(--rgi-atlas) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% auto !important;
-  background-position: center 42.76% !important;
+  background: url('/framework/rgi/axes.svg') center / contain no-repeat !important;
 }
 
 .page #axes :global(.sellf-container) > div:last-child > * {
   display: none !important;
 }
 
-/* PERFORMANCE LAYERS — exact approved card artwork */
+/* PERFORMANCE LAYERS */
 .page #layers :global(.sellf-container) > div > div:last-child {
-  aspect-ratio: 500 / 151;
+  aspect-ratio: 480 / 155;
   width: 100%;
   max-width: 650px;
   margin-inline: auto;
-  background-image: var(--rgi-atlas) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% auto !important;
-  background-position: center 53.69% !important;
+  background: url('/framework/rgi/layers.svg') center / contain no-repeat !important;
 }
 
 .page #layers :global(.sellf-container) > div > div:last-child > * {
   display: none !important;
 }
 
-/* FUNNEL WIDTH — exact approved funnel artwork */
+/* FUNNEL WIDTH */
 .page #funnel {
   background: linear-gradient(90deg, #f5f8fa 0%, #edf3f6 100%) !important;
 }
 
 .page #funnel :global(.sellf-container) > div:last-child {
-  aspect-ratio: 500 / 282;
+  aspect-ratio: 500 / 190;
   width: 100%;
-  max-width: 610px;
+  max-width: 650px;
   margin-inline: auto;
-  background-image: var(--rgi-atlas) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% auto !important;
-  background-position: center 69.19% !important;
+  background: url('/framework/rgi/funnel.svg') center / contain no-repeat !important;
 }
 
 .page #funnel :global(.sellf-container) > div:last-child > * {
   display: none !important;
 }
 
-/* EXTERNAL / INTERNAL — preserve copy, only match approved tonal split */
+/* EXTERNAL / INTERNAL */
 .page #external-internal > div:first-child {
   background: #17232b !important;
 }
@@ -134,7 +122,7 @@
   background: rgba(238,245,249,.48) !important;
 }
 
-/* QUARTERLY + ANNUAL — exact approved chart, preserve descriptive copy below */
+/* QUARTERLY + ANNUAL */
 .page #cadence :global(.sellf-container) > div:last-child {
   position: relative;
 }
@@ -143,11 +131,8 @@
   content: '';
   display: block;
   width: 100%;
-  aspect-ratio: 500 / 190;
-  background-image: var(--rgi-atlas);
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: center 83.38%;
+  aspect-ratio: 485 / 140;
+  background: url('/framework/rgi/cadence.svg') center / contain no-repeat;
 }
 
 .page #cadence :global(.sellf-container) > div:last-child > div:nth-child(1),
@@ -159,16 +144,13 @@
   margin-top: 1.25rem !important;
 }
 
-/* MORE THAN A REPORT — exact approved report/deck artwork */
+/* MORE THAN A REPORT */
 .page #output :global(.sellf-container) > div:last-child {
-  aspect-ratio: 500 / 250;
+  aspect-ratio: 485 / 170;
   width: 100%;
-  max-width: 620px;
+  max-width: 650px;
   margin-inline: auto;
-  background-image: var(--rgi-atlas) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% auto !important;
-  background-position: center 100% !important;
+  background: url('/framework/rgi/output.svg') center / contain no-repeat !important;
 }
 
 .page #output :global(.sellf-container) > div:last-child > * {
@@ -177,6 +159,7 @@
 
 @media (max-width: 767px) {
   .page article > section:first-of-type :global(.sellf-container) > div:last-child,
+  .page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child,
   .page #bhs-rgi :global(.sellf-container) > div:last-child,
   .page #axes :global(.sellf-container) > div:last-child,
   .page #layers :global(.sellf-container) > div > div:last-child,
