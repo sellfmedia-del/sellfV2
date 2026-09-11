@@ -94,12 +94,12 @@ type Copy = {
 
 const copy: Record<SupportedLang, Copy> = {
   tr: {
-    heroEyebrow: "SELLF PROPRIETARY FRAMEWORK",
+    heroEyebrow: "SELLF'E ÖZGÜ BÜYÜME ÇERÇEVESİ",
     name: "RGI",
-    expansion: "Real Growth Index",
+    expansion: "Gerçek Büyüme Endeksi",
     heroTitleA: "Büyüme, iyi görünen şey değildir.",
     heroTitleB: "Ölçülebilir biçimde gerçekten ilerleyen şeydir.",
-    heroDesc: "Satış, trafik, erişim veya kampanya sonuçları tek başına gerçek büyümeyi kanıtlamaz. RGI — Real Growth Index, BHS ile belirlenen başlangıç noktasından itibaren marka ve ürün performansının gerçekten ne kadar ilerlediğini ölçmek için geliştirdiğimiz Sellf büyüme indeksidir.",
+    heroDesc: "Satış, trafik, erişim veya kampanya sonuçları tek başına gerçek büyümeyi kanıtlamaz. RGI — Gerçek Büyüme Endeksi, BHS ile belirlenen başlangıç noktasından itibaren marka ve ürün performansının gerçekten ne kadar ilerlediğini ölçmek için geliştirdiğimiz Sellf büyüme indeksidir.",
     heroCta: "RGI Nasıl Çalışır",
     glanceEyebrow: "RGI'YA HIZLI BAKIŞ",
     glanceTitle: "Bir performans skoru değil. Bir ilerleme ölçüsü.",
@@ -111,31 +111,31 @@ const copy: Record<SupportedLang, Copy> = {
     bridgeCta: "BHS ile bağlantıyı gör",
     axesEyebrow: "İKİ EKSEN",
     axesTitle: "Büyüme tek bir yerde gerçekleşmez.",
-    axesDesc: "RGI şirket performansını Brand ve Product eksenlerinde inceler; sonra gerçek büyümeyi anlamak için bu iki alanı tekrar bir araya getirir.",
-    brandTitle: "Brand",
+    axesDesc: "RGI şirket performansını Marka ve Ürün eksenlerinde inceler; sonra gerçek büyümeyi anlamak için bu iki alanı tekrar bir araya getirir.",
+    brandTitle: "Marka",
     brandDesc: "Marka gücü, talep, algı, erişim ve ticari değer yaratma kapasitesi.",
-    productTitle: "Product",
-    productDesc: "Ürün veya hizmetin funnel yapısı, ekonomik performansı ve gerçek büyümeye katkısı.",
+    productTitle: "Ürün",
+    productDesc: "Ürün veya hizmetin dönüşüm hunisi yapısı, ekonomik performansı ve gerçek büyümeye katkısı.",
     layersEyebrow: "ÜÇ PERFORMANS KATMANI",
     layersTitle: "Görünürlüğün ötesinde ne değişti?",
     layersDesc: "Tam RGI sistemi büyümeyi pazarlama, finans ve operasyon katmanlarında okur. Çünkü pazarlama performansı yükselirken şirketin finansal veya operasyonel sağlığı aynı anda kötüleşebilir.",
-    layerMarketing: "Marketing Performance",
+    layerMarketing: "Pazarlama Performansı",
     layerMarketingDesc: "Pazarın markaya ve ürünlere verdiği tepki nasıl değişiyor?",
-    layerFinancial: "Financial Health",
+    layerFinancial: "Finansal Sağlık",
     layerFinancialDesc: "Bu büyüme ekonomik olarak ne kadar sağlıklı?",
-    layerOperational: "Operational Efficiency",
+    layerOperational: "Operasyonel Verimlilik",
     layerOperationalDesc: "Organizasyon oluşan büyümeyi ne kadar verimli ve sürdürülebilir taşıyor?",
-    brandMarketingEyebrow: "BRAND — MARKETING PERFORMANCE",
+    brandMarketingEyebrow: "MARKA — PAZARLAMA PERFORMANSI",
     brandMarketingTitle: "Marka gerçekten güçleniyor mu?",
-    brandMarketingDesc: "Marka performansını yalnızca erişim veya takipçi sayısıyla değerlendirmeyiz. External RGI, markanın pazardaki gerçek hareketini beş temel sinyal üzerinden okur.",
+    brandMarketingDesc: "Marka performansını yalnızca erişim veya takipçi sayısıyla değerlendirmeyiz. Dış RGI, markanın pazardaki gerçek hareketini beş temel sinyal üzerinden okur.",
     brandSignals: [
-      ["Trend Adaptation", "Kategori trendleri içindeki görünürlük ve yıllık talep değişimi."],
-      ["Positive Comment %", "Yorum ve mention hacmi içinde pozitif algı ve rakiplere göre konum."],
-      ["Traffic-Based Market Share", "Sektörel trafik payı ve erişilebildiği ölçüde trafik kalitesi."],
-      ["Marketing KPI / Result Focus", "Kampanyanın belirlenen gerçek hedefe göre ürettiği sonuç."],
-      ["Advocacy Share", "Loyalty aşamasındaki kitlenin markayı paylaşma, tavsiye etme ve savunma oranı."],
+      ["Trend Uyumu", "Kategori trendleri içindeki görünürlük ve yıllık talep değişimi."],
+      ["Olumlu Yorum Oranı", "Yorum ve bahsedilme hacmi içinde pozitif algı ve rakiplere göre konum."],
+      ["Trafik Bazlı Pazar Payı", "Sektörel trafik payı ve erişilebildiği ölçüde trafik kalitesi."],
+      ["Pazarlama KPI / Sonuç Odağı", "Kampanyanın belirlenen gerçek hedefe göre ürettiği sonuç."],
+      ["Savunuculuk Payı", "Sadakat aşamasındaki kitlenin markayı paylaşma, tavsiye etme ve savunma oranı."],
     ],
-    brandFinancialEyebrow: "BRAND — FINANCIAL HEALTH",
+    brandFinancialEyebrow: "MARKA — FİNANSAL SAĞLIK",
     brandFinancialTitle: "Büyümenin ekonomik karşılığı var mı?",
     brandFinancialDesc: "Markanın büyüyor görünmesi ile ekonomik olarak büyümesi aynı şey değildir. RGI nominal artışı ekonomik sağlık sinyallerinden ayırır.",
     brandFinancialItems: [
@@ -144,57 +144,57 @@ const copy: Record<SupportedLang, Copy> = {
       ["Öngörülmeyen Maliyetler", "Beklenmeyen giderlerin toplam maliyet yapısındaki payı."],
       ["Reel Gelir Büyümesi", "Enflasyon etkisi sonrası gerçek gelir gelişimi."],
     ],
-    productMarketingEyebrow: "PRODUCT — MARKETING PERFORMANCE",
+    productMarketingEyebrow: "ÜRÜN — PAZARLAMA PERFORMANSI",
     productMarketingTitle: "Bir ürün yalnızca daha fazla sattığı için sağlıklı büyümüş sayılmaz.",
-    productMarketingDesc: "RGI ürün büyümesini Funnel Width ve Funnel Depth üzerinden okur. Amaç tek bir aşamadaki sıçramayı ödüllendirmek değil; funnel'ın birlikte, dengeli ve sürdürülebilir biçimde genişleyip genişlemediğini anlamaktır.",
-    funnelEyebrow: "FUNNEL WIDTH",
-    funnelTitle: "Sağlıklı büyüme funnel'ın tek bir noktasında gerçekleşmez.",
-    funnelDesc: "RGI, Awareness → Consideration → Intent → Conversion → Loyalty aşamalarının BHS başlangıç noktasından itibaren yüzdesel değişimini izler. Asıl ölçüm, bu büyüme oranlarının birbirine ne kadar yakın olduğudur.",
-    funnelRule: "RGI'ın sorusu: En çok hangi aşama büyüdü? değil. Funnel'ın tamamı birlikte, sağlıklı bir hızda büyüyor mu?",
+    productMarketingDesc: "RGI ürün büyümesini Dönüşüm Hunisi Genişliği ve Dönüşüm Hunisi Derinliği üzerinden okur. Amaç tek bir aşamadaki sıçramayı ödüllendirmek değil; huninin birlikte, dengeli ve sürdürülebilir biçimde genişleyip genişlemediğini anlamaktır.",
+    funnelEyebrow: "DÖNÜŞÜM HUNİSİ GENİŞLİĞİ",
+    funnelTitle: "Sağlıklı büyüme dönüşüm hunisinin tek bir noktasında gerçekleşmez.",
+    funnelDesc: "RGI, Farkındalık → Değerlendirme → Niyet → Dönüşüm → Sadakat aşamalarının BHS başlangıç noktasından itibaren yüzdesel değişimini izler. Asıl ölçüm, bu büyüme oranlarının birbirine ne kadar yakın olduğudur.",
+    funnelRule: "RGI'ın sorusu: En çok hangi aşama büyüdü? değil. Dönüşüm hunisinin tamamı birlikte, sağlıklı bir hızda büyüyor mu?",
     funnelHealthy: "Dengeli büyüme",
     funnelUnhealthy: "Dengesiz büyüme",
-    funnelDepthEyebrow: "FUNNEL DEPTH",
+    funnelDepthEyebrow: "DÖNÜŞÜM HUNİSİ DERİNLİĞİ",
     funnelDepthTitle: "Satıştan sonra ne oluyor?",
-    funnelDepthDesc: "Funnel Depth özellikle Loyalty ve Advocacy gelişimini yıllık perspektifte değerlendirir. Çünkü gerçek sadakat birkaç haftalık kampanya sonucuyla değil, zaman içinde tekrar satın alma, tavsiye ve savunuculukla kanıtlanır.",
-    productFinancialEyebrow: "PRODUCT — FINANCIAL HEALTH",
+    funnelDepthDesc: "Dönüşüm Hunisi Derinliği özellikle Sadakat ve Savunuculuk gelişimini yıllık perspektifte değerlendirir. Çünkü gerçek sadakat birkaç haftalık kampanya sonucuyla değil, zaman içinde tekrar satın alma, tavsiye ve savunuculukla kanıtlanır.",
+    productFinancialEyebrow: "ÜRÜN — FİNANSAL SAĞLIK",
     productFinancialTitle: "Satılan ürün gerçekten değer mi yaratıyor?",
     productFinancialDesc: "Yüksek satış hacmi tek başına iyi bir ürün ekonomisi anlamına gelmez. RGI ürünün büyümeyi ekonomik olarak ne kadar sağlıklı taşıdığını inceler.",
     productFinancialItems: [
-      ["Gross Profit", "Brüt kârlılık ve sektör ortalamasına göre konum."],
-      ["Marketing Efficiency", "Acquisition maliyeti veya satış hedefi ile pazarlama bütçesi arasındaki ilişki."],
-      ["Production / Service Cost", "Üretim veya hizmet maliyetlerinin yarattığı ekonomik yük."],
-      ["Capacity vs. Result", "Pazarlamanın yarattığı talebi operasyonun gerçekten karşılayabilme kapasitesi."],
+      ["Brüt Kâr", "Brüt kârlılık ve sektör ortalamasına göre konum."],
+      ["Pazarlama Verimliliği", "Müşteri edinme maliyeti veya satış hedefi ile pazarlama bütçesi arasındaki ilişki."],
+      ["Üretim / Hizmet Maliyeti", "Üretim veya hizmet maliyetlerinin yarattığı ekonomik yük."],
+      ["Kapasite / Sonuç", "Pazarlamanın yarattığı talebi operasyonun gerçekten karşılayabilme kapasitesi."],
     ],
     weightsEyebrow: "HEDEFE GÖRE AĞIRLIKLANDIRMA",
     weightsTitle: "Her KPI aynı şirket için aynı ağırlıkta değildir.",
-    weightsDesc: "External RGI'da Marketing Performance %60, Financial Health %40 ağırlığa sahiptir. Brand ve Product eksenlerinin ağırlığı ise şirketin temel KPI'ına göre değişir: brand odaklı hedeflerde Brand %60, conversion odaklı hedeflerde Product %60 ağırlık taşır.",
-    weightsNote: "KPI ağırlığı şirketin hedefini hesaba katar; funnel verimliliği ise aşamalar arasındaki büyüme dengesini ölçer. İkisi aynı şey değildir.",
-    externalTitle: "External RGI",
-    externalDesc: "Kamuya açık ve doğrulanabilir verilerle Brand ve Product eksenlerini Marketing Performance + Financial Health katmanlarında ölçer. Amaç dışarıdan kusursuz model kurmak değil; tutarlı ve karşılaştırılabilir bir büyüme sinyali üretmektir.",
-    internalTitle: "Internal RGI",
-    internalDesc: "Şirket verisi sisteme girdiğinde resim derinleşir. Marketing Performance ve Financial Health'e Operational Efficiency eklenir; böylece büyümenin ne kadar sağlıklı taşındığı da ölçümün parçası olur.",
-    cadenceEyebrow: "QUARTERLY + ANNUAL",
-    cadenceTitle: "Growth tek bir snapshot değildir.",
+    weightsDesc: "Dış RGI'da Pazarlama Performansı %60, Finansal Sağlık %40 ağırlığa sahiptir. Marka ve Ürün eksenlerinin ağırlığı ise şirketin temel KPI'ına göre değişir: marka odaklı hedeflerde Marka %60, dönüşüm odaklı hedeflerde Ürün %60 ağırlık taşır.",
+    weightsNote: "KPI ağırlığı şirketin hedefini hesaba katar; dönüşüm hunisi verimliliği ise aşamalar arasındaki büyüme dengesini ölçer. İkisi aynı şey değildir.",
+    externalTitle: "Dış RGI",
+    externalDesc: "Kamuya açık ve doğrulanabilir verilerle Marka ve Ürün eksenlerini Pazarlama Performansı + Finansal Sağlık katmanlarında ölçer. Amaç dışarıdan kusursuz model kurmak değil; tutarlı ve karşılaştırılabilir bir büyüme sinyali üretmektir.",
+    internalTitle: "İç RGI",
+    internalDesc: "Şirket verisi sisteme girdiğinde resim derinleşir. Pazarlama Performansı ve Finansal Sağlık'a Operasyonel Verimlilik eklenir; böylece büyümenin ne kadar sağlıklı taşındığı da ölçümün parçası olur.",
+    cadenceEyebrow: "ÜÇ AYLIK + YILLIK",
+    cadenceTitle: "Büyüme tek bir anlık görüntü değildir.",
     cadenceDesc: "RGI kısa ve orta vadeli değişimi yapısal gelişimden ayırmak için iki zaman perspektifi kullanır.",
-    quarterly: "Quarterly RGI",
+    quarterly: "Üç Aylık RGI",
     quarterlyDesc: "Kısa ve orta vadeli değişimi, yönü ve stratejinin doğru ilerleyip ilerlemediğini gösterir.",
-    annual: "Annual RGI",
-    annualDesc: "Brand strength, financial health, funnel depth ve uzun dönemli gelişimi daha yapısal perspektiften değerlendirir.",
-    outputEyebrow: "MORE THAN A REPORT",
-    outputTitle: "Bir dashboard değil. Bir karar sistemi.",
+    annual: "Yıllık RGI",
+    annualDesc: "Marka gücü, finansal sağlık, dönüşüm hunisi derinliği ve uzun dönemli gelişimi daha yapısal perspektiften değerlendirir.",
+    outputEyebrow: "BİR RAPORDAN FAZLASI",
+    outputTitle: "Bir gösterge paneli değil. Bir karar sistemi.",
     outputDesc: "RGI'ın değeri daha fazla grafik üretmesinde değil, bir sonraki kararı daha net hale getirmesindedir.",
     outputQuestions: ["Nerede gerçek büyüme var?", "Nerede yalnızca metrik artışı var?", "Hangi alan büyümeyi aşağı çekiyor?", "Bir sonraki çeyrekte kaynak nereye kaydırılmalı?"],
     principleEyebrow: "RGI'IN TEMEL PRENSİBİ",
-    principleTitle: "Vanity metrics büyümeyi kanıtlamaz.",
-    principleDesc: "Trafik, erişim veya satış yükselirken marj düşüyor, sadakat zayıflıyor, acquisition maliyeti kontrolden çıkıyor veya operasyon ölçeklenemiyorsa şirket gerçekten büyümüş olmayabilir.",
+    principleTitle: "Yüzeysel metrikler büyümeyi kanıtlamaz.",
+    principleDesc: "Trafik, erişim veya satış yükselirken marj düşüyor, sadakat zayıflıyor, müşteri edinme maliyeti kontrolden çıkıyor veya operasyon ölçeklenemiyorsa şirket gerçekten büyümüş olmayabilir.",
     principlePull: "Başarı, tek bir metriğin yükselmesi değil; sistemin bütünü içinde yaratılan ölçülebilir ilerlemedir.",
     journeyEyebrow: "BHS + RGI",
-    journeyTitle: "Baseline → Progress → Real Growth",
+    journeyTitle: "Başlangıç → İlerleme → Gerçek Büyüme",
     journeyDesc: "BHS başlangıç noktasını verir. RGI bu başlangıçtan itibaren oluşan değişimi ölçer. Bu döngü tekrarlandıkça büyüme tahmin edilen bir sonuç olmaktan çıkar; ölçülen, öğrenilen ve yönetilen bir sistem haline gelir.",
     journeyCta: "BHS'i Keşfet",
-    finalEyebrow: "THE SELLF MEASUREMENT SYSTEM",
+    finalEyebrow: "SELLF ÖLÇÜM SİSTEMİ",
     finalTitle: "Görünen büyümeyi değil. Gerçek büyümeyi ölçün.",
-    finalDesc: "Şirketlerin daha fazla data üretmeye değil, mevcut datanın ne anlattığını anlayabilmeye ihtiyacı var. RGI karmaşık performans sinyallerini tek bir temel sorunun cevabına dönüştürür.",
+    finalDesc: "Şirketlerin daha fazla veri üretmeye değil, mevcut verinin ne anlattığını anlayabilmeye ihtiyacı var. RGI karmaşık performans sinyallerini az sayıda temel sorunun cevabına dönüştürür.",
     finalQuestionA: "Gerçekten büyüdük mü?",
     finalQuestionB: "Ne sayesinde?",
     finalQuestionC: "Neyi değiştirmeliyiz?",
@@ -321,24 +321,24 @@ function PrimaryButton({ href, children, light = false }: { href: string; childr
   return <a href={href} className={`inline-flex items-center gap-3 rounded-full px-5 py-3 text-[11px] font-semibold transition-transform hover:-translate-y-0.5 ${light ? "bg-white text-[#0b1117]" : "bg-[#0c1218] text-white"}`}>{children}<span>→</span></a>;
 }
 
-function HeroIndexGraphic() {
+function HeroIndexGraphic({ lang }: { lang: SupportedLang }) {
   return (
     <div className="relative mx-auto h-[440px] w-full max-w-[540px] md:h-[520px]">
       <div className="absolute inset-x-[10%] bottom-[7%] h-[12%] rounded-[50%] bg-[#17324a]/16 blur-2xl" />
       {[0,1,2,3].map((i) => (
         <div key={i} className="absolute left-1/2 top-1/2 h-[285px] w-[225px] rounded-[4px] border border-[#416b8f]/25 bg-[linear-gradient(145deg,rgba(217,235,249,.36),rgba(74,115,151,.10))] shadow-[0_26px_65px_rgba(34,62,88,.09)] backdrop-blur-[2px] md:h-[340px] md:w-[270px]" style={{ transform: `translate(-50%,-50%) translateX(${i * 28 - 35}px) translateY(${i * 5}px) rotateY(-18deg)`, zIndex: 5-i }}>
           {i===0 && <div className="absolute inset-0 p-7 md:p-9">
-            <div className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#607b93]">Real Growth Index</div>
+            <div className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#607b93]">{lang === "tr" ? "Gerçek Büyüme Endeksi" : "Real Growth Index"}</div>
             <svg viewBox="0 0 220 190" className="mt-7 h-[210px] w-full overflow-visible">
               <path d="M15 165 L50 125 L82 118 L110 82 L145 67 L183 18" fill="none" stroke="#dcebf7" strokeWidth="12" opacity=".5" />
               <path d="M15 165 L50 125 L82 118 L110 82 L145 67 L183 18" fill="none" stroke="#ffffff" strokeWidth="3" />
               <path d="M180 18 L171 28 M180 18 L179 32" fill="none" stroke="#ffffff" strokeWidth="3" />
             </svg>
-            <div className="absolute bottom-7 left-7 right-7 flex justify-between border-t border-[#496d8c]/25 pt-4 text-[7px] uppercase tracking-[.12em] text-[#516d85]"><span>Baseline</span><span>Progress</span><span>Growth</span></div>
+            <div className="absolute bottom-7 left-7 right-7 flex justify-between border-t border-[#496d8c]/25 pt-4 text-[7px] uppercase tracking-[.12em] text-[#516d85]"><span>{lang === "tr" ? "Başlangıç" : "Baseline"}</span><span>{lang === "tr" ? "İlerleme" : "Progress"}</span><span>{lang === "tr" ? "Büyüme" : "Growth"}</span></div>
           </div>}
         </div>
       ))}
-      <div className="absolute right-[1%] top-[20%] hidden border-l border-[#607b93]/35 pl-4 text-[8px] uppercase leading-5 tracking-[.14em] text-[#526d84] sm:block">From data<br/>to real<br/>growth</div>
+      <div className="absolute right-[1%] top-[20%] hidden border-l border-[#607b93]/35 pl-4 text-[8px] uppercase leading-5 tracking-[.14em] text-[#526d84] sm:block">{lang === "tr" ? <>Veriden<br/>gerçek<br/>büyümeye</> : <>From data<br/>to real<br/>growth</>}</div>
     </div>
   );
 }
@@ -347,9 +347,9 @@ function MiniStat({ number, title, items }: { number: string; title: string; ite
   return <div className="min-h-[160px] rounded-[8px] border border-[#8095a8]/15 bg-white/70 p-5 shadow-[0_12px_38px_rgba(61,84,104,.05)]"><div className="text-3xl font-medium tracking-[-.05em]">{number}</div><div className="mt-1 text-[10px] font-semibold">{title}</div><div className="mt-5 space-y-2 text-[9px] leading-4 text-black/48">{items.map(x=><div key={x}>{x}</div>)}</div></div>;
 }
 
-function FunnelDiagram({ healthy = true }: { healthy?: boolean }) {
+function FunnelDiagram({ healthy = true, lang }: { healthy?: boolean; lang: SupportedLang }) {
   const values = healthy ? [12,11,13,10,12] : [5,6,7,30,8];
-  const labels = ["Awareness","Consideration","Intent","Conversion","Loyalty"];
+  const labels = lang === "tr" ? ["Farkındalık","Değerlendirme","Niyet","Dönüşüm","Sadakat"] : ["Awareness","Consideration","Intent","Conversion","Loyalty"];
   return <div className="space-y-2">{labels.map((label,i)=><div key={label} className="grid grid-cols-[1fr_52px] items-center gap-4"><div className="relative h-9 overflow-hidden rounded-[2px] bg-[#dfe9f1]"><div className="absolute inset-y-0 left-0 bg-[#88a9c3]/45" style={{width:`${Math.min(100, 35 + values[i]*1.8)}%`}} /><div className="relative flex h-full items-center justify-center text-[9px] font-medium text-[#243746]">{label}</div></div><div className={`text-right text-[11px] font-semibold ${healthy ? "text-[#334e63]" : i===3 ? "text-[#aa6b57]" : "text-[#5b6d7c]"}`}>+{values[i]}%</div></div>)}</div>;
 }
 
@@ -367,14 +367,14 @@ export default function RgiFrameworkPage({ lang }: { lang: SupportedLang }) {
             <p className="mt-6 max-w-[620px] text-[13px] leading-7 text-black/58 md:text-sm">{t.heroDesc}</p>
             <div className="mt-8"><PrimaryButton href="#what">{t.heroCta}</PrimaryButton></div>
           </div>
-          <HeroIndexGraphic />
+          <HeroIndexGraphic lang={lang} />
         </div>
       </section>
 
       <section id="what" className="scroll-mt-28 border-y border-[#8397a8]/12 bg-[#eef3f6]">
         <div className="sellf-container grid gap-12 py-16 md:py-20 lg:grid-cols-[.82fr_1.18fr] lg:items-center lg:gap-16">
           <div><Eyebrow>{t.glanceEyebrow}</Eyebrow><h2 className="mt-3 max-w-[14ch] text-3xl font-semibold leading-[1.05] tracking-[-.045em] md:text-[2.65rem]">{t.glanceTitle}</h2><p className="mt-5 max-w-[570px] text-sm leading-7 text-black/56">{t.glanceDesc}</p><div className="mt-6"><TextLink href="#bhs-rgi">{t.glanceCta}</TextLink></div></div>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4"><MiniStat number="2" title={lang==="tr"?"Eksen":"Axes"} items={["Brand","Product"]}/><MiniStat number="3" title={lang==="tr"?"Performans katmanı":"Performance layers"} items={["Marketing","Financial","Operational"]}/><MiniStat number="2" title={lang==="tr"?"Ölçüm tipi":"Measurement types"} items={["External RGI","Internal RGI"]}/><MiniStat number="2" title={lang==="tr"?"Zaman perspektifi":"Time perspectives"} items={["Quarterly","Annual"]}/></div>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4"><MiniStat number="2" title={lang==="tr"?"Eksen":"Axes"} items={lang === "tr" ? ["Marka","Ürün"] : ["Brand","Product"]}/><MiniStat number="3" title={lang==="tr"?"Performans katmanı":"Performance layers"} items={lang === "tr" ? ["Pazarlama","Finansal","Operasyonel"] : ["Marketing","Financial","Operational"]}/><MiniStat number="2" title={lang==="tr"?"Ölçüm tipi":"Measurement types"} items={lang === "tr" ? ["Dış RGI","İç RGI"] : ["External RGI","Internal RGI"]}/><MiniStat number="2" title={lang==="tr"?"Zaman perspektifi":"Time perspectives"} items={lang === "tr" ? ["Üç Aylık","Yıllık"] : ["Quarterly","Annual"]}/></div>
         </div>
       </section>
 
@@ -382,7 +382,7 @@ export default function RgiFrameworkPage({ lang }: { lang: SupportedLang }) {
         <div className="sellf-container grid gap-14 py-16 md:py-20 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-16">
           <div><Eyebrow dark>{t.bridgeEyebrow}</Eyebrow><h2 className="mt-4 max-w-[16ch] text-3xl font-semibold leading-[1.08] tracking-[-.045em] md:text-[2.7rem]">{t.bridgeTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-white/55">{t.bridgeDesc}</p><div className="mt-7"><TextLink href={`/${lang}/framework/bhs`} dark>{t.bridgeCta}</TextLink></div></div>
           <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3">
-            {[['BHS',lang==='tr'?'Neredeyiz?':'Where are we?'],['RGI',lang==='tr'?'Ne kadar ilerledik?':'How much did we improve?'],['Strategy',lang==='tr'?'Sıradaki karar ne?':"What's the next decision?"]].map(([a,b],i)=><div key={a} className="contents"><div className={`grid aspect-square place-items-center rounded-full border ${i===1?'border-[#a6c7e4] bg-[#6f9cbe]/12 shadow-[0_0_34px_rgba(149,193,229,.18)]':'border-white/25'}`}><div className="text-center"><div className="text-lg font-semibold">{a}</div><div className="mt-1 px-4 text-[8px] leading-4 text-white/50">{b}</div></div></div>{i<2&&<div className="text-white/42">→</div>}</div>)}
+            {[['BHS',lang==='tr'?'Neredeyiz?':'Where are we?'],['RGI',lang==='tr'?'Ne kadar ilerledik?':'How much did we improve?'],[lang==='tr'?'Strateji':'Strategy',lang==='tr'?'Sıradaki karar ne?':"What's the next decision?"]].map(([a,b],i)=><div key={a} className="contents"><div className={`grid aspect-square place-items-center rounded-full border ${i===1?'border-[#a6c7e4] bg-[#6f9cbe]/12 shadow-[0_0_34px_rgba(149,193,229,.18)]':'border-white/25'}`}><div className="text-center"><div className="text-lg font-semibold">{a}</div><div className="mt-1 px-4 text-[8px] leading-4 text-white/50">{b}</div></div></div>{i<2&&<div className="text-white/42">→</div>}</div>)}
           </div>
         </div>
       </section>
@@ -411,22 +411,22 @@ export default function RgiFrameworkPage({ lang }: { lang: SupportedLang }) {
       </section>
 
       <section id="funnel" className="scroll-mt-28 border-y border-[#8196a8]/12 bg-[linear-gradient(90deg,#f4f7f9,#e8f0f5)]">
-        <div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.72fr_1.28fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.funnelEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold leading-[1.07] tracking-[-.045em] md:text-[2.7rem]">{t.funnelTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.funnelDesc}</p><div className="mt-6 border-l-2 border-[#7f9bb1] pl-5 text-[12px] font-medium leading-6 text-black/70">{t.funnelRule}</div></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-[8px] border border-[#7894aa]/18 bg-white/85 p-5"><div className="mb-5 text-[10px] font-semibold uppercase tracking-[.16em] text-[#58748b]">{t.funnelHealthy}</div><FunnelDiagram healthy /></div><div className="rounded-[8px] border border-[#a58b81]/16 bg-white/72 p-5"><div className="mb-5 text-[10px] font-semibold uppercase tracking-[.16em] text-[#8a6d62]">{t.funnelUnhealthy}</div><FunnelDiagram healthy={false} /></div></div></div>
+        <div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.72fr_1.28fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.funnelEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold leading-[1.07] tracking-[-.045em] md:text-[2.7rem]">{t.funnelTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.funnelDesc}</p><div className="mt-6 border-l-2 border-[#7f9bb1] pl-5 text-[12px] font-medium leading-6 text-black/70">{t.funnelRule}</div></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-[8px] border border-[#7894aa]/18 bg-white/85 p-5"><div className="mb-5 text-[10px] font-semibold uppercase tracking-[.16em] text-[#58748b]">{t.funnelHealthy}</div><FunnelDiagram healthy lang={lang} /></div><div className="rounded-[8px] border border-[#a58b81]/16 bg-white/72 p-5"><div className="mb-5 text-[10px] font-semibold uppercase tracking-[.16em] text-[#8a6d62]">{t.funnelUnhealthy}</div><FunnelDiagram healthy={false} lang={lang} /></div></div></div>
       </section>
 
-      <section className="bg-white"><div className="sellf-container grid gap-12 py-20 md:py-24 lg:grid-cols-2 lg:gap-20"><div><Eyebrow>{t.funnelDepthEyebrow}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em] md:text-[2.5rem]">{t.funnelDepthTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-black/56">{t.funnelDepthDesc}</p><div className="mt-8 flex items-center gap-4"><div className="grid h-20 w-20 place-items-center rounded-full border border-[#8198aa]/25 text-xs font-semibold">Loyalty</div><div className="text-black/30">→</div><div className="grid h-24 w-24 place-items-center rounded-full border border-[#6f92ad]/35 bg-[#eef4f8] text-xs font-semibold">Advocacy</div></div></div><div><Eyebrow>{t.productFinancialEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold tracking-[-.045em] md:text-[2.5rem]">{t.productFinancialTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.productFinancialDesc}</p><div className="mt-7 grid grid-cols-2 gap-3">{t.productFinancialItems.map(([title,desc])=><div key={title} className="rounded-[7px] border border-[#8297a8]/15 bg-[#f5f7f8] p-4"><div className="text-[11px] font-semibold">{title}</div><div className="mt-2 text-[9px] leading-4 text-black/48">{desc}</div></div>)}</div></div></div></section>
+      <section className="bg-white"><div className="sellf-container grid gap-12 py-20 md:py-24 lg:grid-cols-2 lg:gap-20"><div><Eyebrow>{t.funnelDepthEyebrow}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em] md:text-[2.5rem]">{t.funnelDepthTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-black/56">{t.funnelDepthDesc}</p><div className="mt-8 flex items-center gap-4"><div className="grid h-20 w-20 place-items-center rounded-full border border-[#8198aa]/25 text-xs font-semibold">{lang === "tr" ? "Sadakat" : "Loyalty"}</div><div className="text-black/30">→</div><div className="grid h-24 w-24 place-items-center rounded-full border border-[#6f92ad]/35 bg-[#eef4f8] text-xs font-semibold">{lang === "tr" ? "Savunuculuk" : "Advocacy"}</div></div></div><div><Eyebrow>{t.productFinancialEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold tracking-[-.045em] md:text-[2.5rem]">{t.productFinancialTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.productFinancialDesc}</p><div className="mt-7 grid grid-cols-2 gap-3">{t.productFinancialItems.map(([title,desc])=><div key={title} className="rounded-[7px] border border-[#8297a8]/15 bg-[#f5f7f8] p-4"><div className="text-[11px] font-semibold">{title}</div><div className="mt-2 text-[9px] leading-4 text-black/48">{desc}</div></div>)}</div></div></div></section>
 
-      <section className="border-y border-[#8196a8]/12 bg-[#eef3f6]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.weightsEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold leading-[1.08] tracking-[-.045em] md:text-[2.6rem]">{t.weightsTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.weightsDesc}</p><p className="mt-4 text-[11px] leading-6 text-black/42">{t.weightsNote}</p></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-[8px] border border-[#7894aa]/18 bg-white p-6"><div className="text-[10px] uppercase tracking-[.16em] text-black/42">Layer weight</div><div className="mt-8 space-y-5"><div><div className="flex justify-between text-[11px]"><span>Marketing Performance</span><b>60%</b></div><div className="mt-2 h-2 bg-[#e4ebf0]"><div className="h-full w-[60%] bg-[#7398b7]"/></div></div><div><div className="flex justify-between text-[11px]"><span>Financial Health</span><b>40%</b></div><div className="mt-2 h-2 bg-[#e4ebf0]"><div className="h-full w-[40%] bg-[#b7a27d]"/></div></div></div></div><div className="rounded-[8px] border border-[#7894aa]/18 bg-[#17222b] p-6 text-white"><div className="text-[10px] uppercase tracking-[.16em] text-white/42">Axis weight</div><div className="mt-8 grid grid-cols-2 gap-3"><div className="rounded-[6px] border border-white/12 bg-white/5 p-4"><div className="text-3xl font-semibold">60</div><div className="mt-1 text-[9px] text-white/45">Brand-led KPI</div></div><div className="rounded-[6px] border border-white/12 bg-white/5 p-4"><div className="text-3xl font-semibold">60</div><div className="mt-1 text-[9px] text-white/45">Product-led KPI</div></div></div></div></div></div></section>
+      <section className="border-y border-[#8196a8]/12 bg-[#eef3f6]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.weightsEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold leading-[1.08] tracking-[-.045em] md:text-[2.6rem]">{t.weightsTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.weightsDesc}</p><p className="mt-4 text-[11px] leading-6 text-black/42">{t.weightsNote}</p></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-[8px] border border-[#7894aa]/18 bg-white p-6"><div className="text-[10px] uppercase tracking-[.16em] text-black/42">{lang === "tr" ? "Katman ağırlığı" : "Layer weight"}</div><div className="mt-8 space-y-5"><div><div className="flex justify-between text-[11px]"><span>{lang === "tr" ? "Pazarlama Performansı" : "Marketing Performance"}</span><b>60%</b></div><div className="mt-2 h-2 bg-[#e4ebf0]"><div className="h-full w-[60%] bg-[#7398b7]"/></div></div><div><div className="flex justify-between text-[11px]"><span>{lang === "tr" ? "Finansal Sağlık" : "Financial Health"}</span><b>40%</b></div><div className="mt-2 h-2 bg-[#e4ebf0]"><div className="h-full w-[40%] bg-[#b7a27d]"/></div></div></div></div><div className="rounded-[8px] border border-[#7894aa]/18 bg-[#17222b] p-6 text-white"><div className="text-[10px] uppercase tracking-[.16em] text-white/42">{lang === "tr" ? "Eksen ağırlığı" : "Axis weight"}</div><div className="mt-8 grid grid-cols-2 gap-3"><div className="rounded-[6px] border border-white/12 bg-white/5 p-4"><div className="text-3xl font-semibold">60</div><div className="mt-1 text-[9px] text-white/45">{lang === "tr" ? "Marka odaklı KPI" : "Brand-led KPI"}</div></div><div className="rounded-[6px] border border-white/12 bg-white/5 p-4"><div className="text-3xl font-semibold">60</div><div className="mt-1 text-[9px] text-white/45">{lang === "tr" ? "Ürün odaklı KPI" : "Product-led KPI"}</div></div></div></div></div></div></section>
 
-      <section id="external-internal" className="scroll-mt-28 grid lg:grid-cols-2"><div className="bg-[#17222b] px-6 py-16 text-white sm:px-10 md:px-14 lg:px-[max(3.5rem,calc((100vw-1280px)/2))] lg:pr-16"><Eyebrow dark>EXTERNAL RGI</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em]">{t.externalTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-white/55">{t.externalDesc}</p><div className="mt-10 grid h-28 place-items-center rounded-[50%] border border-white/12 text-[9px] uppercase tracking-[.16em] text-white/45">Public data<br/>real insights</div></div><div className="bg-[#e8f0f5] px-6 py-16 sm:px-10 md:px-14 lg:px-16"><Eyebrow>INTERNAL RGI</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em]">{t.internalTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-black/56">{t.internalDesc}</p><div className="mt-10 grid h-28 place-items-center rounded-[50%] border border-[#718ea5]/18 text-[9px] uppercase tracking-[.16em] text-[#627f95]">Company data<br/>deeper decisions</div></div></section>
+      <section id="external-internal" className="scroll-mt-28 grid lg:grid-cols-2"><div className="bg-[#17222b] px-6 py-16 text-white sm:px-10 md:px-14 lg:px-[max(3.5rem,calc((100vw-1280px)/2))] lg:pr-16"><Eyebrow dark>{lang === "tr" ? "DIŞ RGI" : "EXTERNAL RGI"}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em]">{t.externalTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-white/55">{t.externalDesc}</p><div className="mt-10 grid h-28 place-items-center rounded-[50%] border border-white/12 text-[9px] uppercase tracking-[.16em] text-white/45">{lang === "tr" ? <>Açık veri<br/>gerçek içgörü</> : <>Public data<br/>real insights</>}</div></div><div className="bg-[#e8f0f5] px-6 py-16 sm:px-10 md:px-14 lg:px-16"><Eyebrow>{lang === "tr" ? "İÇ RGI" : "INTERNAL RGI"}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em]">{t.internalTitle}</h2><p className="mt-5 max-w-[620px] text-sm leading-7 text-black/56">{t.internalDesc}</p><div className="mt-10 grid h-28 place-items-center rounded-[50%] border border-[#718ea5]/18 text-[9px] uppercase tracking-[.16em] text-[#627f95]">{lang === "tr" ? <>Şirket verisi<br/>daha güçlü kararlar</> : <>Company data<br/>deeper decisions</>}</div></div></section>
 
-      <section id="cadence" className="scroll-mt-28 bg-[#f6f8f9]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.75fr_1.25fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.cadenceEyebrow}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em] md:text-[2.6rem]">{t.cadenceTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.cadenceDesc}</p></div><div><div className="mb-8 inline-flex rounded-[6px] border border-[#7893a8]/18 bg-white p-1 text-[10px]"><span className="rounded-[4px] bg-[#17222b] px-4 py-2 text-white">Quarterly</span><span className="px-4 py-2">Annual</span></div><div className="flex h-[190px] items-end gap-4 border-b border-[#7893a8]/18 px-3">{[34,46,42,64,58,78,73,98].map((h,i)=><div key={i} className="relative flex-1"><div className="absolute bottom-0 w-full bg-[#cbdbe7]" style={{height:`${h}%`}}/><div className="absolute bottom-0 left-1/2 w-[2px] bg-[#6f9abd]" style={{height:`${Math.min(100,h+12)}%`}}/></div>)}</div><div className="mt-6 grid gap-5 sm:grid-cols-2"><div><h3 className="text-sm font-semibold">{t.quarterly}</h3><p className="mt-2 text-[10px] leading-5 text-black/48">{t.quarterlyDesc}</p></div><div><h3 className="text-sm font-semibold">{t.annual}</h3><p className="mt-2 text-[10px] leading-5 text-black/48">{t.annualDesc}</p></div></div></div></div></section>
+      <section id="cadence" className="scroll-mt-28 bg-[#f6f8f9]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.75fr_1.25fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.cadenceEyebrow}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em] md:text-[2.6rem]">{t.cadenceTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.cadenceDesc}</p></div><div><div className="mb-8 inline-flex rounded-[6px] border border-[#7893a8]/18 bg-white p-1 text-[10px]"><span className="rounded-[4px] bg-[#17222b] px-4 py-2 text-white">{lang === "tr" ? "Üç Aylık" : "Quarterly"}</span><span className="px-4 py-2">{lang === "tr" ? "Yıllık" : "Annual"}</span></div><div className="flex h-[190px] items-end gap-4 border-b border-[#7893a8]/18 px-3">{[34,46,42,64,58,78,73,98].map((h,i)=><div key={i} className="relative flex-1"><div className="absolute bottom-0 w-full bg-[#cbdbe7]" style={{height:`${h}%`}}/><div className="absolute bottom-0 left-1/2 w-[2px] bg-[#6f9abd]" style={{height:`${Math.min(100,h+12)}%`}}/></div>)}</div><div className="mt-6 grid gap-5 sm:grid-cols-2"><div><h3 className="text-sm font-semibold">{t.quarterly}</h3><p className="mt-2 text-[10px] leading-5 text-black/48">{t.quarterlyDesc}</p></div><div><h3 className="text-sm font-semibold">{t.annual}</h3><p className="mt-2 text-[10px] leading-5 text-black/48">{t.annualDesc}</p></div></div></div></div></section>
 
-      <section id="output" className="scroll-mt-28 border-y border-[#8196a8]/12 bg-[#eef3f6]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.82fr_1.18fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.outputEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold leading-[1.08] tracking-[-.045em] md:text-[2.6rem]">{t.outputTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.outputDesc}</p><div className="mt-7 space-y-3">{t.outputQuestions.map(q=><div key={q} className="flex gap-3 text-[11px] text-black/62"><span className="text-[#7394ad]">↗</span><span>{q}</span></div>)}</div></div><div className="relative mx-auto h-[300px] w-full max-w-[600px]"><div className="absolute left-[10%] top-[16%] h-[210px] w-[38%] rounded-[5px] border border-[#7893a8]/20 bg-white p-5 shadow-[0_24px_60px_rgba(50,76,98,.11)]"><div className="text-[8px] font-semibold">Quarterly Growth</div><div className="mt-10 flex h-24 items-end gap-2">{[42,72,56,84].map((v,i)=><div key={i} className="flex-1 bg-[#a9c3d7]" style={{height:`${v}%`}}/>)}</div></div><div className="absolute left-[38%] top-[7%] z-10 h-[235px] w-[34%] rounded-[5px] bg-[#17222b] p-6 text-white shadow-[0_28px_70px_rgba(27,42,54,.22)]"><div className="text-[8px] uppercase tracking-[.15em] text-white/45">RGI / Real Growth Index</div><div className="mt-9 grid h-24 place-items-center rounded-full border border-white/14"><div className="text-4xl font-semibold">78</div></div><div className="mt-7 space-y-2 text-[8px] text-white/45"><div className="flex justify-between"><span>Brand</span><span>82</span></div><div className="flex justify-between"><span>Product</span><span>76</span></div><div className="flex justify-between"><span>Financial</span><span>71</span></div></div></div><div className="absolute right-[7%] top-[22%] h-[195px] w-[36%] rounded-[5px] border border-[#7893a8]/20 bg-white p-5 shadow-[0_20px_50px_rgba(50,76,98,.09)]"><div className="text-[8px] font-semibold">Key insights</div><div className="mt-8 space-y-4">{[80,58,72,45].map((v,i)=><div key={i} className="h-2 bg-[#e0e8ee]"><div className="h-full bg-[#8dabbe]" style={{width:`${v}%`}}/></div>)}</div></div></div></div></section>
+      <section id="output" className="scroll-mt-28 border-y border-[#8196a8]/12 bg-[#eef3f6]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.82fr_1.18fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.outputEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-3xl font-semibold leading-[1.08] tracking-[-.045em] md:text-[2.6rem]">{t.outputTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.outputDesc}</p><div className="mt-7 space-y-3">{t.outputQuestions.map(q=><div key={q} className="flex gap-3 text-[11px] text-black/62"><span className="text-[#7394ad]">↗</span><span>{q}</span></div>)}</div></div><div className="relative mx-auto h-[300px] w-full max-w-[600px]"><div className="absolute left-[10%] top-[16%] h-[210px] w-[38%] rounded-[5px] border border-[#7893a8]/20 bg-white p-5 shadow-[0_24px_60px_rgba(50,76,98,.11)]"><div className="text-[8px] font-semibold">{lang === "tr" ? "Üç Aylık Büyüme" : "Quarterly Growth"}</div><div className="mt-10 flex h-24 items-end gap-2">{[42,72,56,84].map((v,i)=><div key={i} className="flex-1 bg-[#a9c3d7]" style={{height:`${v}%`}}/>)}</div></div><div className="absolute left-[38%] top-[7%] z-10 h-[235px] w-[34%] rounded-[5px] bg-[#17222b] p-6 text-white shadow-[0_28px_70px_rgba(27,42,54,.22)]"><div className="text-[8px] uppercase tracking-[.15em] text-white/45">{lang === "tr" ? "RGI / Gerçek Büyüme Endeksi" : "RGI / Real Growth Index"}</div><div className="mt-9 grid h-24 place-items-center rounded-full border border-white/14"><div className="text-4xl font-semibold">78</div></div><div className="mt-7 space-y-2 text-[8px] text-white/45"><div className="flex justify-between"><span>{lang === "tr" ? "Marka" : "Brand"}</span><span>82</span></div><div className="flex justify-between"><span>{lang === "tr" ? "Ürün" : "Product"}</span><span>76</span></div><div className="flex justify-between"><span>{lang === "tr" ? "Finansal" : "Financial"}</span><span>71</span></div></div></div><div className="absolute right-[7%] top-[22%] h-[195px] w-[36%] rounded-[5px] border border-[#7893a8]/20 bg-white p-5 shadow-[0_20px_50px_rgba(50,76,98,.09)]"><div className="text-[8px] font-semibold">{lang === "tr" ? "Temel içgörüler" : "Key insights"}</div><div className="mt-8 space-y-4">{[80,58,72,45].map((v,i)=><div key={i} className="h-2 bg-[#e0e8ee]"><div className="h-full bg-[#8dabbe]" style={{width:`${v}%`}}/></div>)}</div></div></div></div></section>
 
       <section className="bg-white"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.8fr_1.2fr] lg:gap-20"><div><Eyebrow>{t.principleEyebrow}</Eyebrow><h2 className="mt-4 max-w-[14ch] text-3xl font-semibold leading-[1.08] tracking-[-.045em] md:text-[2.6rem]">{t.principleTitle}</h2><p className="mt-5 text-sm leading-7 text-black/56">{t.principleDesc}</p></div><blockquote className="border-l border-[#7392aa]/35 pl-8 text-2xl font-medium leading-[1.45] tracking-[-.035em] text-[#243846]">“{t.principlePull}”</blockquote></div></section>
 
-      <section className="border-y border-[#8196a8]/12 bg-[#f0f4f6]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.92fr_1.08fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.journeyEyebrow}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em] md:text-[2.6rem]">{t.journeyTitle}</h2><p className="mt-5 max-w-[650px] text-sm leading-7 text-black/56">{t.journeyDesc}</p><div className="mt-7"><PrimaryButton href={`/${lang}/framework/bhs`}>{t.journeyCta}</PrimaryButton></div></div><div className="grid grid-cols-3 items-center gap-3 text-center"><div className="rounded-[8px] border border-[#7a94a8]/18 bg-white p-5"><div className="text-2xl font-semibold">BHS</div><div className="mt-2 text-[9px] text-black/42">Baseline</div></div><div className="rounded-[8px] border border-[#6f90aa]/25 bg-[#dce8f0] p-5"><div className="text-2xl font-semibold">RGI</div><div className="mt-2 text-[9px] text-black/42">Progress</div></div><div className="rounded-[8px] bg-[#17222b] p-5 text-white"><div className="text-2xl font-semibold">→</div><div className="mt-2 text-[9px] text-white/45">Real Growth</div></div></div></div></section>
+      <section className="border-y border-[#8196a8]/12 bg-[#f0f4f6]"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[.92fr_1.08fr] lg:items-center lg:gap-20"><div><Eyebrow>{t.journeyEyebrow}</Eyebrow><h2 className="mt-4 text-3xl font-semibold tracking-[-.045em] md:text-[2.6rem]">{t.journeyTitle}</h2><p className="mt-5 max-w-[650px] text-sm leading-7 text-black/56">{t.journeyDesc}</p><div className="mt-7"><PrimaryButton href={`/${lang}/framework/bhs`}>{t.journeyCta}</PrimaryButton></div></div><div className="grid grid-cols-3 items-center gap-3 text-center"><div className="rounded-[8px] border border-[#7a94a8]/18 bg-white p-5"><div className="text-2xl font-semibold">BHS</div><div className="mt-2 text-[9px] text-black/42">{lang === "tr" ? "Başlangıç" : "Baseline"}</div></div><div className="rounded-[8px] border border-[#6f90aa]/25 bg-[#dce8f0] p-5"><div className="text-2xl font-semibold">RGI</div><div className="mt-2 text-[9px] text-black/42">{lang === "tr" ? "İlerleme" : "Progress"}</div></div><div className="rounded-[8px] bg-[#17222b] p-5 text-white"><div className="text-2xl font-semibold">→</div><div className="mt-2 text-[9px] text-white/45">{lang === "tr" ? "Gerçek Büyüme" : "Real Growth"}</div></div></div></div></section>
 
       <section className="bg-[#101820] text-white"><div className="sellf-container grid gap-14 py-20 md:py-24 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-20"><div><Eyebrow dark>{t.finalEyebrow}</Eyebrow><h2 className="mt-4 max-w-[15ch] text-4xl font-semibold leading-[1.06] tracking-[-.05em] md:text-[3rem]">{t.finalTitle}</h2><p className="mt-6 max-w-[720px] text-sm leading-7 text-white/52">{t.finalDesc}</p></div><div className="border-l border-white/12 pl-8"><div className="space-y-4 text-xl font-medium tracking-[-.025em] text-white/82"><div>{t.finalQuestionA}</div><div className="text-[#91aec4]">{t.finalQuestionB}</div><div>{t.finalQuestionC}</div></div><div className="mt-8"><PrimaryButton href={`/${lang}/contact`} light>{t.finalCta}</PrimaryButton></div></div></div></section>
     </article>
