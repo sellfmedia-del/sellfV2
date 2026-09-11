@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import HomeWorkServices from "@/components/HomeWorkServices";
+import HomeOperatingSystem from "@/components/HomeOperatingSystem";
 import Ecosystem from "@/components/Ecosystem";
 import ProcessEngine from "@/components/ProcessEngine";
 import VisionaryQuote from "@/components/VisionaryQuote";
@@ -283,6 +284,7 @@ export default function HomeClient() {
       <HomeLogoStrips />
 
       <HomeWorkServices />
+      <HomeOperatingSystem />
       <Ecosystem />
       <ProcessEngine />
       <VisionaryQuote />
