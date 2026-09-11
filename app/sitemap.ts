@@ -23,6 +23,7 @@ const staticPaths = [
   "/contact",
   "/privacy-policy",
   "/cookie-policy",
+  "/framework/bhs",
 ];
 
 type BlogSlugEntry = { slug: string; updatedAt: string };
