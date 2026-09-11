@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" role="img" aria-label="RGI real growth index visual">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbfcfd"/><stop offset="1" stop-color="#f2f6f9"/></linearGradient>
+  <linearGradient id="p1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7899b2" stop-opacity=".9"/><stop offset=".58" stop-color="#17344c" stop-opacity=".94"/><stop offset="1" stop-color="#102638" stop-opacity=".98"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f3fb" stop-opacity=".55"/><stop offset=".55" stop-color="#a9c7dc" stop-opacity=".18"/><stop offset="1" stop-color="#6d9ab9" stop-opacity=".08"/></linearGradient>
+  <filter id="shadow" x="-40%" y="-40%" width="180%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+</defs>
+<rect width="400" height="350" fill="url(#bg)"/>
+<ellipse cx="231" cy="320" rx="88" ry="16" fill="#506c80" opacity=".13" filter="url(#shadow)"/>
+<g fill="#455f73" font-family="Arial,Helvetica,sans-serif" font-size="8">
+  <text x="66" y="116" text-anchor="end">Higher</text><text x="66" y="126" text-anchor="end">Decisions</text>
+  <text x="66" y="168" text-anchor="end">Clearer</text><text x="66" y="178" text-anchor="end">Direction</text>
+  <text x="66" y="220" text-anchor="end">Measurable</text><text x="66" y="230" text-anchor="end">Progress</text>
+  <text x="66" y="272" text-anchor="end">Stronger</text><text x="66" y="282" text-anchor="end">Businesses</text>
+</g>
+<path d="M84 103v184" stroke="#6c879c" stroke-opacity=".45"/>
+<g fill="#6f8aa0"><circle cx="84" cy="116" r="3"/><circle cx="84" cy="168" r="3"/><circle cx="84" cy="220" r="3"/><circle cx="84" cy="272" r="3"/></g>
+<g transform="translate(110 31)">
+  <g transform="translate(48 10) skewY(-4)"><rect x="92" y="18" width="96" height="238" rx="2" fill="url(#glass)" stroke="#8fb0c8" stroke-opacity=".62"/><line x1="92" y1="70" x2="188" y2="70" stroke="#8cb0c9" stroke-opacity=".22"/><line x1="92" y1="122" x2="188" y2="122" stroke="#8cb0c9" stroke-opacity=".22"/><line x1="92" y1="174" x2="188" y2="174" stroke="#8cb0c9" stroke-opacity=".22"/><line x1="92" y1="226" x2="188" y2="226" stroke="#8cb0c9" stroke-opacity=".22"/></g>
+  <g transform="translate(22 4) skewY(-4)"><rect x="72" y="12" width="112" height="252" rx="2" fill="url(#glass)" stroke="#739bb9" stroke-opacity=".72"/><line x1="72" y1="64" x2="184" y2="64" stroke="#7fa5c1" stroke-opacity=".24"/><line x1="72" y1="116" x2="184" y2="116" stroke="#7fa5c1" stroke-opacity=".24"/><line x1="72" y1="168" x2="184" y2="168" stroke="#7fa5c1" stroke-opacity=".24"/><line x1="72" y1="220" x2="184" y2="220" stroke="#7fa5c1" stroke-opacity=".24"/></g>
+  <g transform="skewY(-4)"><rect x="40" y="6" width="132" height="266" rx="2" fill="url(#p1)" stroke="#587f9d" stroke-width="1.2"/><rect x="44" y="10" width="124" height="258" fill="none" stroke="#d6e8f5" stroke-opacity=".25"/>
+    <g stroke="#bdd4e5" stroke-opacity=".18"><line x1="40" y1="58" x2="172" y2="58"/><line x1="40" y1="110" x2="172" y2="110"/><line x1="40" y1="162" x2="172" y2="162"/><line x1="40" y1="214" x2="172" y2="214"/></g>
+    <text x="53" y="34" fill="#eef6fb" font-family="Arial,Helvetica,sans-serif" font-size="11" letter-spacing=".5">REAL GROWTH</text><text x="53" y="49" fill="#eef6fb" font-family="Arial,Helvetica,sans-serif" font-size="11" letter-spacing=".5">INDEX</text>
+    <polyline points="55,218 75,173 96,157 118,114 139,95 156,51" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M156 51l-12 7M156 51l-2 13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+</g>
+<path d="M330 245v63" stroke="#6d889d" stroke-opacity=".55"/>
+<g fill="#263b4b" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="700"><text x="340" y="257">FROM</text><text x="340" y="268">DATA</text><text x="340" y="279">TO</text><text x="340" y="290">REAL</text><text x="340" y="301">GROWTH</text></g>
+</svg>

@@ -1,0 +1,61 @@
+.page {
+  /* Scope only the RGI reference page. */
+}
+
+/* Keep the approved mockup composition exactly where it is, but swap the
+   compressed raster crops for the matching vector artwork already in the repo.
+   This removes blur on large / retina displays without changing section layout. */
+.page :global(img[src="/framework/rgi/hero.webp"]) {
+  content: url('/framework/rgi/hero.svg');
+}
+
+.page :global(img[src="/framework/rgi/glance.webp"]) {
+  content: url('/framework/rgi/glance.svg');
+}
+
+.page :global(img[src="/framework/rgi/bridge.webp"]) {
+  content: url('/framework/rgi/bridge.svg');
+}
+
+.page :global(img[src="/framework/rgi/axes.webp"]) {
+  content: url('/framework/rgi/axes.svg');
+}
+
+.page :global(img[src="/framework/rgi/layers.webp"]) {
+  content: url('/framework/rgi/layers.svg');
+}
+
+.page :global(img[src="/framework/rgi/funnel.webp"]) {
+  content: url('/framework/rgi/funnel.svg');
+}
+
+.page :global(img[src="/framework/rgi/cadence.webp"]) {
+  content: url('/framework/rgi/cadence.svg');
+}
+
+.page :global(img[src="/framework/rgi/output-exact.svg"]) {
+  content: url('/framework/rgi/output.svg');
+}
+
+/* The CTA is visually embedded in the approved mockup artwork. Make that same
+   area a real keyboard- and mouse-accessible link without changing its look. */
+.page :global(#rgi-output) :global(.sellf-container) > div:last-child {
+  position: relative;
+}
+
+.page :global(#rgi-output) :global(.rgi-output-link) {
+  position: absolute;
+  z-index: 5;
+  left: 74%;
+  top: 64%;
+  width: 20%;
+  height: 20%;
+  display: block;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.page :global(#rgi-output) :global(.rgi-output-link):focus-visible {
+  outline: 2px solid #17222b;
+  outline-offset: 3px;
+}

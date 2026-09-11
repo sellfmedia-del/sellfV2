@@ -1,0 +1,21 @@
+.methodology {
+  border-top: 1px solid rgba(90, 112, 128, 0.12);
+}
+
+/* The approved mockup is now the visible summary flow. Keep the existing detailed
+   methodology content below it without duplicating the summary sections. */
+.methodology :global(article) > section:nth-of-type(1),
+.methodology :global(article) > section:nth-of-type(2),
+.methodology :global(article) > section:nth-of-type(3),
+.methodology :global(article) > section:nth-of-type(4),
+.methodology :global(article) > section:nth-of-type(5),
+.methodology :global(article) > section:nth-of-type(9),
+.methodology :global(article) > section:nth-of-type(12),
+.methodology :global(article) > section:nth-of-type(13),
+.methodology :global(article) > section:nth-of-type(14) {
+  display: none !important;
+}
+
+.methodology :global(article) {
+  background: #fff;
+}
