@@ -7,9 +7,10 @@ const dict = {
     eyebrow: "SELLF BÜYÜME SİSTEMİ",
     headline: "İçgörüden etkiye.",
     intro: "Gerçek büyümeyi anlamak, ölçmek ve hayata geçirmek için tek bir sistem.",
-    navStep: "Step by Step Metodolojisi",
-    navMeasure: "BHS & RGI",
-    navOperating: "Büyüme & Operasyon Modeli",
+    navBhs: "BHS",
+    navRgi: "RGI",
+    navStep: "Step by Step",
+    navOperating: "Büyüme & Operasyon",
     leftEyebrow: "ÖNEMLİ OLANI ÖLÇ",
     leftTitleA: "Büyüme,",
     leftTitleB: "ölçülür.",
@@ -65,8 +66,9 @@ const dict = {
     eyebrow: "SELLF OPERATING SYSTEM",
     headline: "From insight to impact.",
     intro: "A complete growth system to understand, measure and execute real growth.",
-    navStep: "Step by Step Methodology",
-    navMeasure: "BHS & RGI",
+    navBhs: "BHS",
+    navRgi: "RGI",
+    navStep: "Step by Step",
     navOperating: "Growth & Operations",
     leftEyebrow: "MEASURE WHAT MATTERS",
     leftTitleA: "Growth,",
@@ -216,13 +218,16 @@ export default function HomeOperatingSystem() {
           </div>
 
           <nav className="flex flex-wrap gap-x-6 gap-y-3 lg:justify-end" aria-label="Sellf framework navigation">
-            <a href={`/${currentLang}/framework/step-by-step`} className="group inline-flex items-center gap-2 border-b border-white/28 pb-1 text-[10px] text-white/72 transition-colors hover:text-white">
+            <a href={`/${currentLang}/framework/bhs`} className="group inline-flex items-center gap-2 border-b border-white/20 pb-1 text-[10px] text-white/70 transition-colors hover:text-white">
+              {t.navBhs}<span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+            <a href={`/${currentLang}/framework/rgi`} className="group inline-flex items-center gap-2 border-b border-white/20 pb-1 text-[10px] text-white/70 transition-colors hover:text-white">
+              {t.navRgi}<span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+            <a href={`/${currentLang}/framework/step-by-step`} className="group inline-flex items-center gap-2 border-b border-white/20 pb-1 text-[10px] text-white/70 transition-colors hover:text-white">
               {t.navStep}<span className="transition-transform group-hover:translate-x-1">→</span>
             </a>
-            <a href={`/${currentLang}/framework/growth-measurement`} className="group inline-flex items-center gap-2 border-b border-white/12 pb-1 text-[10px] text-white/58 transition-colors hover:text-white">
-              {t.navMeasure}<span className="transition-transform group-hover:translate-x-1">→</span>
-            </a>
-            <a href={`/${currentLang}/framework/operating-model`} className="group inline-flex items-center gap-2 border-b border-white/12 pb-1 text-[10px] text-white/58 transition-colors hover:text-white">
+            <a href={`/${currentLang}/framework/operating-model`} className="group inline-flex items-center gap-2 border-b border-white/20 pb-1 text-[10px] text-white/70 transition-colors hover:text-white">
               {t.navOperating}<span className="transition-transform group-hover:translate-x-1">→</span>
             </a>
           </nav>
