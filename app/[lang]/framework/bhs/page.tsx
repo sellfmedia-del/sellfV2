@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BhsFrameworkPage from "@/components/BhsFrameworkPage";
+import styles from "./bhs-report.module.css";
 
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
@@ -134,7 +135,9 @@ export default async function BhsPage({ params }: { params: Promise<RouteParams>
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <BhsFrameworkPage lang={currentLang} />
+      <div className={styles.page}>
+        <BhsFrameworkPage lang={currentLang} />
+      </div>
     </>
   );
 }
