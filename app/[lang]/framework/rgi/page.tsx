@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import RgiFrameworkPage from "@/components/RgiFrameworkPage";
+import styles from "./rgi-visual-refine.module.css";
 
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
@@ -133,7 +134,9 @@ export default async function RgiPage({ params }: { params: Promise<RouteParams>
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <RgiFrameworkPage lang={currentLang} />
+      <div className={styles.page}>
+        <RgiFrameworkPage lang={currentLang} />
+      </div>
     </>
   );
 }
