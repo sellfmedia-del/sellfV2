@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SolutionDetailPerformancePreview from "@/components/SolutionDetailPerformancePreview";
+import { getOperationContentByDisplayLabel } from "@/data/OperationContent";
 import { getSolutionIndexItem, solutionSlugs } from "@/data/SolutionIndex";
 import { getSolutionContent } from "@/data/getSolutionContent";
 import type { SupportedSolutionLang } from "@/data/SolutionContent";
@@ -334,19 +335,33 @@ export default async function SolutionPage({
     inLanguage: currentLang,
     provider: {
       "@type": "Organization",
+      "@id": `${baseUrl}/#organization`,
       name: "Sellf Media",
       url: baseUrl,
     },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: currentLang === "tr" ? "Operasyonlar" : "Operations",
-      itemListElement: operations.map((operation) => ({
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: operation,
-        },
-      })),
+      itemListElement: operations.map((operation) => {
+        const operationDetail = getOperationContentByDisplayLabel(operation);
+        const operationUrl = operationDetail
+          ? `${baseUrl}/${currentLang}/services/${operationDetail.slug}`
+          : undefined;
+
+        return {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            ...(operationUrl
+              ? {
+                  "@id": `${operationUrl}#service`,
+                  url: operationUrl,
+                }
+              : {}),
+            name: operation,
+          },
+        };
+      }),
     },
   };
 
