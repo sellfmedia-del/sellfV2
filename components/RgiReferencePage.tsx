@@ -49,11 +49,11 @@ type SummaryCopy = {
 
 const summaryCopy: Record<SupportedLang, SummaryCopy> = {
   tr: {
-    heroEyebrow: "SELLF PROPRIETARY FRAMEWORK",
+    heroEyebrow: "SELLF'E ÖZGÜ BÜYÜME ÇERÇEVESİ",
     heroTitleA: "Büyüme, iyi görünen şey değildir.",
     heroTitleB: "Ölçülebilir biçimde gerçekten ilerleyen şeydir.",
     heroDesc:
-      "Satış, trafik, erişim veya kampanya sonuçları tek başına gerçek büyümeyi kanıtlamaz. RGI — Real Growth Index, BHS ile belirlenen başlangıç noktasından itibaren marka ve ürün performansının gerçekten ne kadar ilerlediğini ölçmek için geliştirdiğimiz Sellf büyüme indeksidir.",
+      "Satış, trafik, erişim veya kampanya sonuçları tek başına gerçek büyümeyi kanıtlamaz. RGI — Gerçek Büyüme Endeksi, BHS ile belirlenen başlangıç noktasından itibaren marka ve ürün performansının gerçekten ne kadar ilerlediğini ölçmek için geliştirdiğimiz Sellf büyüme indeksidir.",
     heroCta: "RGI Nasıl Çalışır",
     glanceEyebrow: "RGI'YA HIZLI BAKIŞ",
     glanceTitle: "Bir performans skoru değil. Bir ilerleme ölçüsü.",
@@ -68,35 +68,35 @@ const summaryCopy: Record<SupportedLang, SummaryCopy> = {
     axesEyebrow: "İKİ EKSEN",
     axesTitle: "Büyüme tek bir yerde gerçekleşmez.",
     axesDesc:
-      "RGI şirket performansını Brand ve Product eksenlerinde inceler; sonra gerçek büyümeyi anlamak için bu iki alanı tekrar bir araya getirir.",
-    axesCta: "Brand & Product hakkında",
+      "RGI şirket performansını Marka ve Ürün eksenlerinde inceler; sonra gerçek büyümeyi anlamak için bu iki alanı tekrar bir araya getirir.",
+    axesCta: "Marka & Ürün hakkında",
     layersEyebrow: "ÜÇ PERFORMANS KATMANI",
     layersTitle: "Görünürlüğün ötesinde ne değişti?",
     layersDesc:
       "Tam RGI sistemi büyümeyi pazarlama, finans ve operasyon katmanlarında okur. Çünkü pazarlama performansı yükselirken şirketin finansal veya operasyonel sağlığı aynı anda kötüleşebilir.",
     layersCta: "Katmanları keşfet",
-    funnelEyebrow: "FUNNEL WIDTH",
-    funnelTitle: "Sağlıklı büyüme funnel'ın tek bir noktasında gerçekleşmez.",
+    funnelEyebrow: "DÖNÜŞÜM HUNİSİ GENİŞLİĞİ",
+    funnelTitle: "Sağlıklı büyüme dönüşüm hunisinin tek bir noktasında gerçekleşmez.",
     funnelDesc:
-      "RGI, funnel'ın tamamının ne kadar verimli büyüdüğüne bakar. Hedef, tek bir aşamanın sıçraması değil; aşamaların birbirine yakın oranlarda, dengeli ve sürdürülebilir biçimde genişlemesidir.",
-    funnelCta: "Funnel verimliliğini gör",
-    externalEyebrow: "EXTERNAL RGI",
+      "RGI, dönüşüm hunisinin tamamının ne kadar verimli büyüdüğüne bakar. Hedef, tek bir aşamanın sıçraması değil; aşamaların birbirine yakın oranlarda, dengeli ve sürdürülebilir biçimde genişlemesidir.",
+    funnelCta: "Huni verimliliğini gör",
+    externalEyebrow: "DIŞ RGI",
     externalTitle: "Dışarıdan ölçülebilir büyüme.",
     externalDesc:
-      "External RGI, kamuya açık ve doğrulanabilir verilerle Brand ve Product eksenlerini Marketing Performance ve Financial Health katmanlarında ölçer.",
-    externalCta: "External RGI hakkında",
-    internalEyebrow: "INTERNAL RGI",
+      "Dış RGI, kamuya açık ve doğrulanabilir verilerle Marka ve Ürün eksenlerini Pazarlama Performansı ve Finansal Sağlık katmanlarında ölçer.",
+    externalCta: "Dış RGI hakkında",
+    internalEyebrow: "İÇ RGI",
     internalTitle: "Şirket verisiyle daha derin bir görünüm.",
     internalDesc:
-      "Şirket verisi sisteme girdiğinde Operational Efficiency de ölçüme eklenir; böylece yalnızca talebi değil, organizasyonun büyümeyi ne kadar sağlıklı taşıdığını da görürüz.",
-    internalCta: "Internal RGI hakkında",
-    cadenceEyebrow: "QUARTERLY + ANNUAL",
-    cadenceTitle: "Growth tek bir snapshot değildir.",
+      "Şirket verisi sisteme girdiğinde Operasyonel Verimlilik de ölçüme eklenir; böylece yalnızca talebi değil, organizasyonun büyümeyi ne kadar sağlıklı taşıdığını da görürüz.",
+    internalCta: "İç RGI hakkında",
+    cadenceEyebrow: "ÜÇ AYLIK + YILLIK",
+    cadenceTitle: "Büyüme tek bir anlık görüntü değildir.",
     cadenceDesc:
-      "Quarterly RGI kısa ve orta vadeli değişimi, Annual RGI ise yapısal gelişimi gösterir. Birlikte yalnızca sonucu değil, büyümenin yönünü ve kalitesini okuruz.",
+      "Üç Aylık RGI kısa ve orta vadeli değişimi, Yıllık RGI ise yapısal gelişimi gösterir. Birlikte yalnızca sonucu değil, büyümenin yönünü ve kalitesini okuruz.",
     cadenceCta: "Zaman perspektifini gör",
-    outputEyebrow: "MORE THAN A REPORT",
-    outputTitle: "Bir dashboard değil. Bir karar sistemi.",
+    outputEyebrow: "BİR RAPORDAN FAZLASI",
+    outputTitle: "Bir gösterge paneli değil. Bir karar sistemi.",
     outputDesc:
       "RGI nerede gerçek büyüme olduğunu, nerede yalnızca metrik artışı bulunduğunu ve odağın bir sonraki adımda nereye kayması gerektiğini görünür hale getirir.",
     outputCta: "Örnek çıktıyı gör",
@@ -191,7 +191,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
             <div className="max-w-[610px]">
               <Eyebrow>{t.heroEyebrow}</Eyebrow>
               <h1 className="mt-3 text-[5.35rem] font-semibold leading-[.82] tracking-[-.075em] sm:text-[6.6rem]">RGI</h1>
-              <p className="mt-2 text-[18px] font-medium tracking-[-.035em]">Real Growth Index</p>
+              <p className="mt-2 text-[18px] font-medium tracking-[-.035em]">{lang === "tr" ? "Gerçek Büyüme Endeksi" : "Real Growth Index"}</p>
               <h2 className="mt-5 max-w-[18ch] text-[2rem] font-semibold leading-[1.02] tracking-[-.048em] sm:text-[2.45rem]">
                 {t.heroTitleA}<br/><span className="text-[#7894ac]">{t.heroTitleB}</span>
               </h2>
@@ -201,7 +201,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               </a>
             </div>
             <div className="mx-auto w-full max-w-[530px]">
-              <Artwork src="/framework/rgi/hero.webp" alt="RGI Real Growth Index visual" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/hero-tr.svg" : "/framework/rgi/hero.svg"} alt={lang === "tr" ? "RGI Gerçek Büyüme Endeksi görseli" : "RGI Real Growth Index visual"} />
             </div>
           </div>
         </section>
@@ -215,7 +215,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-4"><InlineLink href="#rgi-bridge">{t.glanceCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[680px]">
-              <Artwork src="/framework/rgi/glance.webp" alt="RGI at a glance" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/glance-tr.svg" : "/framework/rgi/glance.svg"} alt={lang === "tr" ? "RGI hızlı bakış" : "RGI at a glance"} />
             </div>
           </div>
         </section>
@@ -229,7 +229,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-4"><InlineLink href={`/${lang}/framework/bhs`} dark>{t.bridgeCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[650px]">
-              <Artwork src="/framework/rgi/bridge.webp" alt="BHS to RGI growth cycle" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/bridge-tr.svg" : "/framework/rgi/bridge.svg"} alt={lang === "tr" ? "BHS'den RGI'a büyüme döngüsü" : "BHS to RGI growth cycle"} />
             </div>
           </div>
         </section>
@@ -243,7 +243,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-4"><InlineLink href="#brand">{t.axesCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[690px]">
-              <Artwork src="/framework/rgi/axes.webp" alt="Brand and Product axes" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/axes-tr.svg" : "/framework/rgi/axes.svg"} alt={lang === "tr" ? "Marka ve Ürün eksenleri" : "Brand and Product axes"} />
             </div>
           </div>
         </section>
@@ -257,7 +257,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-4"><InlineLink href="#brand">{t.layersCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[690px]">
-              <Artwork src="/framework/rgi/layers.webp" alt="RGI performance layers" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/layers-tr.svg" : "/framework/rgi/layers.svg"} alt={lang === "tr" ? "RGI performans katmanları" : "RGI performance layers"} />
             </div>
           </div>
         </section>
@@ -271,7 +271,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-4"><InlineLink href="#product">{t.funnelCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[690px]">
-              <Artwork src="/framework/rgi/funnel.webp" alt="Balanced funnel growth example" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/funnel-tr.svg" : "/framework/rgi/funnel.svg"} alt={lang === "tr" ? "Dengeli dönüşüm hunisi büyümesi" : "Balanced funnel growth example"} />
             </div>
           </div>
         </section>
@@ -289,7 +289,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
                 <div className="relative grid h-[82px] w-[82px] place-items-center rounded-full border border-white/30 before:absolute before:inset-[12px] before:rounded-full before:border before:border-white/18 after:absolute after:left-1/2 after:top-[8px] after:h-[64px] after:w-px after:-translate-x-1/2 after:bg-white/18">
                   <div className="h-[1px] w-[58px] bg-white/18" />
                 </div>
-                <span className="mt-2">PUBLIC DATA<br/>REAL INSIGHTS</span>
+                <span className="mt-2">{lang === "tr" ? <><span>AÇIK VERİ</span><br/><span>GERÇEK İÇGÖRÜ</span></> : <><span>PUBLIC DATA</span><br/><span>REAL INSIGHTS</span></>}</span>
               </div>
             </div>
           </div>
@@ -303,7 +303,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               </div>
               <div className="hidden sm:grid place-items-center text-center text-[8px] uppercase leading-4 tracking-[.08em] text-[#6c879b]">
                 <div className="grid h-[82px] w-[82px] place-items-center rounded-full border border-[#6f8da4]/35 text-3xl font-light">▢</div>
-                <span className="mt-2">DEEPER DATA<br/>STRONGER DECISIONS</span>
+                <span className="mt-2">{lang === "tr" ? <><span>DERİN VERİ</span><br/><span>GÜÇLÜ KARARLAR</span></> : <><span>DEEPER DATA</span><br/><span>STRONGER DECISIONS</span></>}</span>
               </div>
             </div>
           </div>
@@ -318,7 +318,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-3"><InlineLink href="#rgi-output">{t.cadenceCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[690px]">
-              <Artwork src="/framework/rgi/cadence.webp" alt="Quarterly and annual RGI growth view" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/cadence-tr.svg" : "/framework/rgi/cadence.svg"} alt={lang === "tr" ? "Üç aylık ve yıllık RGI büyüme görünümü" : "Quarterly and annual RGI growth view"} />
             </div>
           </div>
         </section>
@@ -332,7 +332,7 @@ export default function RgiReferencePage({ lang }: { lang: SupportedLang }) {
               <div className="mt-3"><InlineLink href="#brand">{t.outputCta}</InlineLink></div>
             </div>
             <div className="mx-auto w-full max-w-[690px]">
-              <Artwork src="/framework/rgi/output-exact.svg" alt="RGI decision report output" />
+              <Artwork src={lang === "tr" ? "/framework/rgi/output-tr.svg" : "/framework/rgi/output.svg"} alt={lang === "tr" ? "RGI karar raporu çıktısı" : "RGI decision report output"} />
             </div>
           </div>
         </section>
