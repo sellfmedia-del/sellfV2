@@ -1,109 +1,20 @@
 .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child {
-  isolation: isolate;
+  height: 390px !important;
+  max-width: 680px !important;
+  background-image: var(--bhs-report-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  perspective: none !important;
 }
 
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child::after {
-  content: "";
-  position: absolute;
-  left: 13%;
-  right: -3%;
-  bottom: 6%;
-  height: 14%;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, rgba(11, 13, 13, 0.17), rgba(11, 13, 13, 0) 70%);
-  filter: blur(13px);
-  transform: rotate(-1deg);
-}
-
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(1),
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(2),
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(3) {
-  transform-origin: 50% 50% !important;
-  backface-visibility: hidden;
-  box-shadow: 0 28px 70px rgba(11, 13, 13, 0.13) !important;
-}
-
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(1) {
-  right: 2% !important;
-  z-index: 4 !important;
-  transform: translateY(-50%) translateX(34px) rotateY(-8deg) rotateZ(0.5deg) scale(0.985) !important;
-}
-
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(2) {
-  right: -5% !important;
-  z-index: 3 !important;
-  transform: translateY(-50%) translateX(64px) rotateY(-10deg) rotateZ(1.7deg) scale(0.945) !important;
-}
-
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(3) {
-  right: -12% !important;
-  z-index: 2 !important;
-  transform: translateY(-50%) translateX(92px) rotateY(-12deg) rotateZ(3deg) scale(0.905) !important;
-}
-
-.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(4) {
-  left: 0 !important;
-  z-index: 8 !important;
-  width: 61% !important;
-  height: 282px !important;
-  transform-origin: 50% 50% !important;
-  transform: translateY(-50%) translateZ(72px) rotateY(-7deg) rotateZ(-2.1deg) !important;
-  box-shadow: 0 42px 95px rgba(11, 13, 13, 0.28) !important;
-}
-
-@media (min-width: 768px) {
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child {
-    height: 410px !important;
-    max-width: 680px !important;
-  }
-
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(1),
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(2),
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(3) {
-    width: 52% !important;
-    height: 258px !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .page article > section:nth-of-type(7) :global(.sellf-container) {
-    grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr) !important;
-    column-gap: 5rem !important;
-  }
+.page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > * {
+  display: none !important;
 }
 
 @media (max-width: 767px) {
   .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child {
-    height: 310px !important;
+    height: 300px !important;
     max-width: 520px !important;
-  }
-
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(1),
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(2),
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(3) {
-    width: 56% !important;
-    height: 195px !important;
-  }
-
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(1) {
-    right: 4% !important;
-    transform: translateY(-50%) translateX(18px) rotateY(-7deg) rotateZ(0.4deg) scale(0.98) !important;
-  }
-
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(2) {
-    right: -2% !important;
-    transform: translateY(-50%) translateX(34px) rotateY(-9deg) rotateZ(1.4deg) scale(0.94) !important;
-  }
-
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(3) {
-    right: -8% !important;
-    transform: translateY(-50%) translateX(52px) rotateY(-11deg) rotateZ(2.5deg) scale(0.90) !important;
-  }
-
-  .page article > section:nth-of-type(7) :global(.sellf-container) > div:last-child > div:nth-child(4) {
-    width: 62% !important;
-    height: 214px !important;
-    transform: translateY(-50%) rotateY(-6deg) rotateZ(-1.7deg) !important;
   }
 }
