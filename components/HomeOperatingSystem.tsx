@@ -257,20 +257,24 @@ export default function HomeOperatingSystem() {
               </div>
             </div>
 
-            <div className="relative min-h-[390px] overflow-hidden rounded-[2px] border border-white/[.08] bg-[radial-gradient(circle_at_50%_16%,rgba(215,194,169,.17),transparent_30%),linear-gradient(180deg,#111313_0%,#0b0d0d_76%)]">
-              <div className="absolute inset-0 bg-[linear-gradient(104deg,transparent_0%,transparent_43%,rgba(218,201,181,.09)_44%,rgba(218,201,181,.02)_63%,transparent_64%)]" />
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,.32))]" />
-              <div className="absolute left-1/2 top-[42%] flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 sm:gap-5">
-                <div className="operating-orb relative grid h-36 w-36 place-items-center rounded-full border border-white/[.18] bg-[radial-gradient(circle_at_35%_26%,rgba(255,255,255,.22),rgba(71,69,64,.36)_25%,rgba(5,7,7,.94)_72%)] shadow-[inset_-22px_-28px_48px_rgba(0,0,0,.6),0_22px_45px_rgba(0,0,0,.45)] sm:h-40 sm:w-40">
-                  <div className="text-center"><div className="text-3xl font-medium tracking-[-.06em]">BHS</div><div className="mt-2 text-[8px] font-semibold tracking-[.26em] text-white/50">{t.baseline}</div></div>
+            <div className="relative min-h-[390px]">
+              <div className="pointer-events-none absolute left-1/2 top-[42%] h-[230px] w-[104%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(170,147,121,.13),rgba(91,78,65,.05)_42%,transparent_72%)] blur-2xl" />
+              <div className="pointer-events-none absolute left-[5%] right-[5%] top-[42%] h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,.13)_20%,rgba(205,187,168,.22)_50%,rgba(255,255,255,.13)_80%,transparent)]" />
+              <div className="absolute left-1/2 top-[42%] grid w-full max-w-[360px] -translate-x-1/2 -translate-y-1/2 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-1 sm:gap-3">
+                <div className="operating-orb relative aspect-square w-full max-w-[138px] justify-self-end rounded-full border border-white/[.18] bg-[radial-gradient(circle_at_35%_26%,rgba(255,255,255,.22),rgba(71,69,64,.36)_25%,rgba(5,7,7,.94)_72%)] shadow-[inset_-22px_-28px_48px_rgba(0,0,0,.6),0_22px_45px_rgba(0,0,0,.45)]">
+                  <div className="absolute inset-0 grid place-items-center">
+                    <div className="text-center"><div className="text-2xl font-medium tracking-[-.06em] sm:text-3xl">BHS</div><div className="mt-2 text-[7px] font-semibold tracking-[.24em] text-white/50 sm:text-[8px]">{t.baseline}</div></div>
+                  </div>
                 </div>
-                <span className="text-2xl text-white/56">→</span>
-                <div className="operating-orb operating-orb-r relative grid h-36 w-36 place-items-center rounded-full border border-[#cdbba8]/30 bg-[radial-gradient(circle_at_35%_26%,rgba(255,255,255,.28),rgba(132,113,92,.30)_30%,rgba(9,10,9,.96)_74%)] shadow-[inset_-22px_-28px_48px_rgba(0,0,0,.62),0_22px_45px_rgba(0,0,0,.45)] sm:h-40 sm:w-40">
-                  <div className="text-center"><div className="text-3xl font-medium tracking-[-.06em]">RGI</div><div className="mt-2 text-[8px] font-semibold tracking-[.26em] text-white/50">{t.realGrowth}</div></div>
+                <span className="text-xl text-white/50 sm:text-2xl">→</span>
+                <div className="operating-orb operating-orb-r relative aspect-square w-full max-w-[138px] justify-self-start rounded-full border border-[#cdbba8]/30 bg-[radial-gradient(circle_at_35%_26%,rgba(255,255,255,.28),rgba(132,113,92,.30)_30%,rgba(9,10,9,.96)_74%)] shadow-[inset_-22px_-28px_48px_rgba(0,0,0,.62),0_22px_45px_rgba(0,0,0,.45)]">
+                  <div className="absolute inset-0 grid place-items-center">
+                    <div className="text-center"><div className="text-2xl font-medium tracking-[-.06em] sm:text-3xl">RGI</div><div className="mt-2 text-[7px] font-semibold tracking-[.24em] text-white/50 sm:text-[8px]">{t.realGrowth}</div></div>
+                  </div>
                 </div>
               </div>
 
-              <div className="absolute inset-x-6 bottom-7 grid grid-cols-3 gap-3 border-t border-white/[.10] pt-5 text-center">
+              <div className="absolute inset-x-0 bottom-7 grid grid-cols-3 gap-3 border-t border-white/[.10] pt-5 text-center">
                 {[
                   [t.diagnose, t.diagnoseDesc],
                   [t.execute, t.executeDesc],
