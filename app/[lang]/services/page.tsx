@@ -69,6 +69,7 @@ export default async function ServicesPage({
           url,
           provider: {
             "@type": "Organization",
+            "@id": `${baseUrl}/#organization`,
             name: "Sellf Media",
             url: baseUrl,
           },
