@@ -1,122 +1,61 @@
 .page {
-  --rgi-hero: url('/framework/rgi/hero.svg');
-  --rgi-glance: url('/framework/rgi/glance.svg');
-  --rgi-bridge: url('/framework/rgi/bridge.svg');
-  --rgi-axes: url('/framework/rgi/axes.svg');
-  --rgi-layers: url('/framework/rgi/layers.svg');
-  --rgi-funnel: url('/framework/rgi/funnel.svg');
-  --rgi-cadence: url('/framework/rgi/cadence.svg');
-  --rgi-output: url('/framework/rgi/output.svg');
+  /* Scope only the RGI reference page. */
 }
 
-/* Keep the approved mockup composition, but render the visual modules as vectors
-   so they stay sharp on retina / large desktop displays. */
-.page article > section:first-of-type :global(.sellf-container) > div:last-child,
-.page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child,
-.page #bhs-rgi :global(.sellf-container) > div:last-child,
-.page #axes :global(.sellf-container) > div:last-child,
-.page #layers :global(.sellf-container) > div > div:last-child,
-.page #funnel :global(.sellf-container) > div:last-child,
-.page #cadence :global(.sellf-container) > div:last-child,
-.page #output :global(.sellf-container) > div:last-child {
-  width: 100%;
-  min-height: 0 !important;
-  margin-inline: auto;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: contain !important;
-  border: 0 !important;
-  box-shadow: none !important;
+/* Keep the approved mockup composition exactly where it is, but swap the
+   compressed raster crops for the matching vector artwork already in the repo.
+   This removes blur on large / retina displays without changing section layout. */
+.page :global(img[src="/framework/rgi/hero.webp"]) {
+  content: url('/framework/rgi/hero.svg');
 }
 
-.page article > section:first-of-type :global(.sellf-container) > div:last-child {
-  aspect-ratio: 400 / 350;
-  max-width: 560px;
-  background-image: var(--rgi-hero) !important;
+.page :global(img[src="/framework/rgi/glance.webp"]) {
+  content: url('/framework/rgi/glance.svg');
 }
 
-.page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child {
-  aspect-ratio: 465 / 175;
-  max-width: 670px;
-  background-image: var(--rgi-glance) !important;
+.page :global(img[src="/framework/rgi/bridge.webp"]) {
+  content: url('/framework/rgi/bridge.svg');
 }
 
-.page #bhs-rgi :global(.sellf-container) > div:last-child {
-  aspect-ratio: 405 / 180;
-  max-width: 620px;
-  background-image: var(--rgi-bridge) !important;
+.page :global(img[src="/framework/rgi/axes.webp"]) {
+  content: url('/framework/rgi/axes.svg');
 }
 
-.page #axes :global(.sellf-container) > div:last-child {
-  aspect-ratio: 480 / 180;
-  max-width: 670px;
-  background-image: var(--rgi-axes) !important;
+.page :global(img[src="/framework/rgi/layers.webp"]) {
+  content: url('/framework/rgi/layers.svg');
 }
 
-.page #layers :global(.sellf-container) > div > div:last-child {
-  aspect-ratio: 480 / 155;
-  max-width: 670px;
-  background-image: var(--rgi-layers) !important;
+.page :global(img[src="/framework/rgi/funnel.webp"]) {
+  content: url('/framework/rgi/funnel.svg');
 }
 
-.page #funnel :global(.sellf-container) > div:last-child {
-  aspect-ratio: 500 / 190;
-  max-width: 650px;
-  background-image: var(--rgi-funnel) !important;
+.page :global(img[src="/framework/rgi/cadence.webp"]) {
+  content: url('/framework/rgi/cadence.svg');
 }
 
-.page #cadence :global(.sellf-container) > div:last-child {
-  aspect-ratio: 485 / 140;
-  max-width: 670px;
-  background-image: var(--rgi-cadence) !important;
+.page :global(img[src="/framework/rgi/output-exact.svg"]) {
+  content: url('/framework/rgi/output.svg');
 }
 
-.page #output :global(.sellf-container) > div:last-child {
+/* The CTA is visually embedded in the approved mockup artwork. Make that same
+   area a real keyboard- and mouse-accessible link without changing its look. */
+.page :global(#rgi-output) :global(.sellf-container) > div:last-child {
   position: relative;
-  aspect-ratio: 485 / 170;
-  max-width: 670px;
-  background-image: var(--rgi-output) !important;
 }
 
-/* Remove only the old programmatic drawings underneath the approved visual modules. */
-.page article > section:first-of-type :global(.sellf-container) > div:last-child > *,
-.page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child > *,
-.page #bhs-rgi :global(.sellf-container) > div:last-child > *,
-.page #axes :global(.sellf-container) > div:last-child > *,
-.page #layers :global(.sellf-container) > div > div:last-child > *,
-.page #funnel :global(.sellf-container) > div:last-child > *,
-.page #cadence :global(.sellf-container) > div:last-child > *,
-.page #output :global(.sellf-container) > div:last-child > * {
-  display: none !important;
-}
-
-/* The CTA is visually part of the approved artwork, but remains a real link. */
-.page #output :global(.sellf-container) > div:last-child > :global(.rgi-output-link) {
-  display: block !important;
+.page :global(#rgi-output) :global(.rgi-output-link) {
   position: absolute;
   z-index: 5;
-  left: 75.5%;
-  top: 67%;
-  width: 15.5%;
-  height: 16.5%;
+  left: 74%;
+  top: 64%;
+  width: 20%;
+  height: 20%;
+  display: block;
   border-radius: 999px;
   cursor: pointer;
 }
 
-.page #output :global(.sellf-container) > div:last-child > :global(.rgi-output-link):focus-visible {
+.page :global(#rgi-output) :global(.rgi-output-link):focus-visible {
   outline: 2px solid #17222b;
   outline-offset: 3px;
-}
-
-@media (max-width: 767px) {
-  .page article > section:first-of-type :global(.sellf-container) > div:last-child,
-  .page article > section:nth-of-type(2) :global(.sellf-container) > div:last-child,
-  .page #bhs-rgi :global(.sellf-container) > div:last-child,
-  .page #axes :global(.sellf-container) > div:last-child,
-  .page #layers :global(.sellf-container) > div > div:last-child,
-  .page #funnel :global(.sellf-container) > div:last-child,
-  .page #cadence :global(.sellf-container) > div:last-child,
-  .page #output :global(.sellf-container) > div:last-child {
-    max-width: 100% !important;
-  }
 }
