@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import RgiReferencePage from "@/components/RgiReferencePage";
+import styles from "./rgi-visual-refine.module.css";
 
 const baseUrl = "https://www.sellfmedia.com";
 const locales = ["tr", "en"] as const;
@@ -127,13 +129,37 @@ export default async function RgiPage({ params }: { params: Promise<RouteParams>
     "@graph": [webPageJsonLd, definedTermJsonLd, breadcrumbJsonLd],
   };
 
+  const outputCtaHref = `/${currentLang}/contact`;
+  const outputCtaLabel = currentLang === "tr" ? "Ekibimizle konuşun" : "Talk to our team";
+  const outputLinkScript = `
+    (() => {
+      const attachOutputLink = () => {
+        const visual = document.querySelector('#rgi-output .sellf-container > div:last-child');
+        if (!visual || visual.querySelector('.rgi-output-link')) return;
+        const link = document.createElement('a');
+        link.href = ${JSON.stringify(outputCtaHref)};
+        link.className = 'rgi-output-link';
+        link.setAttribute('aria-label', ${JSON.stringify(outputCtaLabel)});
+        visual.appendChild(link);
+      };
+      attachOutputLink();
+      requestAnimationFrame(attachOutputLink);
+      setTimeout(attachOutputLink, 250);
+    })();
+  `;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <RgiReferencePage lang={currentLang} />
+      <Script id={`rgi-output-link-${currentLang}`} strategy="afterInteractive">
+        {outputLinkScript}
+      </Script>
+      <div className={styles.page}>
+        <RgiReferencePage lang={currentLang} />
+      </div>
     </>
   );
 }
