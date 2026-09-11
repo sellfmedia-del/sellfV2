@@ -403,18 +403,60 @@ export default function BhsFrameworkPage({ lang }: { lang: SupportedLang }) {
             <p className="mt-5 max-w-[620px] text-sm leading-7 text-black/60">{t.outputDesc}</p>
             <p className="mt-4 max-w-[620px] text-sm leading-7 text-black/60">{t.outputExtra}</p>
           </div>
-          <div className="relative mx-auto h-[340px] w-full max-w-[560px]">
-            {[3, 2, 1].map((item) => (
-              <div key={item} className="absolute right-0 top-1/2 h-[230px] w-[66%] -translate-y-1/2 border border-black/[.08] bg-[#fbfaf7] shadow-[0_22px_50px_rgba(11,13,13,.07)]" style={{ transform: `translateY(-50%) translateX(${(3-item)*26}px) scale(${0.88 + (3-item)*0.04})` }}>
-                <div className="p-6">
-                  <div className="h-2 w-16 bg-black/[.12]" /><div className="mt-8 h-px bg-black/[.08]" /><div className="mt-5 h-2 w-3/4 bg-black/[.07]" /><div className="mt-3 h-2 w-1/2 bg-black/[.07]" />
+          <div className="relative mx-auto h-[370px] w-full max-w-[620px] [perspective:1400px]">
+            {[0, 1, 2].map((item) => (
+              <div
+                key={item}
+                className="absolute top-1/2 h-[245px] w-[56%] overflow-hidden border border-black/[.08] bg-[#fbfaf7] shadow-[0_28px_65px_rgba(11,13,13,.10)]"
+                style={{
+                  right: `${2 + item * 8}%`,
+                  transform: `translateY(-50%) rotateY(-10deg) translateZ(${-item * 18}px) scale(${1 - item * 0.035})`,
+                  zIndex: 5 - item,
+                }}
+              >
+                <div className="grid h-full grid-rows-[auto_1fr_auto] p-5 md:p-6">
+                  <div className="flex items-center justify-between border-b border-black/[.07] pb-4">
+                    <div className="h-1.5 w-14 bg-black/[.16]" />
+                    <div className="text-[7px] uppercase tracking-[.18em] text-black/26">sellf.</div>
+                  </div>
+                  <div className="grid grid-cols-[.9fr_1.1fr] gap-4 py-5">
+                    <div className="space-y-3">
+                      <div className="h-1.5 w-4/5 bg-black/[.07]" />
+                      <div className="h-1.5 w-3/5 bg-black/[.06]" />
+                      <div className="mt-5 h-10 border-l-2 border-black/[.10] bg-[linear-gradient(90deg,rgba(11,13,13,.035),transparent)]" />
+                    </div>
+                    <div className="flex items-end gap-2 border-b border-black/[.07] px-2 pb-1">
+                      {[38, 57, 46, 70].map((value, index) => (
+                        <div key={`${item}-${index}`} className="flex-1 bg-black/[.10]" style={{ height: `${value}px` }} />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 border-t border-black/[.07] pt-4">
+                    <div className="h-1.5 bg-black/[.06]" /><div className="h-1.5 bg-black/[.06]" /><div className="h-1.5 bg-black/[.06]" />
+                  </div>
                 </div>
               </div>
             ))}
-            <div className="absolute left-0 top-1/2 h-[250px] w-[62%] -translate-y-1/2 border border-white/[.08] bg-[#0b0d0d] p-7 text-white shadow-[0_30px_65px_rgba(11,13,13,.18)]">
-              <div className="text-4xl font-semibold tracking-[-.055em]">BHS</div>
-              <div className="mt-2 text-[11px] text-[#cdb9a5]">{t.reportLabel}</div>
-              <div className="absolute inset-x-7 bottom-7 border-t border-white/[.12] pt-4 text-[8px] uppercase tracking-[.18em] text-white/34">{t.reportSub}</div>
+            <div
+              className="absolute left-[2%] top-1/2 z-10 h-[272px] w-[61%] overflow-hidden border border-white/[.09] bg-[#090b0b] text-white shadow-[0_38px_80px_rgba(11,13,13,.24)]"
+              style={{ transform: "translateY(-50%) rotateY(-9deg) rotateZ(-1.2deg)" }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=82"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover grayscale brightness-[.34] contrast-[1.12]"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,7,.97)_0%,rgba(5,7,7,.78)_42%,rgba(5,7,7,.20)_100%)]" />
+              <div className="relative flex h-full flex-col p-6 md:p-7">
+                <div className="text-[8px] font-semibold uppercase tracking-[.22em] text-white/42">Sellf Proprietary Framework</div>
+                <div className="mt-6 text-4xl font-semibold tracking-[-.055em] md:text-[2.7rem]">BHS</div>
+                <div className="mt-1 text-[11px] text-[#cdb9a5]">{t.reportLabel}</div>
+                <div className="mt-auto flex items-end justify-between border-t border-white/[.15] pt-4">
+                  <div className="text-[7px] uppercase tracking-[.18em] text-white/38">{t.reportSub}</div>
+                  <div className="text-[10px] font-semibold tracking-[-.03em] text-white/72">sellf.</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
