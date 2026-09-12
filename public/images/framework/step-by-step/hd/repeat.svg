@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-hidden="true">
+  <defs>
+    <radialGradient id="bg" cx="52%" cy="48%" r="70%"><stop offset="0" stop-color="#132127"/><stop offset="1" stop-color="#071014"/></radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#fff"/><stop offset=".16" stop-color="#d4dde0"/><stop offset=".55" stop-color="#647279" stop-opacity=".28"/><stop offset="1" stop-color="#071014" stop-opacity="0"/></radialGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="7"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <g fill="none" stroke="#8b989d" stroke-opacity=".5" stroke-width="3" transform="rotate(-14 600 365)">
+    <ellipse cx="600" cy="365" rx="145" ry="66"/><ellipse cx="600" cy="365" rx="235" ry="108"/><ellipse cx="600" cy="365" rx="340" ry="152"/><ellipse cx="600" cy="365" rx="450" ry="202"/>
+  </g>
+  <circle cx="600" cy="365" r="112" fill="url(#core)" filter="url(#g)" opacity=".85"/><circle cx="600" cy="365" r="44" fill="#f7f9fa"/>
+  <g fill="#e6ebed"><circle cx="305" cy="302" r="7"/><circle cx="452" cy="245" r="5"/><circle cx="792" cy="270" r="6"/><circle cx="892" cy="408" r="5"/><circle cx="690" cy="505" r="4"/></g>
+  <text x="600" y="652" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="24" letter-spacing="8" fill="#cbd2d5">SAME STEPS</text>
+  <text x="600" y="692" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="24" letter-spacing="8" fill="#cbd2d5">A HIGHER YOU</text>
+</svg>
