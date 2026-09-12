@@ -65,6 +65,8 @@ export default async function OperatingModelRoute({ params }: { params: Promise<
 
   const currentLang = lang as SupportedLang;
   const canonicalUrl = `${baseUrl}/${currentLang}/framework/operating-model`;
+  const bhsUrl = `${baseUrl}/${currentLang}/framework/bhs`;
+  const rgiUrl = `${baseUrl}/${currentLang}/framework/rgi`;
   const content = seo[currentLang];
 
   const structuredData = {
@@ -77,11 +79,29 @@ export default async function OperatingModelRoute({ params }: { params: Promise<
         name: content.title,
         description: content.description,
         inLanguage: currentLang,
+        about: { "@id": `${canonicalUrl}#operating-model` },
+        mentions: [{ "@id": `${bhsUrl}#bhs` }, { "@id": `${rgiUrl}#rgi` }],
         isPartOf: {
           "@type": "WebSite",
           "@id": `${baseUrl}/#website`,
           name: "Sellf Media",
           url: baseUrl,
+        },
+      },
+      {
+        "@type": "DefinedTerm",
+        "@id": `${canonicalUrl}#operating-model`,
+        name: currentLang === "tr" ? "Sellf İşletim Modeli" : "Sellf Operating Model",
+        alternateName: currentLang === "tr" ? "Büyüme ve Operasyon Modeli" : "Growth & Operations Model",
+        description:
+          currentLang === "tr"
+            ? "Sellf'in stratejik yön, sürekli denetim ve sonuç sorumluluğunu Büyüme ekibinde; uygulama, optimizasyon ve raporlamayı ise Operasyon ekibinde ayrıştıran işletim modeli."
+            : "Sellf's operating model that separates strategic direction, continuous governance and outcome accountability within Growth from execution, optimization and reporting within Operations.",
+        url: canonicalUrl,
+        inDefinedTermSet: {
+          "@type": "DefinedTermSet",
+          name: currentLang === "tr" ? "Sellf İşletim Sistemi" : "Sellf Operating System",
+          url: `${baseUrl}/${currentLang}`,
         },
       },
       {
