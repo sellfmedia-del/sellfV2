@@ -1,35 +1,71 @@
 .opModelVisualRefine [class*="heroVisual"] {
   background:
-    linear-gradient(180deg, rgba(5, 9, 11, .12) 0%, rgba(5, 9, 11, .04) 52%, rgba(5, 9, 11, .42) 100%),
-    url("/images/framework/operating-model/hero.jpg") center 54% / cover no-repeat !important;
-  box-shadow: inset 0 0 70px rgba(0, 0, 0, .38);
+    linear-gradient(90deg, rgba(7, 11, 13, .42) 0%, rgba(7, 11, 13, .08) 18%, rgba(7, 11, 13, .02) 80%, rgba(7, 11, 13, .24) 100%),
+    linear-gradient(180deg, rgba(5, 9, 11, .08) 0%, rgba(5, 9, 11, 0) 48%, rgba(5, 9, 11, .32) 100%),
+    url("/images/framework/operating-model/hero.jpg") center 58% / 108% auto no-repeat !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+.opModelVisualRefine [class*="heroVisual"]::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #0b1013 0%, rgba(11, 16, 19, .72) 5%, transparent 18%, transparent 86%, rgba(11, 16, 19, .45) 96%, #0b1013 100%),
+    linear-gradient(180deg, #0b1013 0%, transparent 10%, transparent 88%, #0b1013 100%);
 }
 
 .opModelVisualRefine [class*="heroVisual"]::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 6;
+  z-index: 2;
   pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(7, 11, 13, .24), transparent 22%, transparent 78%, rgba(7, 11, 13, .24)),
-    linear-gradient(180deg, rgba(255, 255, 255, .018), transparent 30%, rgba(0, 0, 0, .18));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .025);
+  background: radial-gradient(ellipse at 50% 62%, transparent 0 48%, rgba(4, 7, 9, .08) 72%, rgba(4, 7, 9, .26) 100%);
 }
 
 .opModelVisualRefine [class*="heroDoor"] {
-  background:
-    linear-gradient(105deg, rgba(8, 13, 16, .84), rgba(8, 13, 16, .64) 55%, rgba(8, 13, 16, .76)) !important;
-  border-color: rgba(255, 255, 255, .035) !important;
-  box-shadow: 0 24px 65px rgba(0, 0, 0, .22), inset 0 0 45px rgba(255, 255, 255, .012) !important;
-  backdrop-filter: blur(.8px);
+  z-index: 5 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+  transform: none !important;
+  padding-top: 118px !important;
 }
 
-.opModelVisualRefine [class*="heroDoorWords"],
+.opModelVisualRefine [class*="heroDoorWords"] {
+  position: relative;
+  z-index: 8;
+  width: max-content;
+  padding: 12px 20px;
+  color: rgba(218, 224, 227, .62) !important;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .95);
+}
+
+.opModelVisualRefine [class*="heroDoorLeft"] [class*="heroDoorWords"] {
+  background: linear-gradient(90deg, rgba(7, 11, 13, .88) 0%, rgba(7, 11, 13, .72) 62%, rgba(7, 11, 13, 0) 100%);
+  box-shadow: -12px 0 28px rgba(7, 11, 13, .42), 10px 0 30px rgba(7, 11, 13, .18);
+}
+
+.opModelVisualRefine [class*="heroDoorRight"] [class*="heroDoorWords"] {
+  background: linear-gradient(270deg, rgba(7, 11, 13, .88) 0%, rgba(7, 11, 13, .72) 62%, rgba(7, 11, 13, 0) 100%);
+  box-shadow: 12px 0 28px rgba(7, 11, 13, .42), -10px 0 30px rgba(7, 11, 13, .18);
+}
+
 .opModelVisualRefine [class*="heroDoor"] strong {
   position: relative;
   z-index: 8;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, .9);
+  padding: 9px 16px;
+  background: radial-gradient(ellipse at center, rgba(7, 11, 13, .84) 0%, rgba(7, 11, 13, .62) 55%, rgba(7, 11, 13, 0) 100%);
+  color: rgba(235, 239, 241, .82) !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .92);
 }
 
 .opModelVisualRefine [class*="heroLight"],
@@ -38,43 +74,88 @@
   display: none !important;
 }
 
+/* Team visuals: keep the approved abstract objects, but make them feel embedded in the card rather than pasted-in images. */
 .opModelVisualRefine [class*="rings"] {
-  right: -18px !important;
-  top: 68px !important;
-  width: 332px !important;
-  height: 330px !important;
-  opacity: .94 !important;
-  transform: none !important;
-  background:
-    linear-gradient(90deg, rgba(11, 16, 19, .82) 0%, rgba(11, 16, 19, .25) 31%, rgba(11, 16, 19, 0) 56%),
-    url("/images/framework/operating-model/growth.jpg") center / cover no-repeat !important;
-  filter: grayscale(1) contrast(1.08) brightness(.88);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
+  right: -10px !important;
+  top: 72px !important;
+  width: 350px !important;
+  height: 350px !important;
+  opacity: .92 !important;
+  transform: rotate(-12deg) !important;
+  background: none !important;
+  filter: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
 }
 
 .opModelVisualRefine [class*="rings"] > i {
-  display: none !important;
+  display: block !important;
+  border-color: rgba(225, 231, 234, .30) !important;
+  background: linear-gradient(120deg, rgba(255,255,255,.012), rgba(255,255,255,.055) 44%, rgba(255,255,255,.006) 70%) !important;
+  box-shadow:
+    inset 10px 0 28px rgba(255,255,255,.035),
+    inset -14px 0 34px rgba(0,0,0,.24),
+    0 0 20px rgba(255,255,255,.018) !important;
+  backdrop-filter: blur(.6px);
+}
+
+.opModelVisualRefine [class*="rings"]::before,
+.opModelVisualRefine [class*="rings"]::after {
+  content: "";
+  position: absolute;
+  inset: 13% 1%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.opModelVisualRefine [class*="rings"]::before {
+  border: 1px solid rgba(244, 247, 248, .18);
+  transform: rotate(72deg) scale(.88,.37);
+  box-shadow: 0 0 24px rgba(255,255,255,.025);
+}
+
+.opModelVisualRefine [class*="rings"]::after {
+  inset: 20% 9%;
+  border: 1px solid rgba(244, 247, 248, .10);
+  transform: rotate(102deg) scale(.82,.31);
 }
 
 .opModelVisualRefine [class*="layers"] {
-  right: 14px !important;
-  top: 66px !important;
-  width: 300px !important;
-  height: 320px !important;
-  opacity: .94 !important;
-  transform: none !important;
-  transform-style: flat !important;
-  background:
-    linear-gradient(90deg, rgba(11, 16, 19, .90) 0%, rgba(11, 16, 19, .28) 34%, rgba(11, 16, 19, 0) 62%),
-    url("/images/framework/operating-model/operations.jpg") center / cover no-repeat !important;
-  filter: grayscale(.94) contrast(1.08) brightness(.88);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 23%, #000 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 23%, #000 100%);
+  right: 20px !important;
+  top: 72px !important;
+  width: 278px !important;
+  height: 315px !important;
+  opacity: .96 !important;
+  transform: rotateX(59deg) rotateZ(-18deg) !important;
+  transform-style: preserve-3d !important;
+  background: none !important;
+  filter: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
 }
 
 .opModelVisualRefine [class*="layers"] > i {
-  display: none !important;
+  display: block !important;
+  border: 1px solid rgba(230, 235, 237, .18) !important;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.026) 44%, rgba(255,255,255,.008) 100%) !important;
+  box-shadow:
+    0 18px 34px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.05),
+    inset 16px 0 30px rgba(255,255,255,.018) !important;
+  backdrop-filter: blur(2px);
+}
+
+.opModelVisualRefine [class*="layers"]::after {
+  content: "";
+  position: absolute;
+  left: 54px;
+  top: 14px;
+  width: 150px;
+  height: 210px;
+  background: radial-gradient(ellipse at center, rgba(232,238,240,.06), transparent 66%);
+  filter: blur(16px);
+  pointer-events: none;
 }
 
 .opModelVisualRefine [class*="teamCard"]::after {
@@ -83,7 +164,9 @@
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: radial-gradient(circle at 84% 42%, transparent 0 19%, rgba(8, 12, 15, .06) 44%, rgba(8, 12, 15, .18) 74%);
+  background:
+    linear-gradient(90deg, rgba(10, 15, 18, .18) 0%, transparent 54%, rgba(10, 15, 18, .06) 100%),
+    radial-gradient(circle at 84% 42%, transparent 0 20%, rgba(8, 12, 15, .025) 52%, rgba(8, 12, 15, .16) 86%);
 }
 
 .opModelVisualRefine [class*="teamCopy"],
@@ -137,34 +220,41 @@
 
 @media (max-width: 920px) {
   .opModelVisualRefine [class*="heroVisual"] {
-    background-position: center 54% !important;
+    background-position: center 58% !important;
+    background-size: cover !important;
   }
 
   .opModelVisualRefine [class*="rings"],
   .opModelVisualRefine [class*="layers"] {
-    opacity: .84 !important;
+    opacity: .82 !important;
   }
 }
 
 @media (max-width: 620px) {
   .opModelVisualRefine [class*="heroDoor"] {
-    background: linear-gradient(105deg, rgba(8, 13, 16, .78), rgba(8, 13, 16, .56) 55%, rgba(8, 13, 16, .72)) !important;
+    padding-top: 82px !important;
+  }
+
+  .opModelVisualRefine [class*="heroDoorWords"] {
+    padding: 8px 10px;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
 
   .opModelVisualRefine [class*="rings"] {
-    right: -78px !important;
-    top: 118px !important;
-    width: 280px !important;
+    right: -95px !important;
+    top: 120px !important;
+    width: 300px !important;
     height: 310px !important;
-    opacity: .52 !important;
+    opacity: .38 !important;
   }
 
   .opModelVisualRefine [class*="layers"] {
-    right: -58px !important;
-    top: 120px !important;
-    width: 260px !important;
+    right: -70px !important;
+    top: 124px !important;
+    width: 270px !important;
     height: 300px !important;
-    opacity: .50 !important;
+    opacity: .34 !important;
   }
 
   .opModelVisualRefine [class*="modeScenicA"],
