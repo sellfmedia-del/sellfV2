@@ -4,20 +4,18 @@ import { useEffect } from "react";
 
 const HERO_VISUAL = "https://dnznrvs05pmza.cloudfront.net/magnific_precision_upscaler_v2/7025a255-7d53-4b90-8848-63a6cea4fdb8/7025a255-7d53-4b90-8848-63a6cea4fdb8.png?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOWYzOGVjZTcxZGE2YTNhNiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTMzNjgwN30.-GAF16jU234lwLI4cNZJ01HK1s2PaFa8v--S1xOarhM";
 const SETUP_VISUAL = "https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3.1-flash-lite-image/images/68371fd1-2d73-4abe-8452-180045cef5a4/ed3e6dca-71a8-4e77-bf6f-57bf7ff92ccd/Reconstruct__input_as_a_crisp_high_fidelity_version_of_the_e.jpg?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMGFhNDNiYTFmOTQ2NTcyYyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTM3NjkyOX0.9lAgP3MpYXwwa3hnrf24goS3eWH0QPx1Pcw7yBJarnY";
-const MATURITY_VISUAL = "https://d2jqrm6oza8nb6.cloudfront.net/datasets/73b8c793-9698-4636-b3f5-f357c23da172.png?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNjUyZTVhMmFkMzFmM2EwMyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTM3OTc1NH0.dQdRpDvI7SpWsYi-kopBIUwi0gfgHGSlsmB3st1bVHw";
 const PAIN_VISUAL = "https://dnznrvs05pmza.cloudfront.net/magnific_precision_upscaler_v2/e08ff0ed-78e7-441f-945d-5bea7b0d0a9b/e08ff0ed-78e7-441f-945d-5bea7b0d0a9b.png?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZmVkNjU1MTgxOGI1YTU4NyIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTM4NTc1Mn0.darnQrCmtk1Y5qVj_MBYrErwFtES1yehublZwbTD1No";
 const EXPANSION_VISUAL = "https://d2jqrm6oza8nb6.cloudfront.net/datasets/6ce8b096-f07d-41af-a697-2b5502515133.png?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNzQwOWE5MzgxOWVmZmM0OSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTM2OTQwMH0.BFfa-8FBVfte5rFBjx2kMsjS2UN3gLxwQ38dPNGruC4";
 const AGING_VISUAL = "https://d2jqrm6oza8nb6.cloudfront.net/datasets/ec8fb010-6207-419e-83c6-6ee3f4214c93.png?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOTA5Y2Q4ODhlYzQwNWFiZiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTM0Mzc1Mn0.D0qc6fmr36ZMRM2yxCmbHX7W4Wcql4xJYIhGJya7cfE";
-const REPEAT_VISUAL = "https://d2jqrm6oza8nb6.cloudfront.net/datasets/4ba430a9-4713-4e91-8ea2-f4211f5ef87a.png?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMjMzOTIzOTdmMjIyNjUyOSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTMxNTIyM30._zTN6WVPBuXga2uBXI-ZHySXSOY5Z722z9Acr8aoFWU";
 
 const stages = [
   { name: "development", src: null },
   { name: "setup", src: SETUP_VISUAL },
-  { name: "maturity", src: MATURITY_VISUAL },
+  { name: "maturity", src: null },
   { name: "pain", src: PAIN_VISUAL },
   { name: "expansion", src: EXPANSION_VISUAL },
   { name: "aging", src: AGING_VISUAL },
-  { name: "repeat", src: REPEAT_VISUAL },
+  { name: "repeat", src: null },
 ] as const;
 
 function mountImage(target: HTMLElement, src: string, eager = false) {
