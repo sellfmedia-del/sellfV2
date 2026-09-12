@@ -25,7 +25,6 @@ const staticPaths = [
   "/cookie-policy",
   "/framework/bhs",
   "/framework/rgi",
-  "/framework/operating-model",
 ];
 
 type BlogSlugEntry = { slug: string; updatedAt: string };
@@ -80,31 +79,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Operation detail sayfaları statik veri kaynağından gelir.
+  // Yalnızca gerçek, canonical standalone operation sayfaları sitemap'e alınır.
+  // Alias URL'ler redirect ile canonical URL'ye taşındığı için burada yer almaz.
   for (const locale of locales) {
     for (const slug of operationSlugs) {
-      const path = `/services/operations/${slug}`;
+      const path = `/services/${slug}`;
       entries.push({
         url: `${baseUrl}/${locale}${path}`,
         alternates: languageAlternates(path),
         changeFrequency: "monthly",
-        priority: 0.7,
+        priority: 0.65,
       });
     }
   }
 
-  // Sanity blog yazıları dinamik olarak eklenir. Her iki locale URL'si aynı
-  // slug'ı kullanır; içerik dil seçimine göre render edilir.
-  const posts = await getBlogSlugs();
+  const blogSlugs = await getBlogSlugs();
   for (const locale of locales) {
-    for (const post of posts) {
-      const path = `/blog/${post.slug}`;
+    for (const { slug, updatedAt } of blogSlugs) {
+      const path = `/blog/${slug}`;
       entries.push({
         url: `${baseUrl}/${locale}${path}`,
-        lastModified: post.updatedAt ? new Date(post.updatedAt) : undefined,
+        lastModified: new Date(updatedAt),
         alternates: languageAlternates(path),
         changeFrequency: "monthly",
-        priority: 0.7,
+        priority: 0.6,
       });
     }
   }
