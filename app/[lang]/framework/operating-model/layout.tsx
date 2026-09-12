@@ -1,5 +1,6 @@
 import "./visual-refine.css";
 import "./mockup-fidelity.css";
+import "./overlap-fix.css";
 import hero0 from "@/components/ophero/hero0";
 import hero1 from "@/components/ophero/hero1";
 import hero2 from "@/components/ophero/hero2";
