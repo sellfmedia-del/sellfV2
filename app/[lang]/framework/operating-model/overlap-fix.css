@@ -1,0 +1,62 @@
+.opModelVisualRefine [class*="heroDoorWords"] {
+  isolation: isolate;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.opModelVisualRefine [class*="heroDoorWords"]::before {
+  content: "";
+  position: absolute;
+  inset: -22px -72px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(7, 11, 13, .99) 0%,
+    rgba(7, 11, 13, .98) 48%,
+    rgba(7, 11, 13, .90) 67%,
+    rgba(7, 11, 13, .55) 80%,
+    rgba(7, 11, 13, 0) 100%
+  );
+}
+
+.opModelVisualRefine [class*="heroDoor"] strong {
+  isolation: isolate;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.opModelVisualRefine [class*="heroDoor"] strong::before {
+  content: "";
+  position: absolute;
+  inset: -18px -76px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(7, 11, 13, .99) 0%,
+    rgba(7, 11, 13, .97) 48%,
+    rgba(7, 11, 13, .86) 68%,
+    rgba(7, 11, 13, .48) 82%,
+    rgba(7, 11, 13, 0) 100%
+  );
+}
+
+/* Keep the approved card composition, but reserve real space above the tag row. */
+.opModelVisualRefine [class*="teamCopy"] {
+  padding-bottom: 78px;
+}
+
+@media (max-width: 620px) {
+  .opModelVisualRefine [class*="heroDoorWords"]::before {
+    inset: -14px -38px;
+  }
+
+  .opModelVisualRefine [class*="heroDoor"] strong::before {
+    inset: -12px -42px;
+  }
+
+  .opModelVisualRefine [class*="teamCopy"] {
+    padding-bottom: 88px;
+  }
+}
