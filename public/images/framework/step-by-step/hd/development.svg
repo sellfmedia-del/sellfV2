@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-hidden="true">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="58%"><stop offset="0" stop-color="#1a2429"/><stop offset="1" stop-color="#071014"/></radialGradient>
+    <radialGradient id="petal" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#8f999e" stop-opacity=".22"/><stop offset="1" stop-color="#48545a" stop-opacity=".06"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <g fill="url(#petal)" stroke="#c4cbce" stroke-width="3" stroke-opacity=".9">
+    <circle cx="600" cy="260" r="225"/><circle cx="440" cy="400" r="225"/><circle cx="760" cy="400" r="225"/><circle cx="600" cy="540" r="225"/>
+  </g>
+  <circle cx="600" cy="400" r="112" fill="#020608" stroke="#d0d5d7" stroke-width="2"/>
+  <text x="600" y="418" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="46" font-weight="600" letter-spacing="12" fill="#f1f3f3" filter="url(#glow)">IKIGAI</text>
+</svg>
