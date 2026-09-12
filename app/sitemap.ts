@@ -25,6 +25,7 @@ const staticPaths = [
   "/cookie-policy",
   "/framework/bhs",
   "/framework/rgi",
+  "/framework/operating-model",
 ];
 
 type BlogSlugEntry = { slug: string; updatedAt: string };
