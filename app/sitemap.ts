@@ -26,6 +26,7 @@ const staticPaths = [
   "/framework/bhs",
   "/framework/rgi",
   "/framework/operating-model",
+  "/framework/step-by-step",
 ];
 
 type BlogSlugEntry = { slug: string; updatedAt: string };
