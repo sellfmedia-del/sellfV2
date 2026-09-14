@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import HomeWorkServices from "@/components/HomeWorkServices";
 import HomeOperatingSystem from "@/components/HomeOperatingSystem";
 import HomeTestimonialsBlog, { type HomeBlogPost } from "@/components/HomeTestimonialsBlog";
+import HomeOwnBrands from "@/components/HomeOwnBrands";
 import Ecosystem from "@/components/Ecosystem";
 import ProcessEngine from "@/components/ProcessEngine";
 import VisionaryQuote from "@/components/VisionaryQuote";
@@ -287,6 +288,7 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
       <HomeWorkServices />
       <HomeOperatingSystem />
       <HomeTestimonialsBlog lang={currentLang} posts={latestPosts} />
+      <HomeOwnBrands lang={currentLang} />
       <Ecosystem />
       <ProcessEngine />
       <VisionaryQuote />
