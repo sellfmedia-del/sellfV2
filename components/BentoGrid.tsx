@@ -438,7 +438,7 @@ const gridLayoutData: GridConfig[] = [
   },
   {
     id: "asceinwest",
-    title: "ASCE GYO + INWEST",
+    title: "INWEST",
     tagColor: "bg-orange-50 text-orange-700 border-orange-200",
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "flow",
