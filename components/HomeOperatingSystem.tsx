@@ -243,7 +243,7 @@ export default function HomeOperatingSystem() {
                 {t.leftTitleA}<br/><span className="text-[#c8bdb3]">{t.leftTitleB}</span>
               </h3>
               <p className="mt-5 max-w-md text-sm leading-7 text-white/62">{t.leftDesc}</p>
-              <div className="mt-6"><ArrowLink href={`/${currentLang}/framework/growth-measurement`}>{t.leftCta}</ArrowLink></div>
+              <div className="mt-6"><ArrowLink href={`/${currentLang}/framework/bhs`}>{t.leftCta}</ArrowLink></div>
 
               <div className="mt-10 space-y-6">
                 {[
