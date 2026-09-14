@@ -56,7 +56,7 @@ export default function VisionaryQuote() {
       : "text-[clamp(2.55rem,3.18vw,3.18rem)] xl:text-[3.35rem]";
 
   return (
-    <section className="home-visionary overflow-hidden border-y border-black/[.06] bg-[#f8f8f6] text-[#101111]">
+    <section className="home-visionary isolate overflow-hidden border-y border-black/[.06] bg-[#f8f8f6] text-[#101111]">
       <div className="sellf-container lg:grid lg:aspect-[1774/847] lg:grid-cols-[54.397%_45.603%]">
         <div className="flex min-h-[650px] flex-col justify-between px-6 py-14 sm:px-8 md:px-12 lg:min-h-0 lg:pb-[7.8%] lg:pl-[10.36%] lg:pr-[4.97%] lg:pt-[6.3%]">
           <div>
@@ -102,11 +102,11 @@ export default function VisionaryQuote() {
           </div>
         </div>
 
-        <div className="relative min-h-[560px] border-t border-black/[.06] lg:min-h-0 lg:border-l lg:border-t-0">
+        <div className="relative min-h-[560px] lg:min-h-0">
           <img
             src={founderQuoteImage}
             alt="Yiğit Konuk - Sellf Mentality"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
           />
         </div>
       </div>
