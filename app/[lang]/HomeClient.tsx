@@ -7,7 +7,6 @@ import HomeWorkServices from "@/components/HomeWorkServices";
 import HomeOperatingSystem from "@/components/HomeOperatingSystem";
 import HomeTestimonialsBlog, { type HomeBlogPost } from "@/components/HomeTestimonialsBlog";
 import Ecosystem from "@/components/Ecosystem";
-import ProcessEngine from "@/components/ProcessEngine";
 import VisionaryQuote from "@/components/VisionaryQuote";
 import HomeLogoStrips from "@/components/HomeLogoStrips";
 import CallToAction from "@/components/CallToAction";
@@ -288,7 +287,6 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
       <HomeOperatingSystem />
       <HomeTestimonialsBlog lang={currentLang} posts={latestPosts} />
       <Ecosystem />
-      <ProcessEngine />
       <VisionaryQuote />
       <CallToAction />
     </div>
