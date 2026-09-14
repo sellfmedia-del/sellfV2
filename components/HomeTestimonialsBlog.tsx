@@ -22,6 +22,7 @@ type Testimonial = {
   text: LocalizedString;
   author: string;
   company: LocalizedString;
+  role?: LocalizedString;
   logos: string[];
 };
 
@@ -79,12 +80,13 @@ const testimonials: Testimonial[] = [
   {
     id: 6,
     text: {
-      tr: "Büyüme yolculuğunuzu en az kendimizinki kadar ilgi ve hayranlıkla izledik. Zamanla Sellf, kaliteli hizmet sunan bir ekipten; büyümenin gerçek mekaniklerini anlayan, geleneksel pazarlamanın kapsamının çok ötesindeki süreçleri ve ekipleri yönetebilen kapsamlı bir sisteme dönüştü.",
-      en: "We have watched your growth journey with as much interest and admiration as our own. Over time, Sellf has evolved from a team delivering quality service into a comprehensive system that understands the true mechanics of growth, capable of managing processes and teams far beyond the scope of traditional marketing.",
+      tr: "Sellf tüm sürecimiz boyunca son derece yardımcı oldu. Bankacılık uzmanlarımız işlerini kusursuz biliyorlardı ancak bunu müşterilerin dijital yolculukları ve onboarding süreçlerine nasıl uygulayacaklarını bilmiyorlardı. Tüm süreci kurdular ve büyüme yolculuğumuzu büyük ölçüde kolaylaştırdılar.",
+      en: "Sellf was extremely helpful for our entire process. Our banking experts knew their jobs perfectly but did not know how to implement this across customers' digital journeys and onboarding processes. They set up the entire process and eased our growth journey a great deal.",
     },
-    author: "Zeynep Hanım",
-    company: { tr: "Renault", en: "Renault" },
-    logos: ["https://cdn.sellfmedia.workers.dev/essentials/logorenaul.png"],
+    author: "İgor Valerie",
+    company: { tr: "TIIB", en: "TIIB" },
+    role: { tr: "Yönetim Kurulu Üyesi", en: "Board Member" },
+    logos: ["https://logos.hunter.io/turkibu.com"],
   },
 ];
 
@@ -155,11 +157,16 @@ export default function HomeTestimonialsBlog({ lang, posts }: { lang: Lang; post
                   <div>
                     <div className="text-sm font-semibold text-black/90">{item.author}</div>
                     <div className="mt-1 text-[10px] uppercase tracking-[.14em] text-black/38">{item.company[lang]}</div>
+                    {item.role ? <div className="mt-1 text-[10px] tracking-[.06em] text-black/42">{item.role[lang]}</div> : null}
                   </div>
                   <div className="flex items-center gap-2">
                     {item.logos.map((logo) => (
                       <div key={logo} className="relative h-8 w-20 opacity-48 grayscale mix-blend-multiply">
-                        <Image src={logo} alt={`${item.company[lang]} logo`} fill className="object-contain object-right-bottom" unoptimized />
+                        {logo.startsWith("https://logos.hunter.io/") ? (
+                          <img src={logo} alt={`${item.company[lang]} logo`} className="absolute inset-0 h-full w-full object-contain object-right-bottom" loading="lazy" />
+                        ) : (
+                          <Image src={logo} alt={`${item.company[lang]} logo`} fill className="object-contain object-right-bottom" unoptimized />
+                        )}
                       </div>
                     ))}
                   </div>
