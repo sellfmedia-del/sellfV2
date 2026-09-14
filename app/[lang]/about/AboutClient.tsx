@@ -319,7 +319,7 @@ function Arrow() {
 
 function GlobalStandardGraphic() {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[520px]" aria-hidden="true">
+    <div className="relative mx-auto aspect-square w-full max-w-[380px]" aria-hidden="true">
       <div className="about-orbit absolute inset-[9%] rounded-full border border-white/16" />
       <div className="absolute inset-[20%] rounded-full border border-white/10" />
       <div className="absolute inset-x-[9%] top-1/2 h-px bg-white/12" />
@@ -360,25 +360,25 @@ export default function AboutClient() {
       <style
         dangerouslySetInnerHTML={{
           __html:
-            ".about-guides{background-image:linear-gradient(to right,rgba(11,13,13,.055) 1px,transparent 1px);background-size:20% 100%;background-position:center}.about-founder{mask-image:linear-gradient(to right,transparent 0%,#000 15%,#000 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 15%,#000 100%)}.about-team-image{filter:grayscale(1) contrast(1.08)}.about-orbit{animation:aboutOrbit 28s linear infinite}.about-node{animation:aboutPulse 3.8s ease-in-out infinite}.about-node:nth-of-type(2){animation-delay:-.8s}.about-node:nth-of-type(3){animation-delay:-1.6s}.about-node:nth-of-type(4){animation-delay:-2.4s}.about-node:nth-of-type(5){animation-delay:-3.2s}@keyframes aboutOrbit{to{transform:rotate(360deg)}}@keyframes aboutPulse{0%,100%{opacity:.28;box-shadow:0 0 0 0 rgba(255,255,255,.12)}50%{opacity:1;box-shadow:0 0 0 12px rgba(255,255,255,0)}}@media(max-width:1023px){.about-founder{mask-image:linear-gradient(to top,#000 72%,transparent 100%);-webkit-mask-image:linear-gradient(to top,#000 72%,transparent 100%)}}@media(prefers-reduced-motion:reduce){.about-orbit,.about-node{animation:none}}",
+            ".about-guides{background-image:linear-gradient(to right,rgba(11,13,13,.055) 1px,transparent 1px);background-size:20% 100%;background-position:center}.about-founder{filter:grayscale(1) contrast(1.06);mask-image:linear-gradient(to right,transparent 0%,#000 15%,#000 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 15%,#000 100%)}.about-team-image{filter:grayscale(1) contrast(1.28) brightness(.72);transform:scale(1.015)}.about-orbit{animation:aboutOrbit 28s linear infinite}.about-node{animation:aboutPulse 3.8s ease-in-out infinite}.about-node:nth-of-type(2){animation-delay:-.8s}.about-node:nth-of-type(3){animation-delay:-1.6s}.about-node:nth-of-type(4){animation-delay:-2.4s}.about-node:nth-of-type(5){animation-delay:-3.2s}@keyframes aboutOrbit{to{transform:rotate(360deg)}}@keyframes aboutPulse{0%,100%{opacity:.28;box-shadow:0 0 0 0 rgba(255,255,255,.12)}50%{opacity:1;box-shadow:0 0 0 12px rgba(255,255,255,0)}}@media(max-width:1023px){.about-founder{mask-image:linear-gradient(to top,#000 72%,transparent 100%);-webkit-mask-image:linear-gradient(to top,#000 72%,transparent 100%)}}@media(prefers-reduced-motion:reduce){.about-orbit,.about-node{animation:none}}",
         }}
       />
 
       <section className="about-guides relative border-b border-black/[.07] bg-[#f8f8f6] pt-24 md:pt-28">
-        <div className="sellf-container grid min-h-[760px] lg:grid-cols-[58%_42%] lg:min-h-[830px]">
-          <div className="relative z-10 flex flex-col justify-between py-14 pr-0 sm:py-16 lg:py-20 lg:pr-10">
+        <div className="sellf-container grid min-h-[600px] lg:grid-cols-[58%_42%] lg:min-h-[650px]">
+          <div className="relative z-10 flex flex-col justify-between py-10 pr-0 sm:py-12 lg:py-14 lg:pr-10">
             <div>
               <p className="sellf-kicker text-black/38">{t.hero.kicker}</p>
-              <h1 className="sellf-display mt-8 max-w-[13ch] text-[clamp(3rem,6vw,6.5rem)] leading-[.91]">
+              <h1 className="sellf-display mt-6 max-w-[14ch] text-[clamp(2.9rem,5.1vw,5.2rem)] leading-[.91]">
                 {t.hero.title}
               </h1>
-              <p className="mt-8 max-w-[45rem] text-sm leading-7 text-black/58 md:text-base">
+              <p className="mt-6 max-w-[42rem] text-[13px] leading-6 text-black/58 md:text-sm">
                 {t.hero.body}
               </p>
             </div>
 
-            <div className="mt-12 grid gap-8 border-t border-black/12 pt-8 md:grid-cols-[1fr_auto] md:items-end">
-              <p className="max-w-[38rem] text-lg font-medium leading-snug tracking-[-.025em] md:text-2xl">
+            <div className="mt-8 grid gap-6 border-t border-black/12 pt-6 md:grid-cols-[1fr_auto] md:items-end">
+              <p className="max-w-[36rem] text-base font-medium leading-snug tracking-[-.025em] md:text-xl">
                 {t.hero.statement}
               </p>
               <a
@@ -391,7 +391,7 @@ export default function AboutClient() {
             </div>
           </div>
 
-          <div className="relative min-h-[510px] lg:min-h-0">
+          <div className="relative min-h-[400px] lg:min-h-0">
             <Image
               src={founderImage}
               alt={t.hero.imageAlt}
@@ -401,13 +401,13 @@ export default function AboutClient() {
               sizes="(max-width: 1023px) 100vw, 42vw"
               className="about-founder object-cover object-center mix-blend-multiply"
             />
-            <div className="pointer-events-none absolute right-4 top-10 hidden text-right lg:block">
+            <div className="pointer-events-none absolute right-4 top-8 hidden text-right lg:block">
               <p className="text-[10px] font-medium uppercase tracking-[.32em] text-black/40">
                 {t.hero.sideTop}
               </p>
               <span className="mt-4 ml-auto block h-px w-10 bg-black/20" />
             </div>
-            <div className="pointer-events-none absolute bottom-12 right-4 hidden lg:block">
+            <div className="pointer-events-none absolute bottom-8 right-4 hidden lg:block">
               {t.hero.sideBottom.map((line) => (
                 <p key={line} className="text-[9px] font-medium uppercase tracking-[.3em] text-black/36">
                   {line}
@@ -419,32 +419,32 @@ export default function AboutClient() {
       </section>
 
       <section id="manifesto" className="relative overflow-hidden bg-[#0a0c0c] text-white">
-        <div className="sellf-container grid lg:min-h-[660px] lg:grid-cols-[54%_46%]">
-          <div className="relative z-10 flex flex-col justify-between py-16 pr-0 md:py-20 lg:py-24 lg:pr-14">
+        <div className="sellf-container grid lg:min-h-[510px] lg:grid-cols-[54%_46%]">
+          <div className="relative z-10 flex flex-col justify-between py-12 pr-0 md:py-14 lg:py-16 lg:pr-14">
             <div>
               <p className="sellf-kicker text-white/38">{t.manifesto.kicker}</p>
-              <h2 className="sellf-display mt-7 max-w-[11ch] text-[clamp(2.8rem,5.3vw,5.8rem)] leading-[.92]">
+              <h2 className="sellf-display mt-5 max-w-[12ch] text-[clamp(2.7rem,4.35vw,4.45rem)] leading-[.92]">
                 {t.manifesto.title}
               </h2>
             </div>
-            <div className="mt-12 max-w-[46rem] space-y-5 text-sm leading-7 text-white/58 md:text-[15px]">
+            <div className="mt-8 max-w-[46rem] space-y-4 text-[13px] leading-6 text-white/58 md:text-sm">
               {t.manifesto.paragraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
-              <p className="border-t border-white/14 pt-6 text-base font-medium leading-snug text-white/88 md:text-xl">
+              <p className="border-t border-white/14 pt-5 text-sm font-medium leading-snug text-white/88 md:text-lg">
                 {t.manifesto.statement}
               </p>
             </div>
           </div>
 
-          <div className="relative min-h-[460px] lg:min-h-0">
+          <div className="relative min-h-[350px] lg:min-h-0">
             <Image
               src="https://cdn.sellfmedia.workers.dev/statics/ekip_foto.jpg"
               alt={t.manifesto.imageAlt}
               fill
               unoptimized
               sizes="(max-width: 1023px) 100vw, 46vw"
-              className="about-team-image object-cover object-center opacity-72"
+              className="about-team-image object-cover object-[52%_center] opacity-[.82]"
             />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,#0a0c0c_0%,rgba(10,12,12,.5)_18%,rgba(10,12,12,.1)_65%,rgba(10,12,12,.36)_100%)]" />
           </div>
@@ -452,21 +452,21 @@ export default function AboutClient() {
       </section>
 
       <section className="border-b border-black/[.07] bg-white">
-        <div className="sellf-container grid gap-10 py-14 md:py-18 lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:py-20">
+        <div className="sellf-container grid gap-8 py-10 md:py-12 lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:py-14">
           <div>
             <p className="sellf-kicker text-black/35">{t.team.kicker}</p>
-            <h2 className="sellf-display mt-5 max-w-[18ch] text-4xl sm:text-5xl lg:text-[3.4rem]">
+            <h2 className="sellf-display mt-4 max-w-[18ch] text-3xl sm:text-4xl lg:text-[3rem]">
               {t.team.title}
             </h2>
-            <p className="mt-6 max-w-[48rem] text-sm leading-7 text-black/55 md:text-[15px]">
+            <p className="mt-4 max-w-[48rem] text-[13px] leading-6 text-black/55 md:text-sm">
               {t.team.body}
             </p>
           </div>
           <div className="grid grid-cols-2 border-l border-t border-black/10">
             {t.team.credentials.map(([name, field]) => (
-              <div key={name} className="min-h-28 border-r border-b border-black/10 p-5 md:p-6">
+              <div key={name} className="border-r border-b border-black/10 p-4 md:p-5">
                 <p className="text-lg font-semibold tracking-[-.035em] md:text-xl">{name}</p>
-                <p className="mt-3 text-xs leading-5 text-black/40">{field}</p>
+                <p className="mt-2 text-[11px] leading-5 text-black/40">{field}</p>
               </div>
             ))}
           </div>
@@ -474,33 +474,33 @@ export default function AboutClient() {
       </section>
 
       <section className="about-guides border-b border-black/[.07] bg-[#f5f5f2]">
-        <div className="sellf-container py-18 md:py-24 lg:py-28">
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
+        <div className="sellf-container py-14 md:py-16 lg:py-18">
+          <div className="grid gap-8 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
             <div>
               <p className="sellf-kicker text-black/35">{t.thesis.kicker}</p>
-              <h2 className="sellf-display mt-6 max-w-[12ch] text-[clamp(3rem,6vw,6.7rem)] leading-[.91]">
+              <h2 className="sellf-display mt-5 max-w-[12ch] text-[clamp(2.9rem,4.9vw,5.15rem)] leading-[.91]">
                 {t.thesis.title}
               </h2>
             </div>
             <div>
-              <p className="text-sm leading-7 text-black/58 md:text-base">{t.thesis.body}</p>
-              <p className="mt-7 border-l-2 border-black pl-5 text-lg font-semibold leading-snug tracking-[-.025em] md:text-xl">
+              <p className="text-[13px] leading-6 text-black/58 md:text-sm">{t.thesis.body}</p>
+              <p className="mt-5 border-l border-black pl-4 text-base font-semibold leading-snug tracking-[-.025em] md:text-lg">
                 {t.thesis.statement}
               </p>
             </div>
           </div>
 
-          <div className="mt-16 grid border-l border-t border-black/12 sm:grid-cols-3 md:mt-20">
+          <div className="mt-10 grid border-l border-t border-black/12 sm:grid-cols-3 md:mt-12">
             {t.thesis.pillars.map(([number, title, note]) => (
-              <div key={title} className="min-h-36 border-r border-b border-black/12 p-6 md:min-h-44 md:p-8">
+              <div key={title} className="border-r border-b border-black/12 p-5 md:p-6">
                 <p className="text-[10px] font-medium tracking-[.2em] text-black/35">{number}</p>
-                <h3 className="mt-5 text-sm font-semibold uppercase tracking-[.16em]">{title}</h3>
-                <p className="mt-3 text-xs leading-5 text-black/42">{note}</p>
+                <h3 className="mt-4 text-xs font-semibold uppercase tracking-[.16em]">{title}</h3>
+                <p className="mt-2 text-[11px] leading-5 text-black/42">{note}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-medium uppercase tracking-[.22em] text-black/34">
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-medium uppercase tracking-[.22em] text-black/34">
             {t.thesis.rail.map((item, index) => (
               <span key={item} className="flex items-center gap-4">
                 {item}
@@ -512,47 +512,47 @@ export default function AboutClient() {
       </section>
 
       <section className="border-b border-black/[.07] bg-white">
-        <div className="sellf-container grid gap-12 py-18 md:py-24 lg:grid-cols-[.78fr_1.22fr] lg:items-center lg:py-28">
+        <div className="sellf-container grid gap-8 py-14 md:py-16 lg:grid-cols-[.82fr_1.18fr] lg:items-center lg:py-18">
           <div>
             <p className="sellf-kicker text-black/35">{t.operating.kicker}</p>
-            <h2 className="sellf-display mt-6 max-w-[11ch] text-5xl md:text-6xl lg:text-7xl">
+            <h2 className="sellf-display mt-5 max-w-[11ch] text-4xl md:text-5xl lg:text-6xl">
               {t.operating.title}
             </h2>
-            <p className="mt-7 max-w-xl text-sm leading-7 text-black/55 md:text-[15px]">
+            <p className="mt-5 max-w-xl text-[13px] leading-6 text-black/55 md:text-sm">
               {t.operating.body}
             </p>
             <Link
               href={langPrefix + "/framework/operating-model"}
-              className="group mt-8 inline-flex items-center gap-3 text-xs font-semibold"
+              className="group mt-6 inline-flex items-center gap-3 text-xs font-semibold"
             >
               {t.operating.cta}
               <Arrow />
             </Link>
           </div>
 
-          <div className="relative grid gap-10 md:grid-cols-2 md:gap-16">
-            <div className="relative flex aspect-square flex-col justify-center rounded-full border border-black/18 p-[15%]">
-              <p className="text-[clamp(2rem,4vw,3.7rem)] font-semibold tracking-[-.055em]">
+          <div className="relative grid gap-8 md:grid-cols-2 md:gap-8">
+            <div className="relative mx-auto flex aspect-square w-full max-w-[270px] flex-col justify-center rounded-full border border-black/18 p-[13%]">
+              <p className="text-[clamp(1.9rem,3vw,2.8rem)] font-semibold tracking-[-.055em]">
                 {t.operating.growth.title}
               </p>
               <p className="mt-2 text-[10px] uppercase tracking-[.2em] text-black/38">
                 {t.operating.growth.sub}
               </p>
-              <ul className="mt-7 space-y-2 text-xs leading-5 text-black/55">
+              <ul className="mt-5 space-y-1.5 text-[11px] leading-5 text-black/55">
                 {t.operating.growth.items.map((item) => (
                   <li key={item}>— {item}</li>
                 ))}
               </ul>
             </div>
 
-            <div className="relative flex aspect-square flex-col justify-center rounded-full border border-black/18 bg-[#f2f1ed] p-[15%]">
-              <p className="text-[clamp(2rem,4vw,3.7rem)] font-semibold tracking-[-.055em]">
+            <div className="relative mx-auto flex aspect-square w-full max-w-[270px] flex-col justify-center rounded-full border border-black/18 bg-[#f2f1ed] p-[13%]">
+              <p className="text-[clamp(1.9rem,3vw,2.8rem)] font-semibold tracking-[-.055em]">
                 {t.operating.operations.title}
               </p>
               <p className="mt-2 text-[10px] uppercase tracking-[.2em] text-black/38">
                 {t.operating.operations.sub}
               </p>
-              <ul className="mt-7 space-y-2 text-xs leading-5 text-black/55">
+              <ul className="mt-5 space-y-1.5 text-[11px] leading-5 text-black/55">
                 {t.operating.operations.items.map((item) => (
                   <li key={item}>— {item}</li>
                 ))}
@@ -572,35 +572,35 @@ export default function AboutClient() {
       </section>
 
       <section className="about-guides border-b border-black/[.07] bg-[#f7f7f4]">
-        <div className="sellf-container grid gap-12 py-18 md:py-24 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:py-28">
+        <div className="sellf-container grid gap-8 py-14 md:py-16 lg:grid-cols-[.82fr_1.18fr] lg:items-center lg:py-18">
           <div>
             <p className="sellf-kicker text-black/35">{t.standards.kicker}</p>
-            <h2 className="sellf-display mt-6 max-w-[11ch] text-5xl md:text-6xl lg:text-7xl">
+            <h2 className="sellf-display mt-5 max-w-[11ch] text-4xl md:text-5xl lg:text-6xl">
               {t.standards.title}
             </h2>
-            <p className="mt-7 max-w-lg text-sm leading-7 text-black/55 md:text-[15px]">
+            <p className="mt-5 max-w-lg text-[13px] leading-6 text-black/55 md:text-sm">
               {t.standards.body}
             </p>
           </div>
 
-          <div className="grid gap-10 md:grid-cols-2 md:gap-8">
+          <div className="grid gap-8 md:grid-cols-2 md:gap-6">
             {[
               { item: t.standards.bhs, href: "/framework/bhs" },
               { item: t.standards.rgi, href: "/framework/rgi" },
             ].map(({ item, href }) => {
               return (
                 <article key={item.name} className="flex flex-col items-center text-center">
-                  <div className="flex aspect-square w-full max-w-[330px] flex-col items-center justify-center rounded-full border border-white/10 bg-[#0b0d0d] px-[14%] text-white shadow-[0_24px_70px_rgba(0,0,0,.14)]">
-                    <p className="text-[clamp(3.4rem,6vw,5.5rem)] font-light tracking-[-.06em]">{item.name}</p>
+                  <div className="flex aspect-square w-full max-w-[255px] flex-col items-center justify-center rounded-full border border-white/10 bg-[#0b0d0d] px-[14%] text-white shadow-[0_18px_45px_rgba(0,0,0,.12)]">
+                    <p className="text-[clamp(3rem,5vw,4.35rem)] font-light tracking-[-.06em]">{item.name}</p>
                     <p className="mt-2 text-[10px] font-medium uppercase tracking-[.24em] text-white/46">
                       {item.label}
                     </p>
-                    <p className="mt-6 text-xs leading-5 text-white/52">{item.desc}</p>
+                    <p className="mt-4 text-[11px] leading-[1.45rem] text-white/52">{item.desc}</p>
                   </div>
-                  <p className="mt-6 text-[10px] uppercase tracking-[.2em] text-black/38">{item.question}</p>
+                  <p className="mt-4 text-[10px] uppercase tracking-[.2em] text-black/38">{item.question}</p>
                   <Link
                     href={langPrefix + href}
-                    className="group mt-4 inline-flex items-center gap-3 text-xs font-semibold"
+                    className="group mt-3 inline-flex items-center gap-3 text-xs font-semibold"
                   >
                     {item.cta}
                     <Arrow />
@@ -614,25 +614,25 @@ export default function AboutClient() {
 
       <section className="relative overflow-hidden bg-[#080a0a] text-white">
         <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(rgba(255,255,255,.18)_1px,transparent_1px)] [background-size:28px_28px]" />
-        <div className="sellf-container relative grid gap-12 py-20 md:py-28 lg:grid-cols-[1.04fr_.96fr] lg:items-center lg:py-32">
+        <div className="sellf-container relative grid gap-8 py-14 md:py-18 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:py-20">
           <div>
             <p className="sellf-kicker text-white/38">{t.vision.kicker}</p>
-            <h2 className="sellf-display mt-7 max-w-[12ch] text-[clamp(3rem,5.8vw,6.3rem)] leading-[.92]">
+            <h2 className="sellf-display mt-5 max-w-[13ch] text-[clamp(2.9rem,4.75vw,5rem)] leading-[.92]">
               {t.vision.title}
             </h2>
-            <div className="mt-9 max-w-[48rem] space-y-5 text-sm leading-7 text-white/56 md:text-[15px]">
+            <div className="mt-6 max-w-[46rem] space-y-4 text-[13px] leading-6 text-white/56 md:text-sm">
               {t.vision.paragraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
-            <p className="mt-9 max-w-[42rem] border-l border-white/35 pl-5 text-lg font-medium leading-snug text-white/88 md:text-xl">
+            <p className="mt-6 max-w-[40rem] border-l border-white/35 pl-4 text-base font-medium leading-snug text-white/88 md:text-lg">
               {t.vision.statement}
             </p>
           </div>
 
           <div>
             <GlobalStandardGraphic />
-            <div className="mt-7 grid grid-cols-2 gap-y-3 border-t border-white/12 pt-6">
+            <div className="mt-5 grid grid-cols-2 gap-y-2 border-t border-white/12 pt-5">
               {t.vision.points.map((point) => (
                 <p key={point} className="text-[10px] font-medium uppercase tracking-[.2em] text-white/42">
                   {point}
@@ -644,17 +644,17 @@ export default function AboutClient() {
       </section>
 
       <section className="border-b border-black/[.07] bg-white">
-        <div className="sellf-container grid gap-12 py-18 md:py-24 lg:grid-cols-[1.35fr_.65fr] lg:py-28">
+        <div className="sellf-container grid gap-8 py-14 md:py-16 lg:grid-cols-[1.35fr_.65fr] lg:py-18">
           <div>
             <p className="sellf-kicker text-black/35">{t.step.kicker}</p>
-            <h2 className="sellf-display mt-6 max-w-[12ch] text-5xl md:text-6xl lg:text-7xl">
+            <h2 className="sellf-display mt-5 max-w-[12ch] text-4xl md:text-5xl lg:text-6xl">
               {t.step.title}
             </h2>
-            <p className="mt-7 max-w-[48rem] text-sm leading-7 text-black/55 md:text-[15px]">
+            <p className="mt-5 max-w-[48rem] text-[13px] leading-6 text-black/55 md:text-sm">
               {t.step.body}
             </p>
 
-            <div className="relative mt-14 grid gap-8 md:grid-cols-4 md:gap-0">
+            <div className="relative mt-10 grid gap-7 md:grid-cols-4 md:gap-0">
               <span className="absolute left-0 right-0 top-[5px] hidden h-px bg-black/18 md:block" />
               {t.step.steps.map(([number, title, note]) => (
                 <div key={number} className="relative pr-6">
@@ -668,7 +668,7 @@ export default function AboutClient() {
 
             <Link
               href={langPrefix + "/framework/step-by-step"}
-              className="group mt-10 inline-flex items-center gap-3 text-xs font-semibold"
+              className="group mt-8 inline-flex items-center gap-3 text-xs font-semibold"
             >
               {t.step.cta}
               <Arrow />
@@ -677,54 +677,54 @@ export default function AboutClient() {
 
           <aside className="flex flex-col justify-between border-l border-black/12 pl-7 md:pl-10">
             <p className="text-[10px] uppercase tracking-[.2em] text-black/35">Sellf Notes · 01</p>
-            <div className="mt-16 lg:mt-auto">
-              <h3 className="sellf-display max-w-[8ch] text-4xl md:text-5xl">{t.step.bookTitle}</h3>
-              <p className="mt-6 text-sm leading-7 text-black/50">{t.step.bookBody}</p>
+            <div className="mt-10 lg:mt-auto">
+              <h3 className="sellf-display max-w-[9ch] text-3xl md:text-4xl">{t.step.bookTitle}</h3>
+              <p className="mt-4 text-[13px] leading-6 text-black/50">{t.step.bookBody}</p>
             </div>
           </aside>
         </div>
       </section>
 
       <section className="about-guides border-b border-black/[.07] bg-[#f5f5f2]">
-        <div className="sellf-container py-18 md:py-24 lg:py-28">
-          <div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
+        <div className="sellf-container py-14 md:py-16 lg:py-18">
+          <div className="grid gap-6 lg:grid-cols-[.78fr_1.22fr] lg:items-end">
             <div>
               <p className="sellf-kicker text-black/35">{t.awards.kicker}</p>
-              <h2 className="sellf-display mt-6 max-w-[11ch] text-4xl sm:text-5xl lg:text-6xl">
+              <h2 className="sellf-display mt-5 max-w-[13ch] text-3xl sm:text-4xl lg:text-5xl">
                 {t.awards.title}
               </h2>
             </div>
-            <p className="max-w-2xl text-sm leading-7 text-black/52 md:text-[15px]">{t.awards.body}</p>
+            <p className="max-w-2xl text-[13px] leading-6 text-black/52 md:text-sm">{t.awards.body}</p>
           </div>
 
-          <div className="mt-14 grid border-l border-t border-black/12 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-10 grid border-t border-black/12 md:grid-cols-2 xl:grid-cols-4">
             {t.awards.items.map(([year, recipient, award]) => (
-              <article key={award} className="min-h-52 border-r border-b border-black/12 p-6 md:p-8">
-                <p className="text-2xl font-semibold tracking-[-.04em]">{year}</p>
-                <p className="mt-8 text-[10px] font-semibold uppercase tracking-[.18em] text-black/42">
+              <article key={award} className="border-r border-b border-black/12 py-5 pr-5 md:py-6 md:pr-6">
+                <p className="text-xl font-semibold tracking-[-.04em]">{year}</p>
+                <p className="mt-5 text-[10px] font-semibold uppercase tracking-[.18em] text-black/42">
                   {recipient}
                 </p>
-                <h3 className="mt-3 text-sm font-medium leading-6">{award}</h3>
+                <h3 className="mt-2 text-[13px] font-medium leading-5">{award}</h3>
               </article>
             ))}
           </div>
 
-          <p className="mt-6 text-[10px] uppercase tracking-[.18em] text-black/35">{t.awards.sources}</p>
+          <p className="mt-4 text-[10px] uppercase tracking-[.18em] text-black/35">{t.awards.sources}</p>
         </div>
       </section>
 
       <section className="relative overflow-hidden bg-[#090b0b] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_20%,rgba(255,255,255,.06),transparent_34%)]" />
-        <div className="sellf-container relative grid gap-12 py-20 md:py-28 lg:grid-cols-[1.35fr_.65fr] lg:items-end lg:py-32">
+        <div className="sellf-container relative grid gap-8 py-16 md:py-18 lg:grid-cols-[1.35fr_.65fr] lg:items-end lg:py-20">
           <div>
             <p className="sellf-kicker text-white/38">{t.closing.kicker}</p>
-            <h2 className="sellf-display mt-7 max-w-[15ch] text-[clamp(3rem,6vw,6.6rem)] leading-[.92]">
+            <h2 className="sellf-display mt-5 max-w-[15ch] text-[clamp(2.9rem,4.9vw,5.2rem)] leading-[.92]">
               {t.closing.title}
             </h2>
-            <p className="mt-8 max-w-[50rem] text-sm leading-7 text-white/55 md:text-[15px]">
+            <p className="mt-6 max-w-[48rem] text-[13px] leading-6 text-white/55 md:text-sm">
               {t.closing.body}
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href={langPrefix + "/framework/operating-model"}
                 className="group inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 text-xs font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
@@ -745,9 +745,9 @@ export default function AboutClient() {
           <div className="border-l border-white/16 pl-7">
             <p className="text-base leading-7 text-white/56">{t.closing.line1}</p>
             <p className="text-base leading-7 text-white/56">{t.closing.line2}</p>
-            <p className="mt-5 text-xl font-semibold tracking-[-.03em]">{t.closing.statement}</p>
-            <span className="mt-10 block h-px w-12 bg-white/35" />
-            <p className="mt-5 max-w-[16rem] text-[10px] font-medium uppercase leading-5 tracking-[.24em] text-white/35">
+            <p className="mt-4 text-lg font-semibold tracking-[-.03em]">{t.closing.statement}</p>
+            <span className="mt-7 block h-px w-12 bg-white/35" />
+            <p className="mt-4 max-w-[16rem] text-[10px] font-medium uppercase leading-5 tracking-[.24em] text-white/35">
               {t.closing.side}
             </p>
           </div>
