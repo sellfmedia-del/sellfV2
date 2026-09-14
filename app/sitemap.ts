@@ -23,6 +23,7 @@ const staticPaths = [
   "/contact",
   "/privacy-policy",
   "/cookie-policy",
+  "/brands",
   "/framework/bhs",
   "/framework/rgi",
   "/framework/operating-model",
