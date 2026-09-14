@@ -57,6 +57,29 @@ export default function VisionaryQuote() {
 
   return (
     <section className="home-visionary isolate overflow-hidden border-y border-black/[.06] bg-[#f8f8f6] text-[#101111]">
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Person",
+                "@id": "https://www.sellfmedia.com/#yigit-konuk",
+                name: "Yiğit Konuk",
+                jobTitle: currentLang === "tr" ? "Kurucu & CEO" : "Founder & CEO",
+                worksFor: { "@id": "https://www.sellfmedia.com/#organization" },
+              },
+              {
+                "@type": "Organization",
+                "@id": "https://www.sellfmedia.com/#organization",
+                founder: { "@id": "https://www.sellfmedia.com/#yigit-konuk" },
+              },
+            ],
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
       <div className="sellf-container lg:grid lg:aspect-[1774/847] lg:grid-cols-[54.397%_45.603%]">
         <div className="flex min-h-[650px] flex-col justify-between px-6 py-14 sm:px-8 md:px-12 lg:min-h-0 lg:pb-[7.8%] lg:pl-[10.36%] lg:pr-[4.97%] lg:pt-[6.3%]">
           <div>
