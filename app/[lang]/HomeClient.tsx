@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import HomeWorkServices from "@/components/HomeWorkServices";
 import HomeOperatingSystem from "@/components/HomeOperatingSystem";
+import HomeTestimonialsBlog, { type HomeBlogPost } from "@/components/HomeTestimonialsBlog";
 import Ecosystem from "@/components/Ecosystem";
 import ProcessEngine from "@/components/ProcessEngine";
 import VisionaryQuote from "@/components/VisionaryQuote";
@@ -54,7 +55,7 @@ const trustMarks = [
 const ease = [0.22, 1, 0.36, 1] as const;
 const heroVideo = "https://player.vimeo.com/video/1225074289?h=0f91056daa&background=1&autoplay=1&loop=1&muted=1&autopause=0&playsinline=1&preload=auto&controls=0&title=0&byline=0&portrait=0";
 
-export default function HomeClient() {
+export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[] }) {
   const params = useParams();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
@@ -285,6 +286,7 @@ export default function HomeClient() {
 
       <HomeWorkServices />
       <HomeOperatingSystem />
+      <HomeTestimonialsBlog lang={currentLang} posts={latestPosts} />
       <Ecosystem />
       <ProcessEngine />
       <VisionaryQuote />
