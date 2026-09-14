@@ -46,9 +46,9 @@ const dictionary = {
       },
       fizyohol: {
         tag: "PERFORMANCE MARKETING",
-        shortDesc: "“62 TL'ye 222 randevu.”",
+        shortDesc: "“₺62,99 maliyetle 222 lead.”",
         longDesc: "Tamamen reklam odaklı bir çalışma yürütüldü. Düşük edinim maliyetinde yüksek kaliteli lead akışı hedeflendi; reklam kurgusu ve hedefleme bu KPI etrafında optimize edildi. Tüm rezervasyon müsaitlikleri doldu.",
-        metrics: ["62 TL CAC", "222 Kalifiye Lead", "1/24 ROI"],
+        metrics: ["₺62,99 Lead Maliyeti", "222 Toplam Lead", "1/24 ROI"],
         schematicData: ["Düşük CAC Reklamı", "Lead Kalifikasyonu", "Müsaitlik Dolumu"]
       },
       elitehair: {
@@ -99,6 +99,41 @@ const dictionary = {
         longDesc: "Fransa e-ticaret pazarı için brandbook, logo ve konumlandırma çalışmaları tamamlandı. Pazaryeri altyapısı kuruldu, doğru platform ve hedef kitle eşleştirmesi yapıldı. Lansman öncesi hazırlık aşaması tamamlanmış olmakla birlikte bütçe uyumsuzluğu ve tedarik yetersizliği nedeniyle operasyon aşamasına geçilemedi ve süreç sonlandırıldı.",
         metrics: ["Brandbook Hazır", "Altyapı Tamam", "Süreç Durduruldu"],
         schematicData: ["Fransa Konumlandırma", "Pazaryeri Kurulumu", "Stratejik Durdurma ✖"]
+      },
+      gotradego: {
+        tag: "SEO & ORGANİK BÜYÜME",
+        shortDesc: "“4 ayda tıklamalarda %400, görünürlükte %1.100 artış.”",
+        longDesc: "Teknik SEO, içerik mimarisi ve arama niyeti optimizasyonunun birlikte yürütüldüğü dört aylık çalışma, GoTradeGo'nun organik talep yakalama kapasitesini büyüttü.",
+        metrics: ["+%400 Organik Tıklama", "+%1.100 Görüntülenme", "4 Ay"],
+        schematicData: ["Teknik SEO", "İçerik Otoritesi", "Arama Talebi"]
+      },
+      monstera: {
+        tag: "SAĞLIKTA SEO",
+        shortDesc: "“3 ayda organik tıklamalarda %235 büyüme.”",
+        longDesc: "Sağlık sektörünün yüksek güven gerektiren arama yapısına göre teknik altyapı, içerik ve sayfa optimizasyonları birlikte ele alındı; üç ay içinde hem tıklama hem görünürlük güçlü biçimde yükseldi.",
+        metrics: ["+%235 Organik Tıklama", "+%845 Görüntülenme", "3 Ay"],
+        schematicData: ["Teknik Sağlık SEO'su", "İçerik Optimizasyonu", "Organik Görünürlük"]
+      },
+      social2024: {
+        tag: "SOSYAL MEDYA PERFORMANSI",
+        shortDesc: "“2024 ortalamasında etkileşim %700 arttı.”",
+        longDesc: "Markalar genelinde içerik stratejisi, format seçimi, yayın ritmi ve dağıtım optimizasyonu tek performans disiplini altında yönetildi; etkileşim ve siteye yönlenen trafik birlikte büyüdü.",
+        metrics: ["+%700 İçerik Etkileşimi", "+%262 Link Tıklaması", "2024 Ortalaması"],
+        schematicData: ["İçerik Stratejisi", "Format & Dağıtım", "Etkileşim Döngüsü"]
+      },
+      beautycommerce: {
+        tag: "E-TİCARET & KOZMETİK",
+        shortDesc: "“17,5 milyon TL ciroya uzanan performans.”",
+        longDesc: "Kozmetik e-ticaret operasyonunda medya yatırımı, dönüşüm akışı ve ticari hedefler aynı ölçüm sistemi altında yönetildi; yıllık ciro, dönüşüm ve yatırım geri dönüşü birlikte büyütüldü.",
+        metrics: ["17,5 Mn TL Yıllık Ciro", "+%300 Dönüşüm Oranı", "+%213 ROI Artışı"],
+        schematicData: ["Medya Yatırımı", "Dönüşüm Akışı", "Kârlı Ölçekleme"]
+      },
+      asceinwest: {
+        tag: "GAYRİMENKUL BÜYÜMESİ",
+        shortDesc: "“2 projede 1.850 potansiyel alıcı.”",
+        longDesc: "ASCE GYO ve Inwest Group için strateji, kreatif, medya ve lead akışı uçtan uca tek kurgu altında yönetildi; iki projede dijital erişim ve potansiyel alıcı talebi birlikte büyütüldü.",
+        metrics: ["+%450 Dijital Erişim", "1.850 Potansiyel Alıcı", "2 Proje"],
+        schematicData: ["Strateji & Kreatif", "Medya Dağıtımı", "Alıcı Talebi"]
       }
     }
   },
@@ -143,9 +178,9 @@ const dictionary = {
       },
       fizyohol: {
         tag: "PERFORMANCE MARKETING",
-        shortDesc: "“222 appointments for 62 TL each.”",
+        shortDesc: "“222 leads at ₺62.99 each.”",
         longDesc: "A fully ad-focused operation was carried out. High-quality lead flow at a low acquisition cost was targeted; the ad structure and targeting were optimized around this KPI. All booking availabilities were filled.",
-        metrics: ["62 TL CAC", "222 Qualified Leads", "1/24 ROI"],
+        metrics: ["₺62.99 Cost per Lead", "222 Total Leads", "1/24 ROI"],
         schematicData: ["Low CAC Ad Setup", "Lead Qualification", "Bookings Full"]
       },
       elitehair: {
@@ -196,6 +231,41 @@ const dictionary = {
         longDesc: "Brandbook, logo, and positioning work for the French e-commerce market were completed. Marketplace infrastructure was set up, right platform and target audience matching was done. Operational phase could not be started due to budget mismatch and supply insufficiency.",
         metrics: ["Brandbook Finished", "Infra Core Ready", "Process Suspended"],
         schematicData: ["France Positioning", "Marketplace Setup", "Strategic Stop Pivot ✖"]
+      },
+      gotradego: {
+        tag: "SEO & ORGANIC GROWTH",
+        shortDesc: "“400% more clicks and 1,100% more visibility in 4 months.”",
+        longDesc: "A four-month programme combining technical SEO, content architecture and search-intent optimisation expanded GoTradeGo's ability to capture organic demand.",
+        metrics: ["+400% Organic Clicks", "+1,100% Impressions", "4 Months"],
+        schematicData: ["Technical SEO", "Content Authority", "Search Demand"]
+      },
+      monstera: {
+        tag: "HEALTHCARE SEO",
+        shortDesc: "“235% growth in organic clicks in 3 months.”",
+        longDesc: "Technical infrastructure, content and on-page optimisation were aligned with the healthcare sector's trust-sensitive search landscape; clicks and visibility grew strongly within three months.",
+        metrics: ["+235% Organic Clicks", "+845% Impressions", "3 Months"],
+        schematicData: ["Healthcare SEO", "Content Optimisation", "Organic Visibility"]
+      },
+      social2024: {
+        tag: "SOCIAL MEDIA PERFORMANCE",
+        shortDesc: "“700% higher engagement across the 2024 average.”",
+        longDesc: "Across brands, content strategy, format selection, publishing cadence and distribution optimisation were managed as one performance discipline, growing both engagement and website traffic.",
+        metrics: ["+700% Content Engagement", "+262% Link Clicks", "2024 Average"],
+        schematicData: ["Content Strategy", "Format & Distribution", "Engagement Loop"]
+      },
+      beautycommerce: {
+        tag: "E-COMMERCE & BEAUTY",
+        shortDesc: "“Performance that reached ₺17.5M in annual revenue.”",
+        longDesc: "For a beauty e-commerce operation, media investment, conversion flow and commercial targets were managed under one measurement system, growing revenue, conversion and return on investment together.",
+        metrics: ["₺17.5M Annual Revenue", "+300% Conversion Rate", "+213% ROI Growth"],
+        schematicData: ["Media Investment", "Conversion Flow", "Profitable Scale"]
+      },
+      asceinwest: {
+        tag: "REAL ESTATE GROWTH",
+        shortDesc: "“1,850 potential buyers across 2 projects.”",
+        longDesc: "Strategy, creative, media and lead flow for ASCE GYO and Inwest Group were managed in one end-to-end system, growing digital reach and potential-buyer demand across two projects.",
+        metrics: ["+450% Digital Reach", "1,850 Potential Buyers", "2 Projects"],
+        schematicData: ["Strategy & Creative", "Media Distribution", "Buyer Demand"]
       }
     }
   }
@@ -203,7 +273,7 @@ const dictionary = {
 
 // ===== 2. FERAH / AÇIK RENKLİ STRÜKTÜR KONFİGÜRASYONU (GÖRSEL VE LOGOLAR DAHİL) =====
 interface GridConfig {
-  id: "evepack" | "canias" | "iamlovein" | "qashe" | "goldium" | "fizyohol" | "elitehair" | "philips" | "colins" | "sfera" | "greymanner" | "ascegyo" | "gkc";
+  id: "evepack" | "canias" | "iamlovein" | "qashe" | "goldium" | "fizyohol" | "elitehair" | "philips" | "colins" | "sfera" | "greymanner" | "ascegyo" | "gkc" | "gotradego" | "monstera" | "social2024" | "beautycommerce" | "asceinwest";
   title: string;
   tagColor: string;
   gridClass: string;
@@ -329,6 +399,51 @@ const gridLayoutData: GridConfig[] = [
     schematicType: "steps",
     logoUrl: "https://cdn.sellfmedia.workers.dev/essentials/logogkc.png",
     bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/gkc1.jpg"
+  },
+  {
+    id: "gotradego",
+    title: "GOTRADEGO",
+    tagColor: "bg-blue-50 text-blue-700 border-blue-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "flow",
+    logoUrl: null,
+    bgImage: "https://gotradego.com/GTG_IMAGES/a281ed433cf8477aa08791887875c091.png"
+  },
+  {
+    id: "monstera",
+    title: "MONSTERA",
+    tagColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "funnel",
+    logoUrl: null,
+    bgImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    id: "social2024",
+    title: "2024 SOCIAL",
+    tagColor: "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "loop",
+    logoUrl: null,
+    bgImage: "https://images.unsplash.com/photo-1660824340595-abee9c790d85?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    id: "beautycommerce",
+    title: "BEAUTY E-COMMERCE",
+    tagColor: "bg-rose-50 text-rose-700 border-rose-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "steps",
+    logoUrl: null,
+    bgImage: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    id: "asceinwest",
+    title: "ASCE GYO + INWEST",
+    tagColor: "bg-orange-50 text-orange-700 border-orange-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "flow",
+    logoUrl: null,
+    bgImage: "https://ascezenith.com/en/images/galeri/dismekan/1.jpg"
   }
 ];
 
