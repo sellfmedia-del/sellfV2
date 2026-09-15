@@ -345,20 +345,20 @@ const displayCopy = {
 
 const pageCss =
   ".about-exact{--line:rgba(11,13,13,.09);--muted:rgba(11,13,13,.52)}" +
-  ".about-exact .guide{background-image:linear-gradient(to right,rgba(11,13,13,.055) 1px,transparent 1px);background-size:20% 100%;background-position:center}" +
-  ".about-exact .band{position:relative;border-bottom:1px solid var(--line)}" +
+  ".about-exact .band{position:relative;isolation:isolate;overflow:clip;border-bottom:1px solid var(--line)}" +
   ".about-exact .headline{text-transform:uppercase;font-weight:700;letter-spacing:-.055em;line-height:.94}" +
   ".about-exact .body-copy{font-size:14px;line-height:1.65;color:var(--muted)}" +
   ".about-exact .meta{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}" +
-  ".about-exact .founder-cut{filter:grayscale(1) contrast(1.06);mix-blend-mode:multiply;object-fit:contain;object-position:center bottom;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 13%,#000 100%);mask-image:linear-gradient(to right,transparent 0%,#000 13%,#000 100%)}" +
+  ".about-exact .founder-cut{filter:grayscale(1) contrast(1.06);mix-blend-mode:multiply;object-fit:cover;object-position:right bottom}" +
   ".about-exact .team-cut{filter:grayscale(1) contrast(1.12);object-fit:cover;object-position:center}" +
-  ".about-exact .hero-band{height:clamp(560px,43vw,650px);padding-top:104px}" +
+  ".about-exact .manifesto-copy{padding-left:max(2.5rem,calc((100vw - 1400px)/2))}" +
+  ".about-exact .hero-band{height:clamp(560px,43vw,650px)}" +
   ".about-exact .manifesto-band{height:clamp(420px,31vw,480px)}" +
   ".about-exact .team-band{height:250px}.about-exact .thesis-band{height:370px}.about-exact .operating-band{height:275px}" +
   ".about-exact .standards-band{height:335px}.about-exact .vision-band{height:405px}.about-exact .step-band{height:305px}" +
   ".about-exact .awards-band{height:285px}.about-exact .closing-band{height:335px}" +
   ".about-exact .orb{transition:transform .35s ease,box-shadow .35s ease}.about-exact .orb:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(0,0,0,.18)}" +
-  "@media(max-width:1023px){.about-exact .hero-band,.about-exact .manifesto-band,.about-exact .team-band,.about-exact .thesis-band,.about-exact .operating-band,.about-exact .standards-band,.about-exact .vision-band,.about-exact .step-band,.about-exact .awards-band,.about-exact .closing-band{height:auto}.about-exact .hero-band{padding-top:112px}.about-exact .band{padding-bottom:64px}.about-exact .founder-cut{-webkit-mask-image:linear-gradient(to top,#000 78%,transparent 100%);mask-image:linear-gradient(to top,#000 78%,transparent 100%)}}" +
+  "@media(max-width:1023px){.about-exact .hero-band,.about-exact .manifesto-band,.about-exact .team-band,.about-exact .thesis-band,.about-exact .operating-band,.about-exact .standards-band,.about-exact .vision-band,.about-exact .step-band,.about-exact .awards-band,.about-exact .closing-band{height:auto}.about-exact .band{padding-bottom:64px}.about-exact .manifesto-copy{padding-left:1rem;padding-right:1rem}}" +
   "@media(prefers-reduced-motion:reduce){.about-exact .orb{transition:none}}";
 
 function Arrow() {
@@ -380,31 +380,27 @@ export default function AboutClient() {
     <main className="about-exact overflow-hidden bg-[#f7f7f4] text-[#0b0d0d]">
       <style dangerouslySetInnerHTML={{ __html: pageCss }} />
 
-      <section className="band guide hero-band bg-[#f8f8f6]">
-        <div className="sellf-container grid h-full lg:grid-cols-[58%_35%_7%]">
-          <div className="relative z-10 flex flex-col justify-center py-12 lg:pr-8">
+      <section className="band hero-band bg-[#f8f8f6]">
+        <div className="sellf-container grid h-full lg:grid-cols-[58%_42%]">
+          <div className="relative z-10 flex flex-col justify-center pb-12 pt-28 lg:pr-8 lg:pt-32">
             <p className="meta text-black/38">The Sellf Mentality</p>
-            <h1 className="headline mt-5 max-w-[15ch] text-[clamp(2.8rem,5.15vw,5.2rem)]">{t.hero.title}</h1>
+            <h1 className="headline mt-5 max-w-[820px] text-[clamp(2.8rem,3.7vw,4rem)]">{t.hero.title}</h1>
             <p className="body-copy mt-5 max-w-[42rem]">{d.heroBody}</p>
             <a href="#manifesto" className="group mt-8 inline-flex w-fit items-center gap-5 text-[11px] font-semibold uppercase tracking-[.2em] text-black/48">
               <span className="text-2xl font-light">↓</span>{t.hero.discover}
             </a>
           </div>
           <div className="relative min-h-[430px] lg:min-h-0">
-            <Image src={founderImage} alt={t.hero.imageAlt} fill priority unoptimized sizes="(max-width: 1023px) 100vw, 35vw" className="founder-cut" />
+            <Image src={founderImage} alt={t.hero.imageAlt} fill priority unoptimized sizes="(max-width: 1023px) 100vw, 42vw" className="founder-cut" />
           </div>
-          <aside className="hidden flex-col items-end justify-between py-16 text-right lg:flex">
-            <div><p className="meta max-w-[8rem] leading-5 text-black/42">{t.hero.sideTop}</p><span className="mt-4 ml-auto block h-px w-10 bg-black/25" /></div>
-            <div>{t.hero.sideBottom.map((line) => <p key={line} className="meta text-[10px] leading-5 text-black/38">{line}</p>)}</div>
-          </aside>
         </div>
       </section>
 
       <section id="manifesto" className="band manifesto-band overflow-hidden bg-[#090b0b] text-white">
-        <div className="sellf-container grid h-full lg:grid-cols-[50%_50%]">
-          <div className="relative z-10 flex flex-col justify-center py-14 lg:pr-10">
+        <div className="grid h-full lg:grid-cols-2">
+          <div className="manifesto-copy relative z-10 flex flex-col justify-center py-14 lg:pr-10">
             <p className="meta text-white/42">{currentLang === "tr" ? "Manifestomuz" : "Our Manifesto"}</p>
-            <h2 className="headline mt-4 max-w-[12ch] text-[clamp(2.65rem,4vw,4rem)]">{t.manifesto.title}</h2>
+            <h2 className="headline mt-4 max-w-[18ch] text-[clamp(2.5rem,3.45vw,3.65rem)]">{t.manifesto.title}</h2>
             <p className="mt-5 max-w-[43rem] text-[13px] leading-[1.6] text-white/58">{d.manifestoBody}</p>
             <div className="mt-6 flex items-center gap-4"><span className="h-px w-10 bg-white/50" /><span className="meta text-[10px] text-white/60">{d.better}</span></div>
           </div>
@@ -415,7 +411,7 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="band team-band guide bg-white">
+      <section className="band team-band bg-white">
         <div className="sellf-container grid h-full items-center gap-8 py-10 lg:grid-cols-[54%_46%]">
           <div>
             <p className="meta text-black/35">{t.team.kicker}</p>
@@ -428,10 +424,10 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="band thesis-band guide bg-[#f7f7f4]">
+      <section className="band thesis-band bg-[#f7f7f4]">
         <div className="sellf-container grid h-full content-center gap-y-8 py-10">
           <div className="grid items-end gap-8 lg:grid-cols-[58%_42%]">
-            <div><p className="meta text-black/35">{currentLang === "tr" ? "İnandığımız gerçek" : "What we believe"}</p><h2 className="headline mt-4 max-w-[14ch] text-[clamp(2.6rem,4.6vw,4.9rem)]">{t.thesis.title}</h2></div>
+            <div><p className="meta text-black/35">{currentLang === "tr" ? "İnandığımız gerçek" : "What we believe"}</p><h2 className="headline mt-4 max-w-[17ch] text-[clamp(2.6rem,4vw,4.35rem)]">{t.thesis.title}</h2></div>
             <p className="body-copy max-w-[35rem]">{d.thesisBody}</p>
           </div>
           <div className="grid items-stretch lg:grid-cols-[1fr_1fr_1fr_.55fr]">
@@ -441,7 +437,7 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="band operating-band guide bg-white">
+      <section className="band operating-band bg-white">
         <div className="sellf-container grid h-full items-center gap-8 py-10 lg:grid-cols-[41%_59%]">
           <div><p className="meta text-black/35">{t.operating.kicker}</p><h2 className="headline mt-4 max-w-[15ch] text-[clamp(2rem,3.1vw,3.25rem)]">{t.operating.title}</h2><p className="body-copy mt-4 max-w-[34rem]">{d.operatingBody}</p></div>
           <div className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
@@ -458,11 +454,11 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="band standards-band guide bg-[#f8f8f6]">
+      <section className="band standards-band bg-[#f8f8f6]">
         <div className="sellf-container grid h-full items-center gap-8 py-10 lg:grid-cols-[47%_53%]">
           <div>
             <p className="meta text-black/35">{currentLang === "tr" ? "Ölçen. Yönlendiren. Büyüten." : "Measure. Direct. Grow."}</p>
-            <h2 className="headline mt-4 max-w-[14ch] text-[clamp(2.35rem,3.8vw,4rem)]">{t.standards.title}</h2>
+            <h2 className="headline mt-4 max-w-[19ch] text-[clamp(2.25rem,2.8vw,3rem)]">{t.standards.title}</h2>
             <p className="body-copy mt-4 max-w-[39rem]">{d.standardsBody}</p>
             <div className="mt-6 flex items-center gap-4"><span className="h-px w-10 bg-black/35" /><span className="meta text-[9px] text-black/42">{d.systemCta}</span></div>
           </div>
@@ -488,7 +484,7 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="band step-band guide bg-white">
+      <section className="band step-band bg-white">
         <div className="sellf-container grid h-full items-center gap-7 py-10 lg:grid-cols-[24%_56%_20%]">
           <div><p className="meta text-black/35">{t.step.kicker}</p><h2 className="headline mt-4 max-w-[11ch] text-[clamp(2rem,3vw,3.1rem)]">{t.step.title}</h2><p className="body-copy mt-4 max-w-[18rem]">{d.stepBody}</p></div>
           <div className="relative grid grid-cols-2 gap-y-7 md:grid-cols-4 md:gap-0">
@@ -499,7 +495,7 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="band awards-band guide bg-[#f7f7f4]">
+      <section className="band awards-band bg-[#f7f7f4]">
         <div className="sellf-container grid h-full items-center gap-7 py-10 lg:grid-cols-[31%_69%]">
           <div><p className="meta text-black/35">{d.awardKicker}</p><h2 className="headline mt-4 max-w-[12ch] text-[clamp(2rem,3vw,3.05rem)]">{d.awardsTitle}</h2><p className="body-copy mt-4 max-w-[22rem]">{t.awards.body}</p></div>
           <div className="relative grid gap-6 md:grid-cols-4">
@@ -510,9 +506,8 @@ export default function AboutClient() {
       </section>
 
       <section className="band closing-band overflow-hidden bg-[#080a0a] text-white">
-        <div className="absolute inset-0 opacity-35 [background-image:radial-gradient(rgba(255,255,255,.13)_1px,transparent_1px)] [background-size:30px_30px]" />
         <div className="sellf-container relative grid h-full items-center gap-10 py-12 lg:grid-cols-[68%_32%]">
-          <div><p className="meta text-white/40">{t.closing.kicker}</p><h2 className="headline mt-4 max-w-[18ch] text-[clamp(2.4rem,3.9vw,4.25rem)]">{t.closing.title}</h2>
+          <div><p className="meta text-white/40">{t.closing.kicker}</p><h2 className="headline mt-4 max-w-[24ch] text-[clamp(2.35rem,3.2vw,3.55rem)]">{t.closing.title}</h2>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href={langPrefix + "/framework/operating-model"} className="group inline-flex items-center gap-4 rounded-full bg-white px-5 py-3 text-[11px] font-semibold text-black">{t.closing.primary}<Arrow /></Link>
               <Link href={langPrefix + "/contact"} className="group inline-flex items-center gap-4 rounded-full border border-white/22 px-5 py-3 text-[11px] font-semibold text-white">{t.closing.secondary}<Arrow /></Link>
