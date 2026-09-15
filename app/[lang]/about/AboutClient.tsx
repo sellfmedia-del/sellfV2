@@ -346,19 +346,20 @@ const displayCopy = {
 const pageCss =
   ".about-exact{--line:rgba(11,13,13,.09);--muted:rgba(11,13,13,.52)}" +
   ".about-exact .band{position:relative;isolation:isolate;overflow:clip;border-bottom:1px solid var(--line)}" +
+  ".about-exact .band>div{min-height:inherit}" +
   ".about-exact .headline{text-transform:uppercase;font-weight:700;letter-spacing:-.055em;line-height:.94}" +
   ".about-exact .body-copy{font-size:14px;line-height:1.65;color:var(--muted)}" +
   ".about-exact .meta{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}" +
   ".about-exact .founder-cut{filter:grayscale(1) contrast(1.06);mix-blend-mode:multiply;object-fit:cover;object-position:right bottom}" +
   ".about-exact .team-cut{filter:grayscale(1) contrast(1.12);object-fit:cover;object-position:center}" +
   ".about-exact .manifesto-copy{padding-left:max(2.5rem,calc((100vw - 1400px)/2))}" +
-  ".about-exact .hero-band{height:clamp(560px,43vw,650px)}" +
-  ".about-exact .manifesto-band{height:clamp(420px,31vw,480px)}" +
-  ".about-exact .team-band{height:250px}.about-exact .thesis-band{height:370px}.about-exact .operating-band{height:275px}" +
-  ".about-exact .standards-band{height:335px}.about-exact .vision-band{height:405px}.about-exact .step-band{height:305px}" +
-  ".about-exact .awards-band{height:285px}.about-exact .closing-band{height:335px}" +
+  ".about-exact .hero-band{min-height:clamp(560px,43vw,650px)}" +
+  ".about-exact .manifesto-band{min-height:clamp(420px,31vw,480px)}" +
+  ".about-exact .team-band{min-height:250px}.about-exact .thesis-band{min-height:370px}.about-exact .operating-band{min-height:275px}" +
+  ".about-exact .standards-band{min-height:335px}.about-exact .vision-band{min-height:405px}.about-exact .step-band{min-height:305px}" +
+  ".about-exact .awards-band{min-height:285px}.about-exact .closing-band{min-height:335px}" +
   ".about-exact .orb{transition:transform .35s ease,box-shadow .35s ease}.about-exact .orb:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(0,0,0,.18)}" +
-  "@media(max-width:1023px){.about-exact .hero-band,.about-exact .manifesto-band,.about-exact .team-band,.about-exact .thesis-band,.about-exact .operating-band,.about-exact .standards-band,.about-exact .vision-band,.about-exact .step-band,.about-exact .awards-band,.about-exact .closing-band{height:auto}.about-exact .band{padding-bottom:64px}.about-exact .manifesto-copy{padding-left:1rem;padding-right:1rem}}" +
+  "@media(max-width:1023px){.about-exact .hero-band,.about-exact .manifesto-band,.about-exact .team-band,.about-exact .thesis-band,.about-exact .operating-band,.about-exact .standards-band,.about-exact .vision-band,.about-exact .step-band,.about-exact .awards-band,.about-exact .closing-band{min-height:0}.about-exact .band{padding-bottom:64px}.about-exact .manifesto-copy{padding-left:1rem;padding-right:1rem}}" +
   "@media(prefers-reduced-motion:reduce){.about-exact .orb{transition:none}}";
 
 function Arrow() {
