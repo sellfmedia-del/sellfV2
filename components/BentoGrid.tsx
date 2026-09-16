@@ -601,7 +601,7 @@ const gridLayoutData: GridConfig[] = [
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "flow",
     logoUrl: null,
-    bgImage: "https://sermbarr.com/_next/image?q=75&url=%2Ffotograflar%2Fx-barr-500-fuw-01.jpg&w=3840"
+    bgImage: "https://i.ytimg.com/vi/ej5Yl-6b2Og/hqdefault.jpg"
   },
   {
     id: "lealkaravan",
@@ -610,7 +610,7 @@ const gridLayoutData: GridConfig[] = [
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "steps",
     logoUrl: null,
-    bgImage: "https://www.lealkaravan.com/wp-content/uploads/2024/09/c_joy_stage_2_1920x1080.webp"
+    bgImage: "/images/showcases/leal-dethleffs.webp"
   },
   {
     id: "wyndhamgrand",
