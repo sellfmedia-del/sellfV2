@@ -52,8 +52,8 @@ export default function VisionaryQuote() {
   const t = dict[currentLang];
   const quoteSize =
     currentLang === "tr"
-      ? "text-[clamp(2.22rem,2.82vw,2.72rem)] xl:text-[2.9rem]"
-      : "text-[clamp(2.55rem,3.18vw,3.18rem)] xl:text-[3.35rem]";
+      ? "text-[clamp(1.9rem,9vw,2.22rem)] sm:text-[clamp(2.22rem,2.82vw,2.72rem)] xl:text-[2.9rem]"
+      : "text-[clamp(1.9rem,9vw,2.35rem)] sm:text-[clamp(2.55rem,3.18vw,3.18rem)] xl:text-[3.35rem]";
 
   return (
     <section className="home-visionary isolate overflow-hidden border-y border-black/[.06] bg-[#f8f8f6] text-[#101111]">
@@ -90,10 +90,10 @@ export default function VisionaryQuote() {
             <blockquote
               className={`mt-8 font-medium leading-[1.04] tracking-[-.052em] text-black ${quoteSize}`}
             >
-              <span className="block whitespace-nowrap">{t.quoteLines[0]}</span>
-              <span className="block whitespace-nowrap">{t.quoteLines[1]}</span>
-              <span className="block whitespace-nowrap text-black/48">{t.quoteLines[2]}</span>
-              <span className="block whitespace-nowrap text-black/48">{t.quoteLines[3]}</span>
+              <span className="block sm:whitespace-nowrap">{t.quoteLines[0]}</span>
+              <span className="block sm:whitespace-nowrap">{t.quoteLines[1]}</span>
+              <span className="block sm:whitespace-nowrap text-black/48">{t.quoteLines[2]}</span>
+              <span className="block sm:whitespace-nowrap text-black/48">{t.quoteLines[3]}</span>
             </blockquote>
 
             <p className="mt-7 max-w-[40rem] text-[12px] leading-[1.58] text-black/58 md:text-[13px]">

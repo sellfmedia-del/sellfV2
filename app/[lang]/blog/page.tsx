@@ -1,6 +1,7 @@
 import { client } from '@/sanity/lib/client'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import ResilientImage from '@/components/ResilientImage'
 
 export const dynamic = 'force-dynamic'
 
@@ -100,7 +101,7 @@ export default async function BlogPage({
               className={`group relative block overflow-hidden rounded-2xl bg-zinc-900 ${bentoClasses}`}
             >
               {post.coverImage ? (
-                <img
+                <ResilientImage
                   src={post.coverImage}
                   alt={post.title}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

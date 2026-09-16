@@ -793,7 +793,18 @@ export default function BentoGrid() {
 
                     <p className="text-sm text-black/58 leading-relaxed mb-4">{itemText.shortDesc}</p>
 
-                    <div className={`grid transition-all duration-500 ${isHovered ? 'grid-rows-[1fr] opacity-100 mb-5' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <button
+                      type="button"
+                      className="mb-4 inline-flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[.14em] text-black/48 lg:hidden"
+                      aria-expanded={isHovered}
+                      aria-controls={`showcase-detail-${config.id}`}
+                      onClick={() => setHoveredId((current) => current === config.id ? null : config.id)}
+                    >
+                      {currentLang === "tr" ? (isHovered ? "Detayı Gizle" : "Detayı Gör") : (isHovered ? "Hide Details" : "View Details")}
+                      <span aria-hidden="true">{isHovered ? "−" : "+"}</span>
+                    </button>
+
+                    <div id={`showcase-detail-${config.id}`} className={`grid transition-all duration-500 ${isHovered ? 'grid-rows-[1fr] opacity-100 mb-5' : 'grid-rows-[0fr] opacity-0'}`}>
                       <div className="overflow-hidden">
                         <div className="pt-4 border-t border-black/10 space-y-4">
                           <div className="bg-black/[.025] border border-black/10 p-3 min-h-[84px] flex items-center justify-center">

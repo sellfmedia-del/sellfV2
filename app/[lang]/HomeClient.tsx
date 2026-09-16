@@ -230,7 +230,7 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
             </motion.div>
           </div>
 
-          <div className="min-h-[460px] md:min-h-[650px]" aria-hidden="true" />
+          <div className="hidden lg:block lg:min-h-[650px]" aria-hidden="true" />
 
           <motion.button
             ref={videoContainerRef}
@@ -238,7 +238,7 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
             onMouseEnter={handleVideoMouseEnter}
             onMouseLeave={() => setVideoExpanded(false)}
             onClick={handleVideoClick}
-            className={`group z-20 w-full min-h-[460px] md:min-h-[650px] overflow-hidden bg-black text-left will-change-[width] lg:absolute lg:inset-y-0 lg:right-0 transition-[width] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "lg:w-full" : "lg:w-[58%]"}`}
+            className={`group relative z-20 min-h-[300px] w-full overflow-hidden bg-black text-left will-change-[width] sm:min-h-[380px] md:min-h-[460px] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-[650px] transition-[width] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${videoExpanded ? "lg:w-full" : "lg:w-[58%]"}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.08, ease }}

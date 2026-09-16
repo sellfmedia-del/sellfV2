@@ -36,7 +36,7 @@ export default function QuickContact() {
   return (
     <div className="fixed right-4 md:right-7 bottom-4 md:bottom-6 z-[9990] flex flex-col items-end font-sans">
       {isOpen && (
-        <div className="mb-3 w-[min(320px,calc(100vw-2rem))] bg-[#0b0d0d]/96 backdrop-blur-xl border border-white/12 p-5 shadow-[0_18px_55px_rgba(0,0,0,.32)] text-white">
+        <div className="mb-3 max-h-[calc(100dvh-5.5rem)] w-[min(320px,calc(100vw-2rem))] overflow-y-auto bg-[#0b0d0d]/96 backdrop-blur-xl border border-white/12 p-5 shadow-[0_18px_55px_rgba(0,0,0,.32)] text-white">
           {status === "success" ? (
             <div className="py-5">
               <div className="sellf-kicker text-white/35 mb-4">Quick contact</div>

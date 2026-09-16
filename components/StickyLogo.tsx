@@ -99,7 +99,7 @@ export default function StickyLogo() {
     <div className="fixed bottom-[82px] md:bottom-[92px] right-4 md:right-7 z-[9980] flex flex-col items-end gap-2 pointer-events-none">
       {/* Konuşma Baloncuğu */}
       <div 
-        className="bg-[#0b0d0d]/94 backdrop-blur-xl text-white/72 px-4 py-2.5 shadow-[0_10px_35px_rgba(0,0,0,.22)] text-[10px] md:text-xs font-medium max-w-[210px] text-right border border-white/12 pointer-events-auto transition-all duration-300"
+        className="hidden bg-[#0b0d0d]/94 backdrop-blur-xl text-white/72 px-4 py-2.5 shadow-[0_10px_35px_rgba(0,0,0,.22)] text-[10px] md:block md:text-xs font-medium max-w-[210px] text-right border border-white/12 pointer-events-auto transition-all duration-300"
         style={{ opacity: message ? 1 : 0 }}
       >
         {message}

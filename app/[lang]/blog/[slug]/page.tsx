@@ -4,6 +4,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import ResilientImage from '@/components/ResilientImage'
 
 export const dynamic = 'force-dynamic'
 
@@ -204,7 +205,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
       {post.coverImage && (
         <div className="w-full max-w-5xl mx-auto px-4 md:px-6 mb-16">
           <div className="aspect-[21/9] w-full relative rounded-2xl overflow-hidden bg-zinc-100">
-            <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
+            <ResilientImage src={post.coverImage} alt={post.title} loading="eager" className="absolute inset-0 w-full h-full object-cover" />
           </div>
         </div>
       )}
@@ -230,7 +231,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
                 className="group block overflow-hidden rounded-xl bg-zinc-100 aspect-[4/3] relative"
               >
                 {related.coverImage ? (
-                  <img
+                  <ResilientImage
                     src={related.coverImage}
                     alt={related.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
