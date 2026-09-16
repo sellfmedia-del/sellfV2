@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const dict = {
   tr: {
@@ -27,9 +27,12 @@ const dict = {
 
 export default function Footer() {
   const params = useParams();
+  const pathname = usePathname();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
   const langPrefix = `/${currentLang}`;
+
+  if (pathname?.includes("/engage")) return null;
 
   return (
     <footer className="bg-[#0b0d0d] text-white border-t border-white/10">

@@ -37,6 +37,7 @@ export default function Header() {
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
   const langPrefix = `/${currentLang}`;
+  const isEngage = pathname?.includes("/engage") ?? false;
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24);
@@ -58,14 +59,16 @@ export default function Header() {
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-[80] transition-all duration-300 ${isScrolled ? "pt-3" : "pt-5 md:pt-6"}`}>
-        <div className={`sellf-container flex h-14 items-center justify-between rounded-full px-4 md:px-5 transition-all duration-300 ${
-          isScrolled
+      <header className={`fixed inset-x-0 top-0 z-[80] transition-all duration-300 ${isEngage ? "pt-0" : isScrolled ? "pt-3" : "pt-5 md:pt-6"}`}>
+        <div className={`sellf-container flex items-center justify-between transition-all duration-300 ${isEngage ? "h-20 rounded-none border-b border-white/10 px-0 text-white" : "h-14 rounded-full px-4 md:px-5"} ${
+          isEngage && !isScrolled
+            ? "bg-transparent"
+            : isScrolled
             ? "bg-[#0b0d0d]/92 text-white shadow-[0_12px_40px_rgba(0,0,0,.18)] backdrop-blur-xl border border-white/10"
             : "bg-[#0b0d0d]/78 text-white backdrop-blur-md border border-white/10"
         }`}>
-          <Link href={langPrefix} aria-label="Sellf Media" onClick={() => setIsMenuOpen(false)} className="relative h-7 w-[74px] md:w-[82px] shrink-0">
-            <Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority className="object-contain object-left" />
+          <Link href={langPrefix} aria-label="Sellf Media" onClick={() => setIsMenuOpen(false)} className={isEngage ? "flex shrink-0 items-center gap-3" : "relative h-7 w-[74px] md:w-[82px] shrink-0"}>
+            {isEngage ? <><span className="text-[27px] font-semibold tracking-[-.06em]">sellf.</span><span className="border-l border-white/35 pl-3 text-[10px] font-semibold tracking-[.22em]">ENGAGE</span></> : <Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority className="object-contain object-left" />}
           </Link>
 
           <nav className="hidden lg:flex items-center gap-7 text-[11px] font-medium">
@@ -86,7 +89,7 @@ export default function Header() {
               {currentLang === "tr" ? "EN" : "TR"}
             </button>
 
-            <Link href={`${langPrefix}/contact`} className="hidden md:inline-flex h-9 items-center rounded-full bg-white px-4 text-[10px] font-semibold text-black hover:bg-[#f1f0ec] transition-colors">
+            <Link href={`${langPrefix}/contact`} className={`hidden md:inline-flex h-9 items-center px-4 text-[10px] font-semibold transition-colors ${isEngage ? "rounded-md bg-[#4a4ae0] text-white hover:bg-[#5b5bea]" : "rounded-full bg-white text-black hover:bg-[#f1f0ec]"}`}>
               {t.contact} <span className="ml-2">→</span>
             </Link>
 
