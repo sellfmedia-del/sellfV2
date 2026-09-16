@@ -59,19 +59,19 @@ export default function Header() {
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-[80] transition-all duration-300 ${isEngage ? "pt-0" : isScrolled ? "pt-3" : "pt-5 md:pt-6"}`}>
-        <div className={`sellf-container flex items-center justify-between transition-all duration-300 ${isEngage ? "h-20 rounded-none border-b border-white/10 px-0 text-white" : "h-14 rounded-full px-4 md:px-5"} ${
+      <header className={`fixed inset-x-0 top-0 z-[80] transition-all duration-300 ${isEngage ? (isScrolled ? "pt-2" : "pt-0") : isScrolled ? "pt-3" : "pt-5 md:pt-6"}`}>
+        <div className={`sellf-container flex items-center justify-between transition-all duration-300 ${isEngage ? (isScrolled ? "h-14 rounded-[14px] px-3 text-white md:px-4" : "h-20 rounded-none border-b border-white/10 px-0 text-white") : "h-14 rounded-full px-4 md:px-5"} ${
           isEngage && !isScrolled
             ? "bg-transparent"
             : isScrolled
             ? "bg-[#0b0d0d]/92 text-white shadow-[0_12px_40px_rgba(0,0,0,.18)] backdrop-blur-xl border border-white/10"
             : "bg-[#0b0d0d]/78 text-white backdrop-blur-md border border-white/10"
         }`}>
-          <Link href={langPrefix} aria-label="Sellf Media" onClick={() => setIsMenuOpen(false)} className={isEngage ? "flex shrink-0 items-center gap-3" : "relative h-7 w-[74px] md:w-[82px] shrink-0"}>
-            {isEngage ? <><span className="text-[27px] font-semibold tracking-[-.06em]">sellf.</span><span className="border-l border-white/35 pl-3 text-[10px] font-semibold tracking-[.22em]">ENGAGE</span></> : <Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority className="object-contain object-left" />}
+          <Link href={langPrefix} aria-label="Sellf Media" onClick={() => setIsMenuOpen(false)} className={isEngage ? `flex shrink-0 items-center transition-[gap] duration-300 ${isScrolled ? "gap-2" : "gap-3"}` : "relative h-7 w-[74px] md:w-[82px] shrink-0"}>
+            {isEngage ? <><span className={`relative block shrink-0 transition-[width,height] duration-300 ${isScrolled ? "h-7 w-7" : "h-9 w-9"}`}><Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority sizes="36px" className="object-contain" /></span><span className={`border-l border-white/30 font-semibold tracking-[.22em] transition-all duration-300 ${isScrolled ? "pl-2 text-[9px]" : "pl-3 text-[10px]"}`}>ENGAGE</span></> : <Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority className="object-contain object-left" />}
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-7 text-[11px] font-medium">
+          <nav className={`hidden items-center font-medium transition-all duration-300 lg:flex ${isEngage && isScrolled ? "gap-5 text-[10px]" : "gap-7 text-[11px]"}`}>
             <Link href={`${langPrefix}/services`} className="hover:opacity-60 transition-opacity">{t.services}</Link>
             <Link href={`${langPrefix}/portfolio`} className="hover:opacity-60 transition-opacity">{t.portfolio}</Link>
             <Link href={`${langPrefix}/engage`} className="hover:opacity-60 transition-opacity">{t.engage}</Link>
@@ -83,13 +83,13 @@ export default function Header() {
             <button
               type="button"
               onClick={toggleLanguage}
-              className="h-9 min-w-9 rounded-full border border-white/15 px-3 text-[10px] font-semibold tracking-[.16em] hover:bg-white/10 transition-colors"
+              className={`${isEngage && isScrolled ? "h-8 min-w-8 px-2.5 text-[9px]" : "h-9 min-w-9 px-3 text-[10px]"} rounded-full border border-white/15 font-semibold tracking-[.16em] transition-all hover:bg-white/10`}
               aria-label={currentLang === "tr" ? "Switch to English" : "Türkçeye geç"}
             >
               {currentLang === "tr" ? "EN" : "TR"}
             </button>
 
-            <Link href={`${langPrefix}/contact`} className={`hidden md:inline-flex h-9 items-center px-4 text-[10px] font-semibold transition-colors ${isEngage ? "rounded-md bg-[#4a4ae0] text-white hover:bg-[#5b5bea]" : "rounded-full bg-white text-black hover:bg-[#f1f0ec]"}`}>
+            <Link href={`${langPrefix}/contact`} className={`hidden items-center font-semibold transition-all md:inline-flex ${isEngage && isScrolled ? "h-8 px-3 text-[9px]" : "h-9 px-4 text-[10px]"} ${isEngage ? "rounded-md bg-[#4a4ae0] text-white hover:bg-[#5b5bea]" : "rounded-full bg-white text-black hover:bg-[#f1f0ec]"}`}>
               {t.contact} <span className="ml-2">→</span>
             </Link>
 
@@ -98,7 +98,7 @@ export default function Header() {
               onClick={() => setIsMenuOpen((v) => !v)}
               aria-expanded={isMenuOpen}
               aria-label={isMenuOpen ? t.close : t.menu}
-              className="lg:hidden h-9 w-9 rounded-full border border-white/15 flex items-center justify-center"
+              className={`${isEngage && isScrolled ? "h-8 w-8" : "h-9 w-9"} flex items-center justify-center rounded-full border border-white/15 transition-all lg:hidden`}
             >
               <span className="relative block w-4 h-3">
                 <span className={`absolute left-0 top-0 h-px w-4 bg-white transition-transform duration-300 ${isMenuOpen ? "translate-y-[5px] rotate-45" : ""}`} />
