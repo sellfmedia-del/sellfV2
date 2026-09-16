@@ -134,6 +134,76 @@ const dictionary = {
         longDesc: "ASCE GYO ve Inwest Group için strateji, kreatif, medya ve lead akışı uçtan uca tek kurgu altında yönetildi; iki projede dijital erişim ve potansiyel alıcı talebi birlikte büyütüldü.",
         metrics: ["+%450 Dijital Erişim", "1.850 Potansiyel Alıcı", "2 Proje"],
         schematicData: ["Strateji & Kreatif", "Medya Dağıtımı", "Alıcı Talebi"]
+      },
+      schnitzel: {
+        tag: "FRANCHISE BÜYÜME SİSTEMİ",
+        shortDesc: "“3 ayda lokasyon ziyaretlerinde %57 artış.”",
+        longDesc: "Franchise sistemi baştan kurgulandı; websiteye franchise talep motoru ve CRM takip entegrasyonu eklendi. Pazarlama operasyonu perakende marka iletişimi ve B2B franchising olarak ayrıştırılıp ayrı ayrı ölçüldü. Dijital kanallardan lokasyon içi müşteri deneyimine kadar entegre uygulamalar yürütüldü.",
+        metrics: ["+%57 Lokasyon Ziyareti", "37 Yeni Sözleşme Süreci", "+%34 Pozitif Değerlendirme"],
+        schematicData: ["Perakende Marka", "Franchise Talep Motoru", "CRM Takibi"]
+      },
+      sermandbarr: {
+        tag: "DİJİTAL DENEYİM & DESTEK",
+        shortDesc: "“Organik trafikte %117 büyüme.”",
+        longDesc: "Website dinamik video ve render içerikleriyle baştan aşağı yenilendi; teknik ve içerik SEO iyileştirmeleri tamamlandı. Servis ve destek hattı tek numarada birleştirilerek router sistemi üzerinden yarı AI bot, yarı çağrı merkezi dinamiğine bağlandı.",
+        metrics: ["+%117 Organik Trafik", "+3 Sıralama Pozisyonu", "-%27 Bounce Rate", "+%50 Destek Memnuniyeti"],
+        schematicData: ["Yeni Website", "SEO Altyapısı", "AI Bot + Call Center"]
+      },
+      lealkaravan: {
+        tag: "ENTEGRE BÜYÜME DANIŞMANLIĞI",
+        shortDesc: "“Talep, kârlılık ve operasyon birlikte büyüdü.”",
+        longDesc: "Pazar, rakip, fiyat aralığı, müşteri acı noktaları ve gelişim alanları kapsamlı biçimde araştırıldı. Yıllık bütçe planı; influencer pazarlama, içerik takvimi, prodüksiyon, sosyal medya ve reklam kurgularıyla tek büyüme sistemi altında birleştirildi. Bütçe, belirlenen temel gelir alanlarına göre optimize edildi.",
+        metrics: ["+%34 Gelen Talep", "+%29 Kârlılık", "+%60 Operasyonel Verim", "+%300 Erişim & Etkileşim"],
+        schematicData: ["Pazar Araştırması", "Gelir Alanları", "Bütçe Optimizasyonu"]
+      },
+      wyndhamgrand: {
+        tag: "OTEL SOSYAL MEDYA BÜYÜMESİ",
+        shortDesc: "“3 ayda 760+ rezervasyon talebi.”",
+        longDesc: "Sosyal medya yönetimi ve influencer pazarlama tek bir plan altında toplandı. Dağınık ilerleyen bütçe, içerik üretimi ve yayın takvimi yeniden yapılandırılarak erişimden rezervasyon talebine uzanan ölçülebilir bir akış kuruldu.",
+        metrics: ["+%23 Takipçi", "+%254 Erişim & Etkileşim", "760+ Rezervasyon Talebi", "3 Ay"],
+        schematicData: ["İçerik Takvimi", "Influencer Dağıtımı", "Rezervasyon Talebi"]
+      },
+      softhotels: {
+        tag: "OTEL CRM & OPERASYON",
+        shortDesc: "“Ticket kapanma hızı ikiye katlandı.”",
+        longDesc: "Otel yönetimi, ticket ve talep toplama platformu baştan tasarlandı. İş süreçleri ve sunucu bağlantıları yeniden kuruldu; CRM, muhasebe ve operasyon arayüzleri ortak yönetim panelinde birleştirildi. Böylece talep yanıtları ve ödeme onayları daha hızlı ve izlenebilir hale geldi.",
+        metrics: ["-%45 İç Şikâyet", "+%100 Kapanma Hızı", "+%60 Tahmini Verimlilik", "+%200 Yanıt & Onay Hızı"],
+        schematicData: ["Talep & Ticket", "CRM Yönetimi", "Muhasebe & Operasyon"]
+      },
+      nutralen: {
+        tag: "ENTEGRE E-TİCARET BÜYÜMESİ",
+        shortDesc: "“6 ayda ciroda %256 büyüme.”",
+        longDesc: "E-ticaret ve pazaryeri yönetimi; dijital reklam, sosyal medya, influencer pazarlama ve ambalaj tasarımıyla entegre edildi. Tüm pazarlama kanalları ortak ticari hedefler ve ölçüm sistemi üzerinden yönetildi.",
+        metrics: ["+%300 Sipariş / 3 Yeni İl", "+%450 Etkileşim", "+%256 Ciro", "1/4 ROI"],
+        schematicData: ["Pazaryerleri", "Medya & Influencer", "Ambalaj & Marka"]
+      },
+      lionsdarwin: {
+        tag: "SIFIRDAN MARKA KURULUMU",
+        shortDesc: "“İlk ayda %5 pazar payı.”",
+        longDesc: "Marka; kurumsal kimlik, ambalaj tasarımı, influencer pazarlama ve dijital assetlerle uçtan uca kuruldu. Lansmanla birlikte stok ve muhasebe yönetimleri otomasyona taşınarak marka iletişimi ile operasyon altyapısı aynı sistemde buluşturuldu.",
+        metrics: ["%5 İlk Ay Pazar Payı", "1/1,65 İlk Ay ROI", "Stok & Muhasebe Otomasyonu"],
+        schematicData: ["Kurumsal Kimlik", "Ambalaj Tasarımı", "Lansman & Otomasyon"]
+      },
+      farmhouse: {
+        tag: "DİJİTAL TASARIM",
+        shortDesc: "“Marka deneyimi için sade ve tutarlı bir tasarım dili.”",
+        longDesc: "FarmHouse için markanın karakterini dijital ortama taşıyan tasarım çalışmaları üretildi. Görsel hiyerarşi, sayfa kompozisyonları ve temel dijital assetler ortak bir tasarım sistemi altında toplandı.",
+        metrics: ["Görsel Kimlik", "Website Tasarımı", "Dijital Assetler"],
+        schematicData: ["Tasarım Yönü", "Arayüz Sistemi", "Uygulama Seti"]
+      },
+      muratbey: {
+        tag: "ÜRÜN KONUMLANDIRMA & SOSYAL",
+        shortDesc: "“Her segmente ayrı ürün anlatısı.”",
+        longDesc: "Ürün konumlandırması ve sosyal medya dili tamamen yenilendi. Reklam ve sosyal medya kreatifleri hedef kitle segmentlerine göre ayrıştırılarak her ürünün doğru mesaj, görsel dil ve kullanım bağlamıyla anlatılması sağlandı.",
+        metrics: ["Yeni Ürün Konumlandırması", "Segment Bazlı Kreatif", "Yenilenen Sosyal Medya Dili"],
+        schematicData: ["Hedef Segment", "Ürün Mesajı", "Kreatif Sistem"]
+      },
+      uko: {
+        tag: "UÇTAN UCA DİJİTAL DÖNÜŞÜM",
+        shortDesc: "“Muhasebeden e-ticarete tek yönetim sistemi.”",
+        longDesc: "Manuel faturalama Logo otomasyonuna taşındı; ikas altyapısında website kuruldu. Muhasebe, stok, ödeme ve entegrasyonlar baştan yapılandırılarak özel ortak yönetim paneline bağlandı. Sosyal medya ve reklam kurguları bu dijital altyapıyla birlikte yürütüldü.",
+        metrics: ["+%230 Google Görüntülenme", "+%47 Gelen Arama", "+%200 Muhasebe Verimi", "+%32 Ciro"],
+        schematicData: ["ikas Website", "Logo & Stok", "Ödeme & Yönetim Paneli"]
       }
     }
   },
@@ -266,6 +336,76 @@ const dictionary = {
         longDesc: "Strategy, creative, media and lead flow for ASCE GYO and Inwest Group were managed in one end-to-end system, growing digital reach and potential-buyer demand across two projects.",
         metrics: ["+450% Digital Reach", "1,850 Potential Buyers", "2 Projects"],
         schematicData: ["Strategy & Creative", "Media Distribution", "Buyer Demand"]
+      },
+      schnitzel: {
+        tag: "FRANCHISE GROWTH SYSTEM",
+        shortDesc: "“57% more location visits in 3 months.”",
+        longDesc: "The franchise system was rebuilt, adding a franchise enquiry engine and CRM tracking to the website. Marketing was split into retail brand communication and B2B franchising, with each measured separately. Integrated applications extended from digital channels into the in-location customer experience.",
+        metrics: ["+57% Location Visits", "37 New Contract Processes", "+34% Positive Reviews"],
+        schematicData: ["Retail Brand", "Franchise Enquiries", "CRM Tracking"]
+      },
+      sermandbarr: {
+        tag: "DIGITAL EXPERIENCE & SUPPORT",
+        shortDesc: "“117% growth in organic traffic.”",
+        longDesc: "The website was rebuilt around dynamic video and rendered content, supported by technical and content SEO improvements. Service and support were consolidated under one number and routed through a hybrid AI bot and call-centre workflow.",
+        metrics: ["+117% Organic Traffic", "+3 Ranking Positions", "-27% Bounce Rate", "+50% Support Satisfaction"],
+        schematicData: ["New Website", "SEO Foundation", "AI Bot + Call Centre"]
+      },
+      lealkaravan: {
+        tag: "INTEGRATED GROWTH CONSULTING",
+        shortDesc: "“Demand, profitability and operations grew together.”",
+        longDesc: "The market, competitors, optimal price range, customer pain points and development opportunities were researched in depth. Annual budget planning brought influencer marketing, content, production, social media and advertising into one growth system, with investment directed towards the strongest revenue areas.",
+        metrics: ["+34% Inbound Demand", "+29% Profitability", "+60% Operational Efficiency", "+300% Reach & Engagement"],
+        schematicData: ["Market Research", "Revenue Areas", "Budget Optimisation"]
+      },
+      wyndhamgrand: {
+        tag: "HOTEL SOCIAL GROWTH",
+        shortDesc: "“760+ booking enquiries in 3 months.”",
+        longDesc: "Social media management and influencer marketing were brought into one plan. Fragmented budgets, content production and publishing calendars were restructured into a measurable flow from reach to booking enquiry.",
+        metrics: ["+23% Followers", "+254% Reach & Engagement", "760+ Booking Enquiries", "3 Months"],
+        schematicData: ["Content Calendar", "Influencer Distribution", "Booking Demand"]
+      },
+      softhotels: {
+        tag: "HOTEL CRM & OPERATIONS",
+        shortDesc: "“Ticket resolution speed doubled.”",
+        longDesc: "The hotel management, ticketing and request platform was redesigned from the ground up. Workflows and server connections were rebuilt, while CRM, accounting and operations interfaces were connected through one management panel, making responses and payment approvals faster and traceable.",
+        metrics: ["-45% Internal Complaints", "+100% Resolution Speed", "+60% Est. Efficiency", "+200% Response & Approval Speed"],
+        schematicData: ["Requests & Tickets", "CRM Management", "Accounting & Ops"]
+      },
+      nutralen: {
+        tag: "INTEGRATED E-COMMERCE GROWTH",
+        shortDesc: "“256% revenue growth in 6 months.”",
+        longDesc: "E-commerce and marketplace management were integrated with digital advertising, social media, influencer marketing and packaging design. Every marketing channel was managed against shared commercial targets and one measurement system.",
+        metrics: ["+300% Orders / 3 New Cities", "+450% Engagement", "+256% Revenue", "1/4 ROI"],
+        schematicData: ["Marketplaces", "Media & Influencers", "Packaging & Brand"]
+      },
+      lionsdarwin: {
+        tag: "BRAND BUILD FROM ZERO",
+        shortDesc: "“5% market share in the first month.”",
+        longDesc: "The brand was built end to end, spanning identity, packaging, influencer marketing and digital assets. Inventory and accounting were automated alongside launch, connecting the customer-facing brand with its operational foundation.",
+        metrics: ["5% First-Month Share", "1/1.65 First-Month ROI", "Inventory & Accounting Automation"],
+        schematicData: ["Brand Identity", "Packaging Design", "Launch & Automation"]
+      },
+      farmhouse: {
+        tag: "DIGITAL DESIGN",
+        shortDesc: "“A clear, consistent design language for the brand experience.”",
+        longDesc: "Design work translated FarmHouse's character into a digital experience. Visual hierarchy, page compositions and core digital assets were brought together under one coherent design system.",
+        metrics: ["Visual Identity", "Website Design", "Digital Assets"],
+        schematicData: ["Design Direction", "Interface System", "Application Set"]
+      },
+      muratbey: {
+        tag: "PRODUCT POSITIONING & SOCIAL",
+        shortDesc: "“A distinct product story for every segment.”",
+        longDesc: "Product positioning and the social media voice were completely renewed. Advertising and social creatives were differentiated by audience segment, giving each product the right message, visual language and usage context.",
+        metrics: ["New Product Positioning", "Segmented Creative", "Renewed Social Voice"],
+        schematicData: ["Audience Segment", "Product Message", "Creative System"]
+      },
+      uko: {
+        tag: "END-TO-END DIGITAL TRANSFORMATION",
+        shortDesc: "“One management system from accounting to e-commerce.”",
+        longDesc: "Manual invoicing moved to Logo automation and a new website was built on ikas. Accounting, inventory, payments and integrations were rebuilt and connected to a custom shared panel, while social media and advertising ran alongside the new digital infrastructure.",
+        metrics: ["+230% Google Views", "+47% Inbound Calls", "+200% Accounting Efficiency", "+32% Revenue"],
+        schematicData: ["ikas Website", "Logo & Inventory", "Payments & Admin Panel"]
       }
     }
   }
@@ -273,7 +413,7 @@ const dictionary = {
 
 // ===== 2. FERAH / AÇIK RENKLİ STRÜKTÜR KONFİGÜRASYONU (GÖRSEL VE LOGOLAR DAHİL) =====
 interface GridConfig {
-  id: "evepack" | "canias" | "iamlovein" | "qashe" | "goldium" | "fizyohol" | "elitehair" | "philips" | "colins" | "sfera" | "greymanner" | "ascegyo" | "gkc" | "gotradego" | "monstera" | "social2024" | "beautycommerce" | "asceinwest";
+  id: "evepack" | "canias" | "iamlovein" | "qashe" | "goldium" | "fizyohol" | "elitehair" | "philips" | "colins" | "sfera" | "greymanner" | "ascegyo" | "gkc" | "gotradego" | "monstera" | "social2024" | "beautycommerce" | "asceinwest" | "schnitzel" | "sermandbarr" | "lealkaravan" | "wyndhamgrand" | "softhotels" | "nutralen" | "lionsdarwin" | "farmhouse" | "muratbey" | "uko";
   title: string;
   tagColor: string;
   gridClass: string;
@@ -444,6 +584,96 @@ const gridLayoutData: GridConfig[] = [
     schematicType: "flow",
     logoUrl: null,
     bgImage: "https://ascezenith.com/en/images/galeri/dismekan/1.jpg"
+  },
+  {
+    id: "schnitzel",
+    title: "SCHNITZEL LANDMANN",
+    tagColor: "bg-red-50 text-red-700 border-red-200",
+    gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]",
+    schematicType: "dual",
+    logoUrl: "https://cdn.sellfmedia.workers.dev/essentials/logoscnitzel.png",
+    bgImage: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    id: "sermandbarr",
+    title: "SERM & BARR",
+    tagColor: "bg-slate-100 text-slate-700 border-slate-300",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "flow",
+    logoUrl: null,
+    bgImage: "https://sermbarr.com/_next/image?q=75&url=%2Ffotograflar%2Fx-barr-500-fuw-01.jpg&w=3840"
+  },
+  {
+    id: "lealkaravan",
+    title: "LEAL KARAVAN / DETHLEFFS",
+    tagColor: "bg-teal-50 text-teal-700 border-teal-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "steps",
+    logoUrl: null,
+    bgImage: "https://www.lealkaravan.com/wp-content/uploads/2024/09/c_joy_stage_2_1920x1080.webp"
+  },
+  {
+    id: "wyndhamgrand",
+    title: "WYNDHAM GRAND",
+    tagColor: "bg-sky-50 text-sky-700 border-sky-200",
+    gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]",
+    schematicType: "funnel",
+    logoUrl: null,
+    bgImage: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    id: "softhotels",
+    title: "SOFT HOTELS",
+    tagColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "loop",
+    logoUrl: null,
+    bgImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    id: "nutralen",
+    title: "NUTRALEN",
+    tagColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "flow",
+    logoUrl: "https://cdn.sellfmedia.workers.dev/essentials/logonutralen.png",
+    bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/nutralen1.png"
+  },
+  {
+    id: "lionsdarwin",
+    title: "LIONS DARWIN",
+    tagColor: "bg-amber-50 text-amber-700 border-amber-200",
+    gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]",
+    schematicType: "steps",
+    logoUrl: "https://cdn.sellfmedia.workers.dev/essentials/logolions.png",
+    bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/lionsambalaj6.jpg"
+  },
+  {
+    id: "farmhouse",
+    title: "FARMHOUSE",
+    tagColor: "bg-lime-50 text-lime-700 border-lime-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "matrix",
+    logoUrl: null,
+    bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/farmhouse1.png"
+  },
+  {
+    id: "muratbey",
+    title: "MURATBEY",
+    tagColor: "bg-blue-50 text-blue-700 border-blue-200",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "dual",
+    logoUrl: "https://cdn.sellfmedia.workers.dev/essentials/logomuratbey.png",
+    bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/muratbey1.jpg"
+  },
+  {
+    id: "uko",
+    title: "UKO",
+    tagColor: "bg-zinc-100 text-zinc-700 border-zinc-300",
+    gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]",
+    schematicType: "flow",
+    logoUrl: "https://cdn.sellfmedia.workers.dev/essentials/logouko.png",
+    bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/uko1.jpg"
   }
 ];
 
