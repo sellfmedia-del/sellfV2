@@ -550,7 +550,7 @@ export default function BentoGrid() {
                   <div className={`transition-all duration-500 ${config.bgImage ? 'pt-[45%]' : ''}`}>
                     <div className="flex items-center justify-between gap-4 mb-4">
                       <span className="text-[9px] font-semibold uppercase tracking-[.18em] text-black/45">{itemText.tag}</span>
-                      <span className="text-[9px] text-black/30">//{config.id.toUpperCase()}</span>
+                      <span className="text-[9px] text-black/30">{"//"}{config.id.toUpperCase()}</span>
                     </div>
 
                     <div className="min-h-8 mb-3 flex items-center">

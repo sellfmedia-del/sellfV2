@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from 'react';
 
 export default function GlobalNotFound() {
@@ -6,11 +7,12 @@ export default function GlobalNotFound() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    const frame = requestAnimationFrame(() => {
       const userLang = navigator.language;
       if (userLang.toLowerCase().includes('tr')) setLang("tr");
       setIsReady(true);
-    }
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   if (!isReady) return <div style={{backgroundColor: 'black', height: '100vh'}} />;
@@ -75,13 +77,13 @@ export default function GlobalNotFound() {
               <p className="quote">{t.quote}</p>
             </div>
 
-            <a href="/" className="box radar-box">
+            <Link href="/" className="box radar-box">
               <div className="radar-text">
                 <div className="green-dot"></div>
                 {t.radar}
               </div>
               <span style={{fontSize: '24px'}}>→</span>
-            </a>
+            </Link>
           </div>
         </div>
       </body>

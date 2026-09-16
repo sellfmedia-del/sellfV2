@@ -19,6 +19,14 @@ const dict = {
   }
 };
 
+type BlogPost = {
+  _id: string;
+  title: string;
+  slug: string;
+  category?: string;
+  coverImage?: string;
+};
+
 export async function generateMetadata({
   params
 }: {
@@ -79,7 +87,7 @@ export default async function BlogPage({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[350px]">
-        {posts.map((post: any, index: number) => {
+        {posts.map((post: BlogPost, index: number) => {
           let bentoClasses = "col-span-1 row-span-1"
           if (index === 0) bentoClasses = "md:col-span-2 lg:col-span-2 row-span-2" 
           else if (index === 3) bentoClasses = "md:col-span-2 lg:col-span-2 row-span-1" 

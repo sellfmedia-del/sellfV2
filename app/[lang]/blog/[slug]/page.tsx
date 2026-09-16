@@ -1,5 +1,6 @@
 import { client } from '@/sanity/lib/client'
 import { PortableText } from '@portabletext/react'
+import type { PortableTextComponents } from '@portabletext/react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -23,6 +24,14 @@ const dict = {
     metaSuffix: "Sellf Media Growth Blog",
     relatedTitle: "Related Insights"
   }
+};
+
+// Sanity'deki eski içeriklerden bazıları makale başlığını tekrar H1 olarak içeriyor.
+// Sayfanın tek H1'i üst başlıkta kalmalı; içerik içindeki H1 bloklarını H2 olarak işleriz.
+const portableTextComponents: PortableTextComponents = {
+  block: {
+    h1: ({ children }) => <h2>{children}</h2>,
+  },
 };
 
 // 1. Sorgu Güncellendi: 'lang' ve 'slug' alıyor
@@ -202,7 +211,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
 
       <article className="max-w-2xl mx-auto px-6 prose prose-lg prose-zinc">
         {post.content ? (
-          <PortableText value={post.content} />
+          <PortableText value={post.content} components={portableTextComponents} />
         ) : (
           <p className="text-zinc-500 italic">{t.noContent}</p>
         )}

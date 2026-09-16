@@ -33,7 +33,8 @@ export default function ThankYouClient() {
   const t = dict[currentLang];
 
   useEffect(() => {
-    setIsVisible(true);
+    const frame = requestAnimationFrame(() => setIsVisible(true));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (

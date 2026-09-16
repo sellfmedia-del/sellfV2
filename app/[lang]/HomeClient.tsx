@@ -54,6 +54,11 @@ const trustMarks = [
 const ease = [0.22, 1, 0.36, 1] as const;
 const heroVideo = "https://player.vimeo.com/video/1225074289?h=0f91056daa&background=1&autoplay=1&loop=1&muted=1&autopause=0&playsinline=1&preload=auto&controls=0&title=0&byline=0&portrait=0";
 
+type WebkitDocument = Document & { webkitFullscreenElement?: Element | null };
+type WebkitFullscreenButton = HTMLButtonElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+};
+
 export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[] }) {
   const params = useParams();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
@@ -71,7 +76,7 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
   };
 
   const ensureVideoPlaying = () => {
-    const fullscreenElement = document.fullscreenElement || (document as any).webkitFullscreenElement;
+    const fullscreenElement = document.fullscreenElement || (document as WebkitDocument).webkitFullscreenElement;
     if (fullscreenElement === videoContainerRef.current) return;
     sendVimeoCommand("setMuted", true);
     sendVimeoCommand("play");
@@ -108,7 +113,7 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
     if (videoContainerRef.current) resizeObserver.observe(videoContainerRef.current);
 
     const handleFullscreenChange = () => {
-      const fullscreenElement = document.fullscreenElement || (document as any).webkitFullscreenElement;
+      const fullscreenElement = document.fullscreenElement || (document as WebkitDocument).webkitFullscreenElement;
       const fullscreen = fullscreenElement === videoContainerRef.current;
       setIsFullscreen(fullscreen);
 
@@ -141,7 +146,10 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
     sendVimeoCommand("play");
 
     if (container.requestFullscreen) container.requestFullscreen();
-    else if ((container as any).webkitRequestFullscreen) (container as any).webkitRequestFullscreen();
+    else {
+      const webkitContainer = container as WebkitFullscreenButton;
+      if (webkitContainer.webkitRequestFullscreen) webkitContainer.webkitRequestFullscreen();
+    }
   };
 
   return (

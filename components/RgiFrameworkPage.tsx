@@ -361,7 +361,7 @@ export default function RgiFrameworkPage({ lang }: { lang: SupportedLang }) {
         <div className="sellf-container grid gap-8 py-14 md:py-20 lg:grid-cols-[.95fr_1.05fr] lg:items-center lg:gap-6 xl:py-24">
           <div className="max-w-[650px]">
             <Eyebrow>{t.heroEyebrow}</Eyebrow>
-            <h1 className="mt-4 text-[5.6rem] font-semibold leading-[.85] tracking-[-.075em] sm:text-[7rem]">{t.name}</h1>
+            <h2 className="mt-4 text-[5.6rem] font-semibold leading-[.85] tracking-[-.075em] sm:text-[7rem]">{t.name}</h2>
             <p className="mt-3 text-xl font-medium tracking-[-.03em]">{t.expansion}</p>
             <h2 className="mt-8 max-w-[17ch] text-3xl font-semibold leading-[1.05] tracking-[-.05em] sm:text-[2.8rem]">{t.heroTitleA}<br/><span className="text-[#7893aa]">{t.heroTitleB}</span></h2>
             <p className="mt-6 max-w-[620px] text-[13px] leading-7 text-black/58 md:text-sm">{t.heroDesc}</p>

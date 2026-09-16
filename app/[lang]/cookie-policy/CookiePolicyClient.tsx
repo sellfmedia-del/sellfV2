@@ -15,7 +15,7 @@ export default function CookiePolicyClient() {
           <div>
             <h2 className="text-2xl md:text-3xl font-semibold tracking-[-.035em] text-black mb-4">1. Introduction and Scope</h2>
             <p>
-              This Cookie Policy has been prepared to inform the visitors of www.sellfmedia.com (the "Website") about the types of cookies used on our website, their purposes of use, and how to manage these cookies. As Sellf Media, we highly value the privacy and protection of our users' personal data.
+              This Cookie Policy has been prepared to inform the visitors of www.sellfmedia.com (the &quot;Website&quot;) about the types of cookies used on our website, their purposes of use, and how to manage these cookies. As Sellf Media, we highly value the privacy and protection of our users&apos; personal data.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export default function CookiePolicyClient() {
             <p className="mb-4">Sellf Media uses cookies for the following primary purposes:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>To ensure the website functions properly and securely.</li>
-              <li>To analyze visitors' site usage habits and improve the user experience.</li>
+              <li>To analyze visitors&apos; site usage habits and improve the user experience.</li>
               <li>To measure the effectiveness of our marketing activities and provide personalized content.</li>
             </ul>
           </div>
