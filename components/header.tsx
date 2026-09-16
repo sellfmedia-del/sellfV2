@@ -10,6 +10,7 @@ const dict = {
     about: "Hakkımızda",
     services: "Neler Yapıyoruz",
     portfolio: "Portfolyo",
+    engage: "Engage",
     blog: "Blog",
     contact: "İletişim",
     menu: "Menü",
@@ -19,6 +20,7 @@ const dict = {
     about: "About Us",
     services: "What We Do",
     portfolio: "Portfolio",
+    engage: "Engage",
     blog: "Blog",
     contact: "Contact Us",
     menu: "Menu",
@@ -69,6 +71,7 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-7 text-[11px] font-medium">
             <Link href={`${langPrefix}/services`} className="hover:opacity-60 transition-opacity">{t.services}</Link>
             <Link href={`${langPrefix}/portfolio`} className="hover:opacity-60 transition-opacity">{t.portfolio}</Link>
+            <Link href={`${langPrefix}/engage`} className="hover:opacity-60 transition-opacity">{t.engage}</Link>
             <Link href={`${langPrefix}/about`} className="hover:opacity-60 transition-opacity">{t.about}</Link>
             <Link href={`${langPrefix}/blog`} className="hover:opacity-60 transition-opacity">{t.blog}</Link>
           </nav>
@@ -109,6 +112,7 @@ export default function Header() {
             {[
               [t.services, `${langPrefix}/services`],
               [t.portfolio, `${langPrefix}/portfolio`],
+              [t.engage, `${langPrefix}/engage`],
               [t.about, `${langPrefix}/about`],
               [t.blog, `${langPrefix}/blog`],
               [t.contact, `${langPrefix}/contact`],

@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/engage-studio/node_modules
+/engage-studio/.sanity
 /.pnp
 .pnp.*
 .yarn/*
@@ -16,6 +18,7 @@
 # next.js
 /.next/
 /out/
+/dist-engage-studio/
 
 # production
 /build

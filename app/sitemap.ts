@@ -19,6 +19,7 @@ const staticPaths = [
   "/about",
   "/services",
   "/portfolio",
+  "/engage",
   "/blog",
   "/contact",
   "/privacy-policy",
@@ -31,6 +32,12 @@ const staticPaths = [
 ];
 
 type BlogSlugEntry = { slug: string; updatedAt: string };
+type EngageSlugEntry = {
+  slug: string;
+  updatedAt: string;
+  type: "engageWebinar" | "engageEvent" | "engageContent" | "engageTool";
+  contentType?: "showcase" | "insight";
+};
 
 async function getBlogSlugs(): Promise<BlogSlugEntry[]> {
   try {
@@ -43,6 +50,33 @@ async function getBlogSlugs(): Promise<BlogSlugEntry[]> {
     console.error("sitemap.ts: blog slug fetch başarısız oldu", error);
     return [];
   }
+}
+
+async function getEngageSlugs(): Promise<EngageSlugEntry[]> {
+  try {
+    const query = `*[
+      _type in ["engageWebinar", "engageEvent", "engageContent", "engageTool"] &&
+      defined(slug.current) &&
+      (_type != "engageTool" || active == true)
+    ]{
+      "slug": slug.current,
+      "updatedAt": coalesce(_updatedAt, _createdAt),
+      "type": _type,
+      contentType
+    }`;
+    const entries = await client.fetch(query, {}, { cache: "no-store" });
+    return (entries || []).filter((entry: EngageSlugEntry) => Boolean(entry.slug));
+  } catch (error) {
+    console.error("sitemap.ts: Engage slug fetch başarısız oldu", error);
+    return [];
+  }
+}
+
+function engagePath(entry: EngageSlugEntry) {
+  if (entry.type === "engageWebinar") return `/engage/webinars/${entry.slug}`;
+  if (entry.type === "engageEvent") return `/engage/events/${entry.slug}`;
+  if (entry.type === "engageTool") return `/engage/tools/${entry.slug}`;
+  return `/engage/${entry.contentType === "showcase" ? "showcases" : "insights"}/${entry.slug}`;
 }
 
 function languageAlternates(path: string) {
@@ -106,6 +140,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         alternates: languageAlternates(path),
         changeFrequency: "monthly",
         priority: 0.6,
+      });
+    }
+  }
+
+  const engageSlugs = await getEngageSlugs();
+  for (const locale of locales) {
+    for (const entry of engageSlugs) {
+      const path = engagePath(entry);
+      entries.push({
+        url: `${baseUrl}/${locale}${path}`,
+        lastModified: new Date(entry.updatedAt),
+        alternates: languageAlternates(path),
+        changeFrequency: "monthly",
+        priority: 0.65,
       });
     }
   }

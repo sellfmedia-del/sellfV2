@@ -1,0 +1,76 @@
+import {defineArrayMember, defineField, defineType} from 'sanity'
+
+export default defineType({
+  name: 'engageContent',
+  title: 'Showcase & Insight',
+  type: 'document',
+  groups: [
+    {name: 'content', title: 'İçerik', default: true},
+    {name: 'format', title: 'Format & Medya'},
+    {name: 'seo', title: 'SEO'},
+  ],
+  fields: [
+    defineField({
+      name: 'contentType',
+      title: 'İçerik Türü',
+      type: 'string',
+      group: 'content',
+      options: {list: [{title: 'Showcase', value: 'showcase'}, {title: 'Insight', value: 'insight'}], layout: 'radio'},
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({name: 'title_tr', title: 'Başlık (TR)', type: 'string', group: 'content', validation: (Rule) => Rule.required()}),
+    defineField({name: 'title_en', title: 'Title (EN)', type: 'string', group: 'content', validation: (Rule) => Rule.required()}),
+    defineField({name: 'slug', title: 'URL Uzantısı', type: 'slug', group: 'content', options: {source: 'title_en', maxLength: 96}, validation: (Rule) => Rule.required()}),
+    defineField({name: 'summary_tr', title: 'Özet (TR)', type: 'text', rows: 4, group: 'content', validation: (Rule) => Rule.required()}),
+    defineField({name: 'summary_en', title: 'Summary (EN)', type: 'text', rows: 4, group: 'content', validation: (Rule) => Rule.required()}),
+    defineField({name: 'publishedAt', title: 'Yayın Tarihi', type: 'datetime', group: 'content', validation: (Rule) => Rule.required()}),
+    defineField({name: 'featured', title: 'Öne Çıkar', type: 'boolean', group: 'content', initialValue: false}),
+    defineField({name: 'clientName', title: 'Marka / Müşteri', type: 'string', group: 'content'}),
+    defineField({
+      name: 'metrics',
+      title: 'Sonuç Metrikleri',
+      type: 'array',
+      group: 'content',
+      of: [defineArrayMember({type: 'object', fields: [
+        defineField({name: 'value', title: 'Değer', type: 'string', validation: (Rule) => Rule.required()}),
+        defineField({name: 'label_tr', title: 'Açıklama (TR)', type: 'string', validation: (Rule) => Rule.required()}),
+        defineField({name: 'label_en', title: 'Label (EN)', type: 'string', validation: (Rule) => Rule.required()}),
+      ], preview: {select: {title: 'value', subtitle: 'label_tr'}}})],
+    }),
+    defineField({
+      name: 'format',
+      title: 'Görünüm Preseti',
+      type: 'string',
+      group: 'format',
+      options: {list: [
+        {title: 'Blog / Makale', value: 'article'},
+        {title: 'Video', value: 'video'},
+        {title: 'Motion / 2D Video', value: 'motion'},
+        {title: 'Carousel', value: 'carousel'},
+        {title: 'Sunum', value: 'presentation'},
+      ]},
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({name: 'coverImage', title: 'Kapak Görseli', type: 'image', group: 'format', options: {hotspot: true}, validation: (Rule) => Rule.required()}),
+    defineField({name: 'body_tr', title: 'İçerik (TR)', type: 'array', of: [{type: 'block'}, {type: 'image', options: {hotspot: true}}], group: 'format'}),
+    defineField({name: 'body_en', title: 'Content (EN)', type: 'array', of: [{type: 'block'}, {type: 'image', options: {hotspot: true}}], group: 'format'}),
+    defineField({name: 'videoUrl', title: 'YouTube / Video Bağlantısı', type: 'url', group: 'format'}),
+    defineField({name: 'presentationUrl', title: 'Sunum / PDF Bağlantısı', type: 'url', group: 'format'}),
+    defineField({
+      name: 'carousel',
+      title: 'Carousel Görselleri',
+      type: 'array',
+      group: 'format',
+      of: [{type: 'image', options: {hotspot: true}, fields: [
+        {name: 'caption_tr', title: 'Açıklama (TR)', type: 'string'},
+        {name: 'caption_en', title: 'Caption (EN)', type: 'string'},
+      ]}],
+    }),
+    defineField({name: 'seo', title: 'SEO', type: 'engageSeo', group: 'seo'}),
+  ],
+  orderings: [{title: 'Yayın: Yeni → Eski', name: 'publishedDesc', by: [{field: 'publishedAt', direction: 'desc'}]}],
+  preview: {
+    select: {title: 'title_tr', type: 'contentType', format: 'format', media: 'coverImage'},
+    prepare({title, type, format, media}) { return {title, subtitle: `${type || 'İçerik'} · ${format || 'format yok'}`, media} },
+  },
+})
