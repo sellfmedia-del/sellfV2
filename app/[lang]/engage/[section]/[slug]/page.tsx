@@ -71,8 +71,8 @@ export default async function EngageDetailPage({params}: DetailProps) {
   const item = await getEngageDetail(section, slug, lang)
   if (!item || !(section in t)) notFound()
 
-  const embed = safeVideoEmbed(item.recordingUrl || item.videoUrl)
-  const externalUrl = item.deliveryType === 'external' ? item.externalUrl : item.presentationUrl
+  const embed = safeVideoEmbed(item.recordingUrl || item.videoUrl || item.podcastUrl)
+  const externalUrl = item.deliveryType === 'external' ? item.externalUrl : item.presentationUrl || (!embed ? item.podcastUrl : undefined)
 
   return (
     <article className={styles.page}>
