@@ -25,10 +25,38 @@ export type EngageCard = {
 
 export type EngageSettings = {
   heroEyebrow?: string
+  heroTitle?: string
+  heroSummary?: string
+  heroExploreCta?: string
+  heroUpcomingCta?: string
+  heroReserveCta?: string
+  heroFeaturedLabel?: string
+  heroQuestion?: string
+  stats?: Array<{value?: string; label?: string}>
+  formatsEyebrow?: string
+  formatsTitle?: string
+  formatsNote?: string
+  formats?: Array<{title?: string; description?: string; tag?: string}>
+  webinarsEyebrow?: string
   webinarsTitle?: string
+  allWebinarsCta?: string
+  registerCta?: string
+  eventsEyebrow?: string
   eventsTitle?: string
+  allEventsCta?: string
+  toolsEyebrow?: string
   contentTitle?: string
+  contentEyebrow?: string
+  allContentCta?: string
   toolsTitle?: string
+  toolsNote?: string
+  allToolsCta?: string
+  closingEyebrow?: string
+  closingTitle?: string
+  closingSummary?: string
+  closingAttendCta?: string
+  closingWorkCta?: string
+  seo?: {title?: string; description?: string; image?: string; noIndex?: boolean}
   featuredItem?: EngageCard
 }
 
@@ -79,10 +107,47 @@ const localizedProjection = `
 const pageQuery = `{
   "settings": *[_type == "engageSettings" && _id == "engageSettings"][0] {
     "heroEyebrow": select($lang == "en" => coalesce(heroEyebrow_en, heroEyebrow_tr), heroEyebrow_tr),
+    "heroTitle": select($lang == "en" => coalesce(heroTitle_en, heroTitle_tr), heroTitle_tr),
+    "heroSummary": select($lang == "en" => coalesce(heroSummary_en, heroSummary_tr), heroSummary_tr),
+    "heroExploreCta": select($lang == "en" => coalesce(heroExploreCta_en, heroExploreCta_tr), heroExploreCta_tr),
+    "heroUpcomingCta": select($lang == "en" => coalesce(heroUpcomingCta_en, heroUpcomingCta_tr), heroUpcomingCta_tr),
+    "heroReserveCta": select($lang == "en" => coalesce(heroReserveCta_en, heroReserveCta_tr), heroReserveCta_tr),
+    "heroFeaturedLabel": select($lang == "en" => coalesce(heroFeaturedLabel_en, heroFeaturedLabel_tr), heroFeaturedLabel_tr),
+    "heroQuestion": select($lang == "en" => coalesce(heroQuestion_en, heroQuestion_tr), heroQuestion_tr),
+    "stats": stats[]{value, "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr)},
+    "formatsEyebrow": select($lang == "en" => coalesce(formatsEyebrow_en, formatsEyebrow_tr), formatsEyebrow_tr),
+    "formatsTitle": select($lang == "en" => coalesce(formatsTitle_en, formatsTitle_tr), formatsTitle_tr),
+    "formatsNote": select($lang == "en" => coalesce(formatsNote_en, formatsNote_tr), formatsNote_tr),
+    "formats": [formatWatch, formatAttend, formatTools, formatRead]{
+      "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+      "description": select($lang == "en" => coalesce(description_en, description_tr), description_tr),
+      "tag": select($lang == "en" => coalesce(tag_en, tag_tr), tag_tr)
+    },
+    "webinarsEyebrow": select($lang == "en" => coalesce(webinarsEyebrow_en, webinarsEyebrow_tr), webinarsEyebrow_tr),
     "webinarsTitle": select($lang == "en" => coalesce(webinarsTitle_en, webinarsTitle_tr), webinarsTitle_tr),
+    "allWebinarsCta": select($lang == "en" => coalesce(allWebinarsCta_en, allWebinarsCta_tr), allWebinarsCta_tr),
+    "registerCta": select($lang == "en" => coalesce(registerCta_en, registerCta_tr), registerCta_tr),
+    "eventsEyebrow": select($lang == "en" => coalesce(eventsEyebrow_en, eventsEyebrow_tr), eventsEyebrow_tr),
     "eventsTitle": select($lang == "en" => coalesce(eventsTitle_en, eventsTitle_tr), eventsTitle_tr),
+    "allEventsCta": select($lang == "en" => coalesce(allEventsCta_en, allEventsCta_tr), allEventsCta_tr),
+    "toolsEyebrow": select($lang == "en" => coalesce(toolsEyebrow_en, toolsEyebrow_tr), toolsEyebrow_tr),
     "contentTitle": select($lang == "en" => coalesce(contentTitle_en, contentTitle_tr), contentTitle_tr),
+    "contentEyebrow": select($lang == "en" => coalesce(contentEyebrow_en, contentEyebrow_tr), contentEyebrow_tr),
+    "allContentCta": select($lang == "en" => coalesce(allContentCta_en, allContentCta_tr), allContentCta_tr),
     "toolsTitle": select($lang == "en" => coalesce(toolsTitle_en, toolsTitle_tr), toolsTitle_tr),
+    "toolsNote": select($lang == "en" => coalesce(toolsNote_en, toolsNote_tr), toolsNote_tr),
+    "allToolsCta": select($lang == "en" => coalesce(allToolsCta_en, allToolsCta_tr), allToolsCta_tr),
+    "closingEyebrow": select($lang == "en" => coalesce(closingEyebrow_en, closingEyebrow_tr), closingEyebrow_tr),
+    "closingTitle": select($lang == "en" => coalesce(closingTitle_en, closingTitle_tr), closingTitle_tr),
+    "closingSummary": select($lang == "en" => coalesce(closingSummary_en, closingSummary_tr), closingSummary_tr),
+    "closingAttendCta": select($lang == "en" => coalesce(closingAttendCta_en, closingAttendCta_tr), closingAttendCta_tr),
+    "closingWorkCta": select($lang == "en" => coalesce(closingWorkCta_en, closingWorkCta_tr), closingWorkCta_tr),
+    "seo": {
+      "title": select($lang == "en" => coalesce(seo.title_en, seo.title_tr), seo.title_tr),
+      "description": select($lang == "en" => coalesce(seo.description_en, seo.description_tr), seo.description_tr),
+      "image": seo.image.asset->url,
+      "noIndex": seo.noIndex
+    },
     "featuredItem": featuredItem->{${localizedProjection}}
   },
   "upcomingWebinars": *[_type == "engageWebinar" && defined(slug.current) && startAt >= now()] | order(startAt asc) [0...8] {${localizedProjection}},

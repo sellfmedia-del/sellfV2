@@ -59,9 +59,14 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const {lang: rawLang} = await params
   const lang: EngageLocale = rawLang === 'en' ? 'en' : 'tr'
   const isEn = lang === 'en'
+  const {settings} = await getEngagePageData(lang)
+  const fallbackTitle = isEn ? 'Sellf Engage | Webinars, Insights & Growth Tools' : 'Sellf Engage | Webinar, Insight ve Büyüme Toolları'
+  const fallbackDescription = isEn ? 'Explore Sellf webinars, events, showcases, insights and practical growth tools.' : 'Sellf webinarlarını, eventlerini, showcase ve insight içeriklerini ve büyüme tool’larını keşfedin.'
   return {
-    title: isEn ? 'Sellf Engage | Webinars, Insights & Growth Tools' : 'Sellf Engage | Webinar, Insight ve Büyüme Toolları',
-    description: isEn ? 'Explore Sellf webinars, events, showcases, insights and practical growth tools.' : 'Sellf webinarlarını, eventlerini, showcase ve insight içeriklerini ve büyüme tool’larını keşfedin.',
+    title: settings?.seo?.title || fallbackTitle,
+    description: settings?.seo?.description || fallbackDescription,
+    robots: settings?.seo?.noIndex ? {index: false, follow: false} : undefined,
+    openGraph: settings?.seo?.image ? {images: [{url: settings.seo.image}]} : undefined,
     alternates: {canonical: `https://www.sellfmedia.com/${lang}/engage`, languages: {tr: 'https://www.sellfmedia.com/tr/engage', en: 'https://www.sellfmedia.com/en/engage', 'x-default': 'https://www.sellfmedia.com/tr/engage'}},
   }
 }
@@ -109,8 +114,51 @@ function ToolVisual({index}: {index: number}) {
 export default async function EngagePage({params}: PageProps) {
   const {lang: rawLang} = await params
   const lang: EngageLocale = rawLang === 'en' ? 'en' : 'tr'
-  const t = copy[lang]
   const data = await getEngagePageData(lang)
+  const fallback = copy[lang]
+  const settings = data.settings
+  const cmsFormats = settings?.formats || []
+  const t = {
+    ...fallback,
+    strap: settings?.heroEyebrow || fallback.strap,
+    heroTitle: settings?.heroTitle || fallback.heroTitle,
+    heroSummary: settings?.heroSummary || fallback.heroSummary,
+    explore: settings?.heroExploreCta || fallback.explore,
+    upcomingCta: settings?.heroUpcomingCta || fallback.upcomingCta,
+    reserve: settings?.heroReserveCta || fallback.reserve,
+    heroLabel: settings?.heroFeaturedLabel || fallback.heroLabel,
+    heroQuestion: settings?.heroQuestion || fallback.heroQuestion,
+    stats: settings?.stats?.length
+      ? settings.stats.map((stat, index) => [stat.value || fallback.stats[index]?.[0] || '', stat.label || fallback.stats[index]?.[1] || ''] as const)
+      : fallback.stats,
+    chooseEyebrow: settings?.formatsEyebrow || fallback.chooseEyebrow,
+    chooseTitle: settings?.formatsTitle || fallback.chooseTitle,
+    chooseNote: settings?.formatsNote || fallback.chooseNote,
+    formats: fallback.formats.map((format, index) => [
+      cmsFormats[index]?.title || format[0],
+      cmsFormats[index]?.description || format[1],
+      cmsFormats[index]?.tag || format[2],
+    ] as const),
+    webinarEyebrow: settings?.webinarsEyebrow || fallback.webinarEyebrow,
+    webinarTitle: settings?.webinarsTitle || fallback.webinarTitle,
+    allWebinars: settings?.allWebinarsCta || fallback.allWebinars,
+    register: settings?.registerCta || fallback.register,
+    eventEyebrow: settings?.eventsEyebrow || fallback.eventEyebrow,
+    eventTitle: settings?.eventsTitle || fallback.eventTitle,
+    allEvents: settings?.allEventsCta || fallback.allEvents,
+    toolsEyebrow: settings?.toolsEyebrow || fallback.toolsEyebrow,
+    toolsTitle: settings?.toolsTitle || fallback.toolsTitle,
+    toolsNote: settings?.toolsNote || fallback.toolsNote,
+    allTools: settings?.allToolsCta || fallback.allTools,
+    latestEyebrow: settings?.contentEyebrow || fallback.latestEyebrow,
+    latestTitle: settings?.contentTitle || fallback.latestTitle,
+    allContent: settings?.allContentCta || fallback.allContent,
+    closeEyebrow: settings?.closingEyebrow || fallback.closeEyebrow,
+    closeTitle: settings?.closingTitle || fallback.closeTitle,
+    closeSummary: settings?.closingSummary || fallback.closeSummary,
+    attend: settings?.closingAttendCta || fallback.attend,
+    work: settings?.closingWorkCta || fallback.work,
+  }
 
   const webinarSeeds: DisplayItem[] = [
     {id: 'w1', title: lang === 'tr' ? 'ROAS’ın Ötesi: Gerçek Katkıyı Ölçmek' : 'Beyond ROAS: Measuring Actual Contribution', image: images.event, href: '#webinars', label: lang === 'tr' ? 'Öne Çıkan' : 'Featured event', meta: '24 September · 15:00 GMT+3', author: 'Sellf Growth Team'},
