@@ -11,6 +11,7 @@ export type EngageCard = {
   coverImage?: string
   date?: string
   endAt?: string
+  timezone?: string
   location?: string
   contentType?: 'showcase' | 'insight'
   format?: 'article' | 'video' | 'motion' | 'podcast' | 'carousel' | 'presentation'
@@ -92,6 +93,7 @@ const localizedProjection = `
   "coverImage": coverImage.asset->url,
   "date": coalesce(startAt, publishedAt, _createdAt),
   endAt,
+  timezone,
   "location": select($lang == "en" => coalesce(location_en, location_tr), location_tr),
   "contentType": select(_type == "engageShowcase" => "showcase", _type == "engageInsight" => "insight"),
   format,

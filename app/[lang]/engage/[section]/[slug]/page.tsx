@@ -4,6 +4,7 @@ import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import {PortableText} from '@portabletext/react'
 import {getEngageDetail, type EngageLocale} from '@/sanity/lib/engage'
+import RegistrationPanel from './RegistrationPanel'
 import styles from './detail.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -73,6 +74,7 @@ export default async function EngageDetailPage({params}: DetailProps) {
 
   const embed = safeVideoEmbed(item.recordingUrl || item.videoUrl || item.podcastUrl)
   const externalUrl = item.presentationUrl || (!embed ? item.podcastUrl : undefined) || item.externalUrl
+  const registrationSection = section === 'webinars' || section === 'events' ? section : null
 
   return (
     <article className={styles.page}>
@@ -106,6 +108,15 @@ export default async function EngageDetailPage({params}: DetailProps) {
               </div>
             ))}
           </section>
+        )}
+
+        {registrationSection && (
+          <RegistrationPanel
+            lang={lang}
+            section={registrationSection}
+            slug={slug}
+            registrationOpen={item.registrationOpen === true}
+          />
         )}
 
         {embed && <div className={styles.video}><iframe src={embed} title={item.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /></div>}
