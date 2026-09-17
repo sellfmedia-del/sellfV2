@@ -3,11 +3,17 @@ import {fileURLToPath} from 'node:url'
 import path from 'node:path'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const command = process.platform === 'win32' ? 'sanity.cmd' : 'sanity'
+const studioRoot = path.join(root, 'engage-studio')
+const command = path.join(
+  studioRoot,
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'sanity.cmd' : 'sanity',
+)
 const args = process.argv.slice(2)
 
 const result = spawnSync(command, args, {
-  cwd: path.join(root, 'engage-studio'),
+  cwd: studioRoot,
   env: process.env,
   stdio: 'inherit',
 })
