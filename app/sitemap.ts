@@ -35,8 +35,7 @@ type BlogSlugEntry = { slug: string; updatedAt: string };
 type EngageSlugEntry = {
   slug: string;
   updatedAt: string;
-  type: "engageWebinar" | "engageEvent" | "engageContent" | "engageTool";
-  contentType?: "showcase" | "insight";
+  type: "engageWebinar" | "engageEvent" | "engageShowcase" | "engageInsight";
 };
 
 async function getBlogSlugs(): Promise<BlogSlugEntry[]> {
@@ -55,14 +54,12 @@ async function getBlogSlugs(): Promise<BlogSlugEntry[]> {
 async function getEngageSlugs(): Promise<EngageSlugEntry[]> {
   try {
     const query = `*[
-      _type in ["engageWebinar", "engageEvent", "engageContent", "engageTool"] &&
-      defined(slug.current) &&
-      (_type != "engageTool" || active == true)
+      _type in ["engageWebinar", "engageEvent", "engageShowcase", "engageInsight"] &&
+      defined(slug.current)
     ]{
       "slug": slug.current,
       "updatedAt": coalesce(_updatedAt, _createdAt),
-      "type": _type,
-      contentType
+      "type": _type
     }`;
     const entries = await client.fetch(query, {}, { cache: "no-store" });
     return (entries || []).filter((entry: EngageSlugEntry) => Boolean(entry.slug));
@@ -75,8 +72,8 @@ async function getEngageSlugs(): Promise<EngageSlugEntry[]> {
 function engagePath(entry: EngageSlugEntry) {
   if (entry.type === "engageWebinar") return `/engage/webinars/${entry.slug}`;
   if (entry.type === "engageEvent") return `/engage/events/${entry.slug}`;
-  if (entry.type === "engageTool") return `/engage/tools/${entry.slug}`;
-  return `/engage/${entry.contentType === "showcase" ? "showcases" : "insights"}/${entry.slug}`;
+  if (entry.type === "engageShowcase") return `/engage/showcases/${entry.slug}`;
+  return `/engage/insights/${entry.slug}`;
 }
 
 function languageAlternates(path: string) {
