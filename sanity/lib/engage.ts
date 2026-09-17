@@ -4,7 +4,7 @@ export type EngageLocale = 'tr' | 'en'
 
 export type EngageCard = {
   _id: string
-  _type: 'engageWebinar' | 'engageEvent' | 'engageContent' | 'engageTool'
+  _type: 'engageWebinar' | 'engageEvent' | 'engageShowcase' | 'engageInsight'
   title: string
   summary?: string
   slug: string
@@ -17,9 +17,10 @@ export type EngageCard = {
   layoutPreset?: 'editorial' | 'mediaFirst' | 'metricFirst'
   cardStyle?: 'standard' | 'wide' | 'featured'
   eventType?: 'hosted' | 'sponsored' | 'attended' | 'speaker'
-  deliveryType?: 'native' | 'embed' | 'external'
   externalUrl?: string
   featured?: boolean
+  registrationOpen?: boolean
+  capacity?: number
 }
 
 export type EngageSettings = {
@@ -47,8 +48,7 @@ export type EngageDetail = EngageCard & {
   videoUrl?: string
   podcastUrl?: string
   presentationUrl?: string
-  embedUrl?: string
-  toolKey?: string
+  meetUrl?: string
   carousel?: Array<{url: string; caption?: string}>
   metrics?: Array<{value: string; label: string}>
   speakers?: Array<{_id: string; name: string; role?: string; image?: string}>
@@ -65,14 +65,15 @@ const localizedProjection = `
   "date": coalesce(startAt, publishedAt, _createdAt),
   endAt,
   "location": select($lang == "en" => coalesce(location_en, location_tr), location_tr),
-  contentType,
+  "contentType": select(_type == "engageShowcase" => "showcase", _type == "engageInsight" => "insight"),
   format,
   layoutPreset,
   cardStyle,
   eventType,
-  deliveryType,
   externalUrl,
-  featured
+  featured,
+  registrationOpen,
+  capacity
 `
 
 const pageQuery = `{
@@ -87,8 +88,8 @@ const pageQuery = `{
   "upcomingWebinars": *[_type == "engageWebinar" && defined(slug.current) && startAt >= now()] | order(startAt asc) [0...8] {${localizedProjection}},
   "pastWebinars": *[_type == "engageWebinar" && defined(slug.current) && startAt < now()] | order(startAt desc) [0...8] {${localizedProjection}},
   "events": *[_type == "engageEvent" && defined(slug.current)] | order(startAt desc) [0...12] {${localizedProjection}},
-  "content": *[_type == "engageContent" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [0...16] {${localizedProjection}},
-  "tools": *[_type == "engageTool" && active == true && defined(slug.current)] | order(order asc, _createdAt desc) [0...12] {${localizedProjection}}
+  "content": *[_type in ["engageShowcase", "engageInsight"] && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [0...16] {${localizedProjection}},
+  "tools": []
 }`
 
 function firstFeatured(data: Omit<EngagePageData, 'featured'>): EngageCard | null {
@@ -129,16 +130,15 @@ export async function getEngagePageData(lang: EngageLocale): Promise<EngagePageD
 export function engageHref(lang: EngageLocale, item: EngageCard): string {
   if (item._type === 'engageWebinar') return `/${lang}/engage/webinars/${item.slug}`
   if (item._type === 'engageEvent') return `/${lang}/engage/events/${item.slug}`
-  if (item._type === 'engageTool') return `/${lang}/engage/tools/${item.slug}`
-  return `/${lang}/engage/${item.contentType === 'showcase' ? 'showcases' : 'insights'}/${item.slug}`
+  if (item._type === 'engageShowcase') return `/${lang}/engage/showcases/${item.slug}`
+  return `/${lang}/engage/insights/${item.slug}`
 }
 
 const sectionTypeMap = {
   webinars: 'engageWebinar',
   events: 'engageEvent',
-  showcases: 'engageContent',
-  insights: 'engageContent',
-  tools: 'engageTool',
+  showcases: 'engageShowcase',
+  insights: 'engageInsight',
 } as const
 
 export type EngageSection = keyof typeof sectionTypeMap
@@ -151,12 +151,9 @@ export async function getEngageDetail(
   if (!(section in sectionTypeMap)) return null
   const validSection = section as EngageSection
   const type = sectionTypeMap[validSection]
-  const expectedContentType = validSection === 'showcases' ? 'showcase' : validSection === 'insights' ? 'insight' : null
-
   const query = `*[
     _type == $type &&
-    slug.current == $slug &&
-    ($expectedContentType == null || contentType == $expectedContentType)
+    slug.current == $slug
   ][0] {
     ${localizedProjection},
     "body": select($lang == "en" => coalesce(body_en, body_tr), body_tr),
@@ -164,8 +161,7 @@ export async function getEngageDetail(
     videoUrl,
     podcastUrl,
     presentationUrl,
-    embedUrl,
-    toolKey,
+    meetUrl,
     "carousel": carousel[]{"url": asset->url, "caption": select($lang == "en" => coalesce(caption_en, caption_tr), caption_tr)},
     "metrics": metrics[]{value, "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr)},
     "speakers": speakers[]->{_id, name, "role": select($lang == "en" => coalesce(role_en, role_tr), role_tr), "image": image.asset->url},
@@ -180,7 +176,7 @@ export async function getEngageDetail(
   try {
     return await client.fetch<EngageDetail | null>(
       query,
-      {type, slug, lang, expectedContentType},
+      {type, slug, lang},
       {cache: 'no-store'},
     )
   } catch (error) {
