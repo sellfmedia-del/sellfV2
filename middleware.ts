@@ -42,6 +42,12 @@ const legacyRedirectMap: Record<string, string> = {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Sanity Studio is an internal, locale-independent application.
+  // Keep its base path and nested tool routes out of the public-site redirects.
+  if (pathname === '/engage-studio' || pathname.startsWith('/engage-studio/')) {
+    return NextResponse.next()
+  }
+
   if (legacyRedirectMap[pathname]) {
     request.nextUrl.pathname = legacyRedirectMap[pathname]
     return NextResponse.redirect(request.nextUrl, 308)
