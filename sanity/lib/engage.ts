@@ -13,7 +13,9 @@ export type EngageCard = {
   endAt?: string
   location?: string
   contentType?: 'showcase' | 'insight'
-  format?: 'article' | 'video' | 'motion' | 'carousel' | 'presentation'
+  format?: 'article' | 'video' | 'motion' | 'podcast' | 'carousel' | 'presentation'
+  layoutPreset?: 'editorial' | 'mediaFirst' | 'metricFirst'
+  cardStyle?: 'standard' | 'wide' | 'featured'
   eventType?: 'hosted' | 'sponsored' | 'attended' | 'speaker'
   deliveryType?: 'native' | 'embed' | 'external'
   externalUrl?: string
@@ -43,6 +45,7 @@ export type EngageDetail = EngageCard & {
   body?: unknown[]
   recordingUrl?: string
   videoUrl?: string
+  podcastUrl?: string
   presentationUrl?: string
   embedUrl?: string
   toolKey?: string
@@ -55,15 +58,17 @@ export type EngageDetail = EngageCard & {
 const localizedProjection = `
   _id,
   _type,
-  "title": select($lang == "en" => title_en, title_tr),
-  "summary": select($lang == "en" => summary_en, summary_tr),
+  "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+  "summary": select($lang == "en" => coalesce(summary_en, summary_tr), summary_tr),
   "slug": slug.current,
   "coverImage": coverImage.asset->url,
   "date": coalesce(startAt, publishedAt, _createdAt),
   endAt,
-  "location": select($lang == "en" => location_en, location_tr),
+  "location": select($lang == "en" => coalesce(location_en, location_tr), location_tr),
   contentType,
   format,
+  layoutPreset,
+  cardStyle,
   eventType,
   deliveryType,
   externalUrl,
@@ -72,11 +77,11 @@ const localizedProjection = `
 
 const pageQuery = `{
   "settings": *[_type == "engageSettings" && _id == "engageSettings"][0] {
-    "heroEyebrow": select($lang == "en" => heroEyebrow_en, heroEyebrow_tr),
-    "webinarsTitle": select($lang == "en" => webinarsTitle_en, webinarsTitle_tr),
-    "eventsTitle": select($lang == "en" => eventsTitle_en, eventsTitle_tr),
-    "contentTitle": select($lang == "en" => contentTitle_en, contentTitle_tr),
-    "toolsTitle": select($lang == "en" => toolsTitle_en, toolsTitle_tr),
+    "heroEyebrow": select($lang == "en" => coalesce(heroEyebrow_en, heroEyebrow_tr), heroEyebrow_tr),
+    "webinarsTitle": select($lang == "en" => coalesce(webinarsTitle_en, webinarsTitle_tr), webinarsTitle_tr),
+    "eventsTitle": select($lang == "en" => coalesce(eventsTitle_en, eventsTitle_tr), eventsTitle_tr),
+    "contentTitle": select($lang == "en" => coalesce(contentTitle_en, contentTitle_tr), contentTitle_tr),
+    "toolsTitle": select($lang == "en" => coalesce(toolsTitle_en, toolsTitle_tr), toolsTitle_tr),
     "featuredItem": featuredItem->{${localizedProjection}}
   },
   "upcomingWebinars": *[_type == "engageWebinar" && defined(slug.current) && startAt >= now()] | order(startAt asc) [0...8] {${localizedProjection}},
@@ -154,18 +159,19 @@ export async function getEngageDetail(
     ($expectedContentType == null || contentType == $expectedContentType)
   ][0] {
     ${localizedProjection},
-    "body": select($lang == "en" => body_en, body_tr),
+    "body": select($lang == "en" => coalesce(body_en, body_tr), body_tr),
     recordingUrl,
     videoUrl,
+    podcastUrl,
     presentationUrl,
     embedUrl,
     toolKey,
-    "carousel": carousel[]{"url": asset->url, "caption": select($lang == "en" => caption_en, caption_tr)},
-    "metrics": metrics[]{value, "label": select($lang == "en" => label_en, label_tr)},
-    "speakers": speakers[]->{_id, name, "role": select($lang == "en" => role_en, role_tr), "image": image.asset->url},
+    "carousel": carousel[]{"url": asset->url, "caption": select($lang == "en" => coalesce(caption_en, caption_tr), caption_tr)},
+    "metrics": metrics[]{value, "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr)},
+    "speakers": speakers[]->{_id, name, "role": select($lang == "en" => coalesce(role_en, role_tr), role_tr), "image": image.asset->url},
     "seo": {
-      "title": select($lang == "en" => seo.title_en, seo.title_tr),
-      "description": select($lang == "en" => seo.description_en, seo.description_tr),
+      "title": select($lang == "en" => coalesce(seo.title_en, seo.title_tr), seo.title_tr),
+      "description": select($lang == "en" => coalesce(seo.description_en, seo.description_tr), seo.description_tr),
       "image": seo.image.asset->url,
       "noIndex": seo.noIndex
     }
