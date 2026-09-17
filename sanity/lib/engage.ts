@@ -87,7 +87,7 @@ const pageQuery = `{
   "upcomingWebinars": *[_type == "engageWebinar" && defined(slug.current) && startAt >= now()] | order(startAt asc) [0...8] {${localizedProjection}},
   "pastWebinars": *[_type == "engageWebinar" && defined(slug.current) && startAt < now()] | order(startAt desc) [0...8] {${localizedProjection}},
   "events": *[_type == "engageEvent" && defined(slug.current)] | order(startAt desc) [0...12] {${localizedProjection}},
-  "content": *[_type == "engageContent" && defined(slug.current)] | order(publishedAt desc) [0...16] {${localizedProjection}},
+  "content": *[_type == "engageContent" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [0...16] {${localizedProjection}},
   "tools": *[_type == "engageTool" && active == true && defined(slug.current)] | order(order asc, _createdAt desc) [0...12] {${localizedProjection}}
 }`
 
