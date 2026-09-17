@@ -11,10 +11,10 @@ export default defineType({
   ],
   fields: [
     defineField({name: 'title_tr', title: 'Başlık (TR)', type: 'string', group: 'content', validation: (Rule) => Rule.required()}),
-    defineField({name: 'title_en', title: 'Title (EN)', type: 'string', group: 'content', validation: (Rule) => Rule.required()}),
-    defineField({name: 'slug', title: 'URL Uzantısı', type: 'slug', group: 'content', options: {source: 'title_en', maxLength: 96}, validation: (Rule) => Rule.required()}),
+    defineField({name: 'title_en', title: 'Title (EN)', description: 'İngilizce hazır değilse boş bırakılabilir.', type: 'string', group: 'content'}),
+    defineField({name: 'slug', title: 'URL Uzantısı', type: 'slug', group: 'content', options: {source: 'title_tr', maxLength: 96}, validation: (Rule) => Rule.required()}),
     defineField({name: 'summary_tr', title: 'Özet (TR)', type: 'text', rows: 4, group: 'content', validation: (Rule) => Rule.required()}),
-    defineField({name: 'summary_en', title: 'Summary (EN)', type: 'text', rows: 4, group: 'content', validation: (Rule) => Rule.required()}),
+    defineField({name: 'summary_en', title: 'Summary (EN)', type: 'text', rows: 4, group: 'content'}),
     defineField({name: 'coverImage', title: 'Kapak Görseli', type: 'image', group: 'content', options: {hotspot: true}}),
     defineField({name: 'active', title: 'Yayında', type: 'boolean', group: 'content', initialValue: false}),
     defineField({name: 'order', title: 'Sıralama', type: 'number', group: 'content', initialValue: 100}),
