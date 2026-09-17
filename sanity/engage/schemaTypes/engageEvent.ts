@@ -36,9 +36,12 @@ export default defineType({
     }),
     defineField({name: 'startAt', title: 'Başlangıç', type: 'datetime', group: 'details', validation: (Rule) => Rule.required()}),
     defineField({name: 'endAt', title: 'Bitiş', type: 'datetime', group: 'details'}),
+    defineField({name: 'timezone', title: 'Saat Dilimi', type: 'string', group: 'details', initialValue: 'Europe/Istanbul'}),
     defineField({name: 'location_tr', title: 'Konum (TR)', type: 'string', group: 'details'}),
     defineField({name: 'location_en', title: 'Location (EN)', type: 'string', group: 'details'}),
     defineField({name: 'externalUrl', title: 'Etkinlik Bağlantısı', type: 'url', group: 'details'}),
+    defineField({name: 'registrationOpen', title: 'Kayıt Açık', type: 'boolean', group: 'details', initialValue: true}),
+    defineField({name: 'capacity', title: 'Kontenjan', description: 'Sınırsızsa boş bırakılabilir.', type: 'number', group: 'details', validation: (Rule) => Rule.integer().positive()}),
     defineField({name: 'featured', title: 'Öne Çıkar', type: 'boolean', group: 'content', initialValue: false}),
     defineField({name: 'coverImage', title: 'Kapak Görseli', type: 'image', group: 'media', options: {hotspot: true}, validation: (Rule) => Rule.required()}),
     defineField({
