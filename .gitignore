@@ -2,8 +2,8 @@
 
 # dependencies
 /node_modules
-/engage-studio/node_modules
-/engage-studio/.sanity
+/engage-studio/
+/.sanity/
 /.pnp
 .pnp.*
 .yarn/*
