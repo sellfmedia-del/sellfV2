@@ -37,4 +37,4 @@ jobs:
         working-directory: engage-studio
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-        run: npx sanity@latest deploy --yes --title "Sellf Engage" --url sellf-engage
+        run: npx sanity deploy --yes --title "Sellf Engage" --url sellf-engage
