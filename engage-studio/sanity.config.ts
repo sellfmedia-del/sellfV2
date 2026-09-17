@@ -10,6 +10,7 @@ import {engageStructure} from '../sanity/engage/structure'
 export default defineConfig({
   name: 'sellf-engage',
   title: 'Sellf Engage',
+  basePath: '/engage-studio',
   projectId,
   dataset,
   schema: engageSchema,
