@@ -2,6 +2,7 @@ import {spawnSync} from 'node:child_process'
 import {fileURLToPath} from 'node:url'
 import path from 'node:path'
 
+// One-time deployment hook for the isolated Engage preview branch.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const engageBranch = 'codex/engage-foundation'
 
