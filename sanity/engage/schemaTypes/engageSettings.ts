@@ -10,7 +10,7 @@ export default defineType({
       title: 'Hero İçeriği',
       description: 'Boş bırakılırsa en yakın tarihli öne çıkarılmış içerik kullanılır.',
       type: 'reference',
-      to: [{type: 'engageWebinar'}, {type: 'engageEvent'}, {type: 'engageContent'}],
+      to: [{type: 'engageWebinar'}, {type: 'engageEvent'}, {type: 'engageShowcase'}, {type: 'engageInsight'}],
     }),
     defineField({name: 'heroEyebrow_tr', title: 'Hero Üst Etiket (TR)', type: 'string', initialValue: 'Sellf Engage'}),
     defineField({name: 'heroEyebrow_en', title: 'Hero Eyebrow (EN)', type: 'string', initialValue: 'Sellf Engage'}),
