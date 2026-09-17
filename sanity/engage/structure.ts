@@ -12,7 +12,7 @@ export const engageStructure: StructureResolver = (S) =>
       S.divider(),
       S.documentTypeListItem('engageWebinar').title('Webinarlar'),
       S.documentTypeListItem('engageEvent').title('Event & Fuarlar'),
-      S.documentTypeListItem('engageContent').title('Showcase & Insight'),
-      S.documentTypeListItem('engageTool').title('Toollar'),
+      S.documentTypeListItem('engageShowcase').title('Showcase'),
+      S.documentTypeListItem('engageInsight').title('Insight'),
       S.documentTypeListItem('engagePerson').title('Konuşmacılar'),
     ])
