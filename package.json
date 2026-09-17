@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "node scripts/deploy-engage-studio-on-preview.mjs",
     "start": "next start",
     "lint": "eslint",
     "studio:engage": "node scripts/run-engage-studio.mjs dev",
