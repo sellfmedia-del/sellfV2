@@ -6,10 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "studio:engage": "node scripts/run-engage-studio.mjs dev",
-    "studio:engage:build": "node scripts/run-engage-studio.mjs build ../dist-engage-studio --yes",
-    "studio:engage:deploy": "node scripts/run-engage-studio.mjs deploy --schema-required"
+    "lint": "eslint"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
