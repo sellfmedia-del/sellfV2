@@ -11,8 +11,8 @@ export const dynamic = 'force-dynamic'
 type DetailProps = {params: Promise<{lang: string; section: string; slug: string}>}
 
 const sectionNames = {
-  tr: {webinars: 'Webinar', events: 'Event', showcases: 'Showcase', insights: 'Insight', tools: 'Tool', back: 'Sellf Engage’e Dön', watch: 'İzle', open: 'İçeriği Aç', coming: 'Bu tool çok yakında kullanıma açılacak.'},
-  en: {webinars: 'Webinar', events: 'Event', showcases: 'Showcase', insights: 'Insight', tools: 'Tool', back: 'Back to Sellf Engage', watch: 'Watch', open: 'Open Content', coming: 'This tool will be available soon.'},
+  tr: {webinars: 'Webinar', events: 'Event', showcases: 'Showcase', insights: 'Insight', back: 'Sellf Engage’e Dön', watch: 'İzle', open: 'İçeriği Aç'},
+  en: {webinars: 'Webinar', events: 'Event', showcases: 'Showcase', insights: 'Insight', back: 'Back to Sellf Engage', watch: 'Watch', open: 'Open Content'},
 } as const
 
 export async function generateMetadata({params}: DetailProps): Promise<Metadata> {
@@ -72,7 +72,7 @@ export default async function EngageDetailPage({params}: DetailProps) {
   if (!item || !(section in t)) notFound()
 
   const embed = safeVideoEmbed(item.recordingUrl || item.videoUrl || item.podcastUrl)
-  const externalUrl = item.deliveryType === 'external' ? item.externalUrl : item.presentationUrl || (!embed ? item.podcastUrl : undefined)
+  const externalUrl = item.presentationUrl || (!embed ? item.podcastUrl : undefined) || item.externalUrl
 
   return (
     <article className={styles.page}>
@@ -124,7 +124,6 @@ export default async function EngageDetailPage({params}: DetailProps) {
         )}
 
         {externalUrl && <a href={externalUrl} target="_blank" rel="noreferrer" className={styles.external}>{t.open}<span>↗</span></a>}
-        {section === 'tools' && !externalUrl && !embed && <div className={styles.coming}>{t.coming}</div>}
       </div>
     </article>
   )
