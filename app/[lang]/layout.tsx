@@ -75,8 +75,8 @@ export default async function RootLayout({
     telephone: "+90 535 013 16 78",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Hüseyinağa Mahallesi, İstiklal Cad. No:56/58, Kat:3 Daire 5",
-      addressLocality: "Beyoğlu",
+      streetAddress: "Merkez Mahallesi, Silahşör Caddesi, Bomonti Ada Eski Bira Fabrikaları No:42/1",
+      addressLocality: "Şişli",
       addressRegion: "İstanbul",
       addressCountry: "TR",
     },
