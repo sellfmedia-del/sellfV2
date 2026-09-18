@@ -26,6 +26,8 @@ function createEditorialType({name, title, kindLabel, defaultLayout}: EngageEdit
       defineField({name: 'publishedAt', title: 'Yayın Tarihi', type: 'datetime', group: 'content', validation: (Rule) => Rule.required()}),
       defineField({name: 'featured', title: 'Öne Çıkar', type: 'boolean', group: 'content', initialValue: false}),
       defineField({name: 'clientName', title: 'Marka / Müşteri', type: 'string', group: 'content', hidden: name !== 'engageShowcase'}),
+      defineField({name: 'externalUrl_tr', title: 'Harici İçerik Bağlantısı (TR)', description: 'Showcase mevcut bir blog yazısına yönlenecekse Türkçe bağlantıyı girin.', type: 'url', group: 'content', hidden: name !== 'engageShowcase'}),
+      defineField({name: 'externalUrl_en', title: 'External Content URL (EN)', description: 'İngilizce blog veya harici içerik bağlantısı.', type: 'url', group: 'content', hidden: name !== 'engageShowcase'}),
       defineField({
         name: 'metrics',
         title: 'Sonuç Metrikleri',
