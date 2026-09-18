@@ -85,6 +85,16 @@ export type EngageDetail = EngageCard & {
   seo?: {title?: string; description?: string; image?: string; noIndex?: boolean}
 }
 
+export type EngageArchiveSection = 'webinars' | 'events' | 'content'
+export type EngageArchiveFilter = 'all' | 'upcoming' | 'past' | 'showcases' | 'insights'
+
+export type EngageArchiveData = {
+  items: EngageCard[]
+  total: number
+}
+
+export const ENGAGE_ARCHIVE_PAGE_SIZE = 12
+
 const localizedProjection = `
   _id,
   _type,
@@ -196,6 +206,49 @@ export async function getEngagePageData(lang: EngageLocale): Promise<EngagePageD
       tools: [],
       featured: null,
     }
+  }
+}
+
+export async function getEngageArchive(
+  section: EngageArchiveSection,
+  lang: EngageLocale,
+  page = 1,
+  filter: EngageArchiveFilter = 'all',
+): Promise<EngageArchiveData> {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1
+  const start = (safePage - 1) * ENGAGE_ARCHIVE_PAGE_SIZE
+  const end = start + ENGAGE_ARCHIVE_PAGE_SIZE
+
+  let condition = ''
+  let order = '_createdAt desc'
+
+  if (section === 'webinars') {
+    condition = '_type == "engageWebinar" && defined(slug.current)'
+    if (filter === 'upcoming') condition += ' && startAt >= now()'
+    if (filter === 'past') condition += ' && startAt < now()'
+    order = filter === 'upcoming' ? 'startAt asc' : 'startAt desc'
+  } else if (section === 'events') {
+    condition = '_type == "engageEvent" && defined(slug.current)'
+    if (filter === 'upcoming') condition += ' && startAt >= now()'
+    if (filter === 'past') condition += ' && startAt < now()'
+    order = filter === 'upcoming' ? 'startAt asc' : 'startAt desc'
+  } else {
+    condition = '_type in ["engageShowcase", "engageInsight"] && defined(slug.current) && publishedAt <= now()'
+    if (filter === 'showcases') condition += ' && _type == "engageShowcase"'
+    if (filter === 'insights') condition += ' && _type == "engageInsight"'
+    order = 'publishedAt desc'
+  }
+
+  const query = `{
+    "total": count(*[${condition}]),
+    "items": *[${condition}] | order(${order}) [${start}...${end}] {${localizedProjection}}
+  }`
+
+  try {
+    return await client.fetch<EngageArchiveData>(query, {lang}, {cache: 'no-store'})
+  } catch (error) {
+    console.error('Sellf Engage archive fetch failed', error)
+    return {items: [], total: 0}
   }
 }
 

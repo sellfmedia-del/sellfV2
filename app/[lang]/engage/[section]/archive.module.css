@@ -1,0 +1,47 @@
+.page { --accent: #4a4ae0; min-height: 100vh; background: #f2f1ed; color: #0b0d0d; }
+.hero { position: relative; overflow: hidden; padding: 9.5rem 0 5.5rem; background: #090c12; color: white; }
+.orb { position: absolute; inset: -25% -10% auto auto; width: 52vw; height: 52vw; border-radius: 50%; background: radial-gradient(circle, rgba(74,74,224,.28), transparent 67%); pointer-events: none; }
+.heroInner { position: relative; z-index: 1; }
+.back { display: inline-block; margin-bottom: clamp(4rem,8vw,7rem); color: rgba(255,255,255,.55); font-size: 11px; font-weight: 650; transition: color .2s ease; }
+.back:hover { color: white; }
+.eyebrow { display: block; margin-bottom: 1.2rem; color: #aaaaff; font-size: 10px; font-weight: 700; letter-spacing: .22em; }
+.hero h1 { max-width: 1050px; font-size: clamp(3.4rem,8vw,8rem); font-weight: 600; line-height: .9; letter-spacing: -.065em; }
+.hero p { max-width: 660px; margin-top: 1.7rem; color: rgba(255,255,255,.61); font-size: clamp(.95rem,1.3vw,1.15rem); line-height: 1.65; }
+.archive { padding-top: clamp(3rem,6vw,5.5rem); padding-bottom: clamp(6rem,10vw,10rem); }
+.filters { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 2.5rem; }
+.filters a { padding: .72rem 1rem; border: 1px solid rgba(11,13,13,.13); border-radius: 999px; color: #656968; font-size: 11px; font-weight: 650; transition: .2s ease; }
+.filters a:hover, .filters .activeFilter { border-color: #0b0d0d; background: #0b0d0d; color: white; }
+.grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1.15rem; }
+.card { display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid rgba(11,13,13,.09); border-radius: 20px; background: #faf9f6; transition: transform .25s ease, box-shadow .25s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 20px 45px rgba(11,13,13,.09); }
+.media { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #131620; }
+.media img { object-fit: cover; transition: transform .5s ease; }
+.card:hover .media img { transform: scale(1.025); }
+.shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(5,7,9,.68)); }
+.media > span { position: absolute; left: 1rem; bottom: 1rem; z-index: 1; padding: .42rem .6rem; border-radius: 5px; background: rgba(10,12,17,.72); color: white; font-size: 8px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; backdrop-filter: blur(8px); }
+.placeholder { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle at 80% 20%, #313174, #10131c 55%); color: rgba(255,255,255,.82); font-size: 2rem; font-weight: 700; }
+.cardCopy { display: flex; flex: 1; flex-direction: column; padding: 1.3rem 1.3rem 1.4rem; }
+.cardCopy time { color: #858987; font-size: 9px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+.cardCopy h2 { margin-top: .85rem; font-size: clamp(1.35rem,2vw,1.9rem); font-weight: 600; line-height: 1.02; letter-spacing: -.045em; }
+.cardCopy p { display: -webkit-box; margin-top: .8rem; overflow: hidden; color: #6c706f; font-size: 12px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.cardCopy strong { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 1.5rem; color: #292b2b; font-size: 10px; }
+.cardCopy strong b { font-size: 15px; }
+.empty { min-height: 280px; display: grid; place-items: center; border: 1px dashed rgba(11,13,13,.18); border-radius: 20px; color: #747877; font-size: 13px; }
+.pagination { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(11,13,13,.12); }
+.pagination a, .pagination > span { font-size: 11px; font-weight: 650; }
+.pagination a:last-child, .pagination > span:last-child { justify-self: end; }
+.pagination > span { color: #a4a7a5; }
+.pagination p { color: #858987; font-size: 10px; }
+.pagination p strong { color: #0b0d0d; }
+@media (max-width: 980px) {
+  .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 640px) {
+  .hero { padding: 7.5rem 0 4.5rem; }
+  .back { margin-bottom: 3.5rem; }
+  .grid { grid-template-columns: 1fr; }
+  .filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: .4rem; }
+  .filters a { flex: 0 0 auto; }
+  .pagination { grid-template-columns: 1fr 1fr; }
+  .pagination p { grid-row: 2; grid-column: 1 / -1; justify-self: center; }
+}
