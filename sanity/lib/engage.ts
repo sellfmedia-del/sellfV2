@@ -87,7 +87,7 @@ export type EngageDetail = EngageCard & {
 }
 
 export type EngageArchiveSection = 'webinars' | 'events' | 'content'
-export type EngageArchiveFilter = 'all' | 'upcoming' | 'past' | 'showcases' | 'insights'
+export type EngageArchiveFilter = 'all' | 'upcoming' | 'past' | 'showcases' | 'insights' | 'videos'
 
 export type EngageArchiveData = {
   items: EngageCard[]
@@ -113,7 +113,10 @@ const localizedProjection = `
   layoutPreset,
   cardStyle,
   eventType,
-  externalUrl,
+  "externalUrl": select(
+    $lang == "en" => coalesce(externalUrl_en, externalUrl_tr, externalUrl),
+    coalesce(externalUrl_tr, externalUrl_en, externalUrl)
+  ),
   "author": select(
     _type == "engageWebinar" && count(speakers) > 0 => array::join(speakers[]->name, " & "),
     "Sellf Media"
@@ -237,7 +240,8 @@ export async function getEngageArchive(
   } else {
     condition = '_type in ["engageShowcase", "engageInsight"] && defined(slug.current) && publishedAt <= now()'
     if (filter === 'showcases') condition += ' && _type == "engageShowcase"'
-    if (filter === 'insights') condition += ' && _type == "engageInsight"'
+    if (filter === 'insights') condition += ' && _type == "engageInsight" && !(format in ["video", "motion", "podcast"])'
+    if (filter === 'videos') condition += ' && _type == "engageInsight" && format in ["video", "motion", "podcast"]'
     order = 'publishedAt desc'
   }
 
@@ -255,6 +259,7 @@ export async function getEngageArchive(
 }
 
 export function engageHref(lang: EngageLocale, item: EngageCard): string {
+  if (item.externalUrl) return item.externalUrl
   if (item._type === 'engageWebinar') return `/${lang}/engage/webinars/${item.slug}`
   if (item._type === 'engageEvent') return `/${lang}/engage/events/${item.slug}`
   if (item._type === 'engageShowcase') return `/${lang}/engage/showcases/${item.slug}`
