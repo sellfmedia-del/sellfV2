@@ -36,6 +36,21 @@ export default defineType({
     }),
     defineField({name: 'startAt', title: 'Başlangıç', type: 'datetime', group: 'details', validation: (Rule) => Rule.required()}),
     defineField({name: 'endAt', title: 'Bitiş', type: 'datetime', group: 'details'}),
+    defineField({
+      name: 'datePrecision',
+      title: 'Tarih Gösterimi',
+      description: 'Gün kesin değilse Ay / Yıl seçin. Sıralama için başlangıç tarihi yine kullanılır.',
+      type: 'string',
+      group: 'details',
+      options: {
+        list: [
+          {title: 'Gün, ay ve yıl', value: 'day'},
+          {title: 'Yalnızca ay ve yıl', value: 'month'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'day',
+    }),
     defineField({name: 'timezone', title: 'Saat Dilimi', type: 'string', group: 'details', initialValue: 'Europe/Istanbul'}),
     defineField({name: 'location_tr', title: 'Konum (TR)', type: 'string', group: 'details'}),
     defineField({name: 'location_en', title: 'Location (EN)', type: 'string', group: 'details'}),

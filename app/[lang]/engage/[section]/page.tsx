@@ -54,8 +54,13 @@ function labelFor(item: EngageCard, lang: EngageLocale) {
   return t.insight
 }
 
-function formatDate(value: string | undefined, lang: EngageLocale) {
+function formatDate(value: string | undefined, lang: EngageLocale, precision: EngageCard['datePrecision'] = 'day') {
   if (!value) return content[lang].comingSoon
+  if (precision === 'month') {
+    return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-GB', {
+      month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul',
+    }).format(new Date(value))
+  }
   return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-GB', {
     day: 'numeric', month: 'long', year: 'numeric',
     ...(value.includes('T') ? {hour: '2-digit', minute: '2-digit'} : {}),
@@ -130,7 +135,7 @@ export default async function EngageArchivePage({params, searchParams}: ArchiveP
             <span>{labelFor(item, lang)}</span>
           </div>
           <div className={styles.cardCopy}>
-            <time dateTime={item.date}>{formatDate(item.date, lang)}</time>
+            <time dateTime={item.date}>{formatDate(item.date, lang, item.datePrecision)}</time>
             <h2>{item.title}</h2>
             {item.summary && <p>{item.summary}</p>}
             <strong>{t.open}<b>→</b></strong>

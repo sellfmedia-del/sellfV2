@@ -71,13 +71,16 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   }
 }
 
-function formatDate(value: string | undefined, lang: EngageLocale) {
+function formatDate(value: string | undefined, lang: EngageLocale, precision: EngageCard['datePrecision'] = 'day') {
   if (!value) return lang === 'tr' ? 'Yakında' : 'Coming soon'
+  if (precision === 'month') {
+    return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-GB', {month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul'}).format(new Date(value))
+  }
   return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-GB', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Istanbul'}).format(new Date(value))
 }
 
 function fromCms(item: EngageCard, lang: EngageLocale, image: string, label: string): DisplayItem {
-  return {id: item._id, title: item.title, summary: item.summary, image: item.coverImage || image, href: engageHref(lang, item), label, meta: formatDate(item.date, lang), author: item.author}
+  return {id: item._id, title: item.title, summary: item.summary, image: item.coverImage || image, href: engageHref(lang, item), label, meta: formatDate(item.date, lang, item.datePrecision), author: item.author}
 }
 
 function ArrowLink({href, children, light = false}: {href: string; children: React.ReactNode; light?: boolean}) {

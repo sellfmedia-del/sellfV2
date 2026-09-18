@@ -10,6 +10,7 @@ export type EngageCard = {
   slug: string
   coverImage?: string
   date?: string
+  datePrecision?: 'day' | 'month'
   endAt?: string
   timezone?: string
   location?: string
@@ -103,6 +104,7 @@ const localizedProjection = `
   "slug": slug.current,
   "coverImage": coverImage.asset->url,
   "date": coalesce(startAt, publishedAt, _createdAt),
+  datePrecision,
   endAt,
   timezone,
   "location": select($lang == "en" => coalesce(location_en, location_tr), location_tr),

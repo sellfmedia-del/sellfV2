@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import {PortableText} from '@portabletext/react'
-import {getEngageDetail, type EngageLocale} from '@/sanity/lib/engage'
+import {getEngageDetail, type EngageCard, type EngageLocale} from '@/sanity/lib/engage'
 import RegistrationPanel from './RegistrationPanel'
 import styles from './detail.module.css'
 
@@ -42,8 +42,13 @@ export async function generateMetadata({params}: DetailProps): Promise<Metadata>
   }
 }
 
-function formatDate(value: string | undefined, lang: EngageLocale) {
+function formatDate(value: string | undefined, lang: EngageLocale, precision: EngageCard['datePrecision'] = 'day') {
   if (!value) return ''
+  if (precision === 'month') {
+    return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-GB', {
+      month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul',
+    }).format(new Date(value))
+  }
   return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-GB', {
     dateStyle: 'long',
     timeStyle: 'short',
@@ -88,7 +93,7 @@ export default async function EngageDetailPage({params}: DetailProps) {
             <span>{t[section as keyof typeof t] || 'Sellf Engage'}</span>
             <h1>{item.title}</h1>
             {item.summary && <p>{item.summary}</p>}
-            {item.date && <time dateTime={item.date}>{formatDate(item.date, lang)}</time>}
+            {item.date && <time dateTime={item.date}>{formatDate(item.date, lang, item.datePrecision)}</time>}
           </div>
         </div>
       </header>
