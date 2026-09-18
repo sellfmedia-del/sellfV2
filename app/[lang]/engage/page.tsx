@@ -51,7 +51,7 @@ const copy = {
 } as const
 
 const images = {
-  hero: '/images/about-team.webp', watch: 'https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png', attend: '/images/about-team.webp', tools: '/framework/rgi/hero.webp', read: '/framework/rgi/hero.webp', event: '/framework/rgi/output-exact.svg',
+  hero: '/images/about-team.webp', watch: 'https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png', attend: '/images/about-team.webp', tools: '/framework/rgi/hero.webp', read: '/images/showcases/leal-dethleffs.webp', event: '/framework/rgi/output-exact.svg',
   one: '/images/framework/operating-model/growth.jpg', two: '/images/framework/operating-model/operations.jpg', three: '/images/framework/operating-model/integrated.jpg', showcase: '/images/showcases/leal-dethleffs.webp',
 }
 
