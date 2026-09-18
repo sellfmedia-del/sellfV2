@@ -25,13 +25,13 @@ const content = {
     webinars: {eyebrow: 'SELLF ENGAGE / WEBINARLAR', title: 'Tüm webinarlar.', description: 'Yaklaşan canlı yayınları ve geçmiş webinar kayıtlarını tek yerde keşfedin.'},
     events: {eyebrow: 'SELLF ENGAGE / EVENTLER', title: 'Eventler & fuarlar.', description: 'Düzenlediğimiz, katıldığımız ve desteklediğimiz buluşmaların tamamı.'},
     content: {eyebrow: 'SELLF ENGAGE / İÇERİKLER', title: 'Showcase & Insight.', description: 'Gerçek işlerden öğrenilenler, doğrulanmış framework’ler ve ekibimizin notları.'},
-    back: 'Engage’e dön', all: 'Tümü', upcoming: 'Yaklaşan', past: 'Geçmiş', showcases: 'Showcase', insights: 'Insight', empty: 'Bu filtrede henüz içerik yok.', previous: 'Önceki', next: 'Sonraki', page: 'Sayfa', webinar: 'Webinar', event: 'Event', showcase: 'Showcase', insight: 'Insight', comingSoon: 'Yakında', open: 'İncele',
+    back: 'Engage’e dön', all: 'Tümü', upcoming: 'Yaklaşan', past: 'Geçmiş', showcases: 'Showcase', insights: 'Insight', videos: 'Video', empty: 'Bu filtrede henüz içerik yok.', previous: 'Önceki', next: 'Sonraki', page: 'Sayfa', webinar: 'Webinar', event: 'Event', showcase: 'Showcase', insight: 'Insight', video: 'Video', comingSoon: 'Yakında', open: 'İncele',
   },
   en: {
     webinars: {eyebrow: 'SELLF ENGAGE / WEBINARS', title: 'All webinars.', description: 'Explore upcoming live sessions and past webinar recordings in one place.'},
     events: {eyebrow: 'SELLF ENGAGE / EVENTS', title: 'Events & exhibitions.', description: 'Every gathering we host, attend or support.'},
     content: {eyebrow: 'SELLF ENGAGE / CONTENT', title: 'Showcases & Insights.', description: 'Lessons from real work, validated frameworks and notes from our team.'},
-    back: 'Back to Engage', all: 'All', upcoming: 'Upcoming', past: 'Past', showcases: 'Showcases', insights: 'Insights', empty: 'There is no content in this filter yet.', previous: 'Previous', next: 'Next', page: 'Page', webinar: 'Webinar', event: 'Event', showcase: 'Showcase', insight: 'Insight', comingSoon: 'Coming soon', open: 'Explore',
+    back: 'Back to Engage', all: 'All', upcoming: 'Upcoming', past: 'Past', showcases: 'Showcases', insights: 'Insights', videos: 'Videos', empty: 'There is no content in this filter yet.', previous: 'Previous', next: 'Next', page: 'Page', webinar: 'Webinar', event: 'Event', showcase: 'Showcase', insight: 'Insight', video: 'Video', comingSoon: 'Coming soon', open: 'Explore',
   },
 } as const
 
@@ -42,7 +42,7 @@ function isSection(value: string): value is EngageArchiveSection {
 }
 
 function validFilter(section: EngageArchiveSection, value?: string): EngageArchiveFilter {
-  const allowed = section === 'content' ? ['all', 'showcases', 'insights'] : ['all', 'upcoming', 'past']
+  const allowed = section === 'content' ? ['all', 'showcases', 'insights', 'videos'] : ['all', 'upcoming', 'past']
   return allowed.includes(value || '') ? value as EngageArchiveFilter : 'all'
 }
 
@@ -51,6 +51,7 @@ function labelFor(item: EngageCard, lang: EngageLocale) {
   if (item._type === 'engageWebinar') return t.webinar
   if (item._type === 'engageEvent') return t.event
   if (item._type === 'engageShowcase') return t.showcase
+  if (item.format === 'video' || item.format === 'motion' || item.format === 'podcast') return t.video
   return t.insight
 }
 
@@ -108,7 +109,7 @@ export default async function EngageArchivePage({params, searchParams}: ArchiveP
   if (requestedPage > pageCount && data.total > 0) redirect(archiveHref(lang, section, filter, pageCount))
 
   const filters: EngageArchiveFilter[] = section === 'content'
-    ? ['all', 'showcases', 'insights']
+    ? ['all', 'showcases', 'insights', 'videos']
     : ['all', 'upcoming', 'past']
 
   return <main className={styles.page}>
