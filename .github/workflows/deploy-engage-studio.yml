@@ -1,0 +1,40 @@
+name: Deploy Sellf Engage Studio
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/engage-foundation
+    paths:
+      - "engage-studio/**"
+      - "sanity/engage/**"
+      - ".github/workflows/deploy-engage-studio.yml"
+      - "package.json"
+
+concurrency:
+  group: deploy-sellf-engage-studio
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy Engage Studio
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out Engage branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Deploy Studio to Sanity
+        working-directory: engage-studio
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: npx sanity deploy --yes --title "Sellf Engage" --url sellf-engage

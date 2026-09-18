@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation"; // 1. Dil Radarı Eklendi
+import { useParams, usePathname } from "next/navigation"; // 1. Dil Radarı Eklendi
 import { getCalApi } from "@calcom/embed-react";
 
 // YENİ: GA4 Olay Tetikleyicisi
@@ -35,6 +35,7 @@ const dict = {
 export default function StickyLogo() {
   // Dil Seçimi
   const params = useParams();
+  const pathname = usePathname();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
 
@@ -93,6 +94,8 @@ export default function StickyLogo() {
   const handleMeetingIntent = () => {
     sendGAEvent('event', 'meeting_booked', { source: 'sticky_logo' });
   };
+
+  if (pathname?.includes("/engage")) return null;
 
   return (
     // Z-INDEX DÜŞÜRÜLDÜ: z-[9999] yerine z-[9980] yapıldı

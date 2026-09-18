@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { usePathname } from "next/navigation";
 
 export default function QuickContact() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -32,6 +34,8 @@ export default function QuickContact() {
       setStatus("error");
     }
   };
+
+  if (pathname?.includes("/engage")) return null;
 
   return (
     <div className="fixed right-4 md:right-7 bottom-4 md:bottom-6 z-[9990] flex flex-col items-end font-sans">

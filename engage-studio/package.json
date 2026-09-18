@@ -1,0 +1,12 @@
+{
+  "name": "sellf-engage-studio",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@sanity/vision": "^6.15.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "sanity": "^6.15.0",
+    "styled-components": "^6.3.11"
+  }
+}

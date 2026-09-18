@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         hostname: "cdn.sellfmedia.workers.dev", 
         pathname: "/**", 
       },
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+        pathname: "/images/**",
+      },
     ],
   },
 
