@@ -19,6 +19,7 @@ export type EngageCard = {
   cardStyle?: 'standard' | 'wide' | 'featured'
   eventType?: 'hosted' | 'sponsored' | 'attended' | 'speaker'
   externalUrl?: string
+  author?: string
   featured?: boolean
   registrationOpen?: boolean
   capacity?: number
@@ -101,6 +102,10 @@ const localizedProjection = `
   cardStyle,
   eventType,
   externalUrl,
+  "author": select(
+    _type == "engageWebinar" && count(speakers) > 0 => array::join(speakers[]->name, " & "),
+    "Sellf Media"
+  ),
   featured,
   registrationOpen,
   capacity

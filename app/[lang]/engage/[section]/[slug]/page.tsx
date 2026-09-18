@@ -21,9 +21,10 @@ export async function generateMetadata({params}: DetailProps): Promise<Metadata>
   const lang: EngageLocale = rawLang === 'en' ? 'en' : 'tr'
   const item = await getEngageDetail(section, slug, lang)
   if (!item) return {}
+  const title = item.seo?.title || item.title
 
   return {
-    title: `${item.seo?.title || item.title} | Sellf Engage`,
+    title: /Sellf Engage/i.test(title) ? title : `${title} | Sellf Engage`,
     description: item.seo?.description || item.summary,
     robots: item.seo?.noIndex ? {index: false, follow: false} : undefined,
     alternates: {

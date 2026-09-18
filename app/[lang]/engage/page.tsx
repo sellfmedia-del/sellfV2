@@ -77,7 +77,7 @@ function formatDate(value: string | undefined, lang: EngageLocale) {
 }
 
 function fromCms(item: EngageCard, lang: EngageLocale, image: string, label: string): DisplayItem {
-  return {id: item._id, title: item.title, summary: item.summary, image: item.coverImage || image, href: engageHref(lang, item), label, meta: formatDate(item.date, lang)}
+  return {id: item._id, title: item.title, summary: item.summary, image: item.coverImage || image, href: engageHref(lang, item), label, meta: formatDate(item.date, lang), author: item.author}
 }
 
 function ArrowLink({href, children, light = false}: {href: string; children: React.ReactNode; light?: boolean}) {
@@ -199,11 +199,12 @@ export default async function EngagePage({params}: PageProps) {
   const featuredSummary = featured?.summary || (lang === 'tr' ? 'Ölçümün büyüme kararlarını nasıl değiştirdiğini birlikte inceleyelim.' : 'A closer look at how measurement changes growth decisions.')
   const featuredHref = featured ? engageHref(lang, featured) : '#webinars'
   const featuredImage = featured?.coverImage || images.hero
+  const featuredMeta = formatDate(featured?.date, lang)
 
   return <div className={styles.page}>
     <section className={styles.hero}><div className={styles.heroOrb} /><div className={`sellf-container ${styles.heroGrid}`}>
       <div className={styles.heroCopy}><span className={styles.eyebrow}>{t.strap}</span><h1>{t.heroTitle}</h1><p>{t.heroSummary}</p><div className={styles.heroActions}><Link href="#formats" className={styles.primaryButton}>{t.explore}<span>→</span></Link><Link href="#webinars" className={styles.secondaryButton}>{t.upcomingCta}</Link></div><div className={styles.metrics}>{t.stats.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div></div>
-      <div className={styles.featureWrap}><Link href={featuredHref} className={styles.featureCard}><CardImage src={featuredImage} alt={featuredTitle} sizes="(max-width: 900px) 100vw, 52vw" /><div className={styles.featureShade} /><div className={styles.featureCopy}><span className={styles.featureLabel}>{t.heroLabel}</span><h2>{featuredTitle}</h2><p>{featuredSummary}</p><small>24 September · 15:00 GMT+3</small><span className={styles.primaryButton}>{t.reserve}<b>→</b></span></div><i className={styles.playButton}>▶</i><div className={styles.progress}><i /></div></Link><div className={styles.featureCaption}><span>{t.heroQuestion}</span><div>● ○ ○ ○ &nbsp; →</div></div></div>
+      <div className={styles.featureWrap}><Link href={featuredHref} className={styles.featureCard}><CardImage src={featuredImage} alt={featuredTitle} sizes="(max-width: 900px) 100vw, 52vw" /><div className={styles.featureShade} /><div className={styles.featureCopy}><span className={styles.featureLabel}>{t.heroLabel}</span><h2>{featuredTitle}</h2><p>{featuredSummary}</p><small>{featuredMeta}</small><span className={styles.primaryButton}>{t.reserve}<b>→</b></span></div><i className={styles.playButton}>▶</i><div className={styles.progress}><i /></div></Link><div className={styles.featureCaption}><span>{t.heroQuestion}</span><div>● ○ ○ ○ &nbsp; →</div></div></div>
     </div></section>
 
     <section className={`${styles.whiteSection} ${styles.curveTop}`} id="formats"><div className="sellf-container"><div className={styles.sectionIntro}><div><span className={styles.eyebrowDark}>{t.chooseEyebrow}</span><h2>{t.chooseTitle}</h2></div><p>{t.chooseNote}</p></div><div className={styles.formatGrid}>{t.formats.map(([title, description, tag], index) => { const formatImages = [images.watch, images.attend, images.tools, images.read]; const anchors = ['latest', 'webinars', 'tools', 'latest']; return <Link href={`#${anchors[index]}`} key={title} className={styles.formatCard}><div className={styles.formatHead}><h3>{title}<span> →</span></h3><i>→</i></div><p>{description}</p><div className={styles.formatMedia}><CardImage src={formatImages[index]} alt="" sizes="(max-width: 760px) 80vw, 25vw" /><span>{tag}</span></div></Link>})}</div></div></section>
