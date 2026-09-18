@@ -9,8 +9,8 @@ const dict = {
     contact: "İletişim",
     privacy: "Gizlilik Politikası",
     cookie: "Çerez Politikası",
-    addressPart1: "Hüseyinağa Mahallesi, İstiklal Cad. No:56/58",
-    addressPart2: "Kat:3 Daire 5 Beyoğlu / İstanbul",
+    addressPart1: "Merkez Mah. Silahşör Cad. Bomonti Ada Eski Bira Fabrikaları",
+    addressPart2: "No:42/1 Şişli / İstanbul",
     proudly: "Bizim tarafımızdan gururla tasarlandı.",
     copyright: "Sellf tarafından. Bununla çok gurur duyuyoruz, teşekkürler."
   },
@@ -18,8 +18,8 @@ const dict = {
     contact: "Contact",
     privacy: "Privacy Policy",
     cookie: "Cookie Policy",
-    addressPart1: "Hüseyinağa Neighborhood, Istiklal Ave. No:56/58",
-    addressPart2: "Floor:3 Apt:5 Beyoğlu / Istanbul",
+    addressPart1: "Merkez Mah. Silahşör Cad. Bomonti Ada Eski Bira Fabrikaları",
+    addressPart2: "No:42/1 Şişli / Istanbul",
     proudly: "Proudly designed by Us.",
     copyright: "by Sellf. We are very proud of it, thank you."
   }
@@ -59,7 +59,7 @@ export default function Footer() {
             <div className="col-span-2 md:col-span-1 flex flex-col gap-3 text-white/55">
               <a href="https://wa.me/905350131678" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+90 535 013 16 78</a>
               <a href="mailto:team@sellfmedia.com" className="hover:text-white transition-colors">team@sellfmedia.com</a>
-              <a href="https://share.google/6RbD4yrxAQ1WxM4E8" target="_blank" rel="noopener noreferrer" className="leading-relaxed hover:text-white transition-colors">
+              <a href="https://www.google.com/maps/search/?api=1&query=Bomonti%20Ada%20Eski%20Bira%20Fabrikalar%C4%B1%20No%3A42%2F1%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer" className="leading-relaxed hover:text-white transition-colors">
                 {t.addressPart1}<br />{t.addressPart2}
               </a>
             </div>
