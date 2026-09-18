@@ -23,6 +23,7 @@ const staticPaths = [
   "/engage/webinars",
   "/engage/events",
   "/engage/content",
+  "/engage/tools",
   "/blog",
   "/contact",
   "/privacy-policy",
