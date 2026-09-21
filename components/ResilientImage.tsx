@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 
 type ResilientImageProps = {
@@ -7,6 +8,8 @@ type ResilientImageProps = {
   alt: string;
   className?: string;
   loading?: "eager" | "lazy";
+  sizes?: string;
+  priority?: boolean;
 };
 
 function buildSources(src: string) {
@@ -25,7 +28,14 @@ function buildSources(src: string) {
   return Array.from(new Set(sources));
 }
 
-export default function ResilientImage({ src, alt, className = "", loading = "lazy" }: ResilientImageProps) {
+export default function ResilientImage({
+  src,
+  alt,
+  className = "",
+  loading = "lazy",
+  sizes = "100vw",
+  priority = false,
+}: ResilientImageProps) {
   const sources = useMemo(() => buildSources(src), [src]);
   const [imageState, setImageState] = useState({ src, sourceIndex: 0, failed: false });
   const currentState = imageState.src === src
@@ -45,10 +55,13 @@ export default function ResilientImage({ src, alt, className = "", loading = "la
   }
 
   return (
-    <img
+    <Image
       src={sources[currentState.sourceIndex]}
       alt={alt}
-      loading={loading}
+      fill
+      sizes={sizes}
+      priority={priority}
+      loading={priority ? undefined : loading}
       className={className}
       onError={() => {
         if (currentState.sourceIndex < sources.length - 1) {
