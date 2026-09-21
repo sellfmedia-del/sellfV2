@@ -1,5 +1,10 @@
 .page { --accent: #4a4ae0; background: #f1f0ec; min-height: 100vh; }
 .hero { position: relative; min-height: 680px; overflow: hidden; background: #0b0d0d; color: white; }
+.visualCaseHero { min-height: 720px; }
+.visualCaseHero .heroImage { opacity: .52; filter: saturate(.74) contrast(1.08); }
+.visualCaseHero .heroShade { background: linear-gradient(90deg, rgba(4,9,15,.98) 0%, rgba(4,9,15,.82) 46%, rgba(4,9,15,.28) 100%), linear-gradient(180deg, transparent 55%, rgba(4,9,15,.88)); }
+.visualCaseHero .heroCopy { max-width: 850px; }
+.visualCaseHero .heroCopy h1 { font-size: clamp(3.4rem, 6.5vw, 7rem); }
 .heroImage { object-fit: cover; opacity: .65; }
 .heroShade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,10,11,.38), rgba(8,10,11,.97)); }
 .heroInner { position: relative; z-index: 1; min-height: 680px; padding-top: 130px; padding-bottom: 60px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -57,6 +62,8 @@
 .coming { width: min(100%,820px); margin: 4rem auto 0; padding: 2rem; border: 1px dashed rgba(11,13,13,.2); border-radius: 24px; color: #747877; font-size: 13px; }
 @media (max-width: 767px) {
   .hero, .heroInner { min-height: 620px; }
+  .visualCaseHero { min-height: 660px; }
+  .visualCaseHero .heroShade { background: linear-gradient(180deg, rgba(4,9,15,.38), rgba(4,9,15,.97) 68%); }
   .metrics { grid-template-columns: 1fr 1fr; }
   .metrics > div:nth-child(2) { border-right: 0; }
   .metrics > div:nth-child(-n+2) { border-bottom: 1px solid rgba(11,13,13,.14); }
@@ -65,3 +72,18 @@
   .registrationForm > button, .consent, .formError { grid-column: 1; }
   .registrationPanel { border-radius: 22px; }
 }
+
+
+/* Visual case pages follow the approved compact editorial mockup. */
+.visualCaseHero{min-height:500px;background:#07111b}
+.visualCaseHero .heroImage{object-position:center 54%;opacity:.72;filter:saturate(.74) contrast(1.08)}
+.visualCaseHero .heroShade{background:linear-gradient(90deg,rgba(4,10,17,.99) 0%,rgba(4,10,17,.94) 38%,rgba(4,10,17,.48) 68%,rgba(4,10,17,.18) 100%),linear-gradient(180deg,transparent 54%,rgba(4,10,17,.76))}
+.visualCaseHero .heroInner{min-height:500px;padding-top:88px;padding-bottom:38px;justify-content:flex-end}
+.visualCaseHero .back{display:none}
+.visualCaseHero .heroCopy{max-width:690px}
+.visualCaseHero .heroCopy>span{margin-bottom:18px;color:#c3c6cb;font-size:9px;letter-spacing:.22em}
+.visualCaseHero .heroCopy h1{max-width:11ch;font-size:clamp(3.1rem,5.5vw,6.1rem);line-height:.88;letter-spacing:-.065em}
+.visualCaseHero .heroCopy p{max-width:610px;margin-top:18px;color:rgba(255,255,255,.76);font-size:clamp(.95rem,1.2vw,1.12rem);line-height:1.5}
+.visualCaseTopics{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:26px;padding-top:17px;border-top:1px solid rgba(255,255,255,.18)}
+.visualCaseTopics span{color:rgba(255,255,255,.55);font-size:8px;font-weight:700;letter-spacing:.18em}
+@media(max-width:767px){.visualCaseHero,.visualCaseHero .heroInner{min-height:570px}.visualCaseHero .heroImage{object-position:66% center;opacity:.48}.visualCaseHero .heroShade{background:linear-gradient(180deg,rgba(4,10,17,.2),rgba(4,10,17,.98) 62%)}.visualCaseHero .heroInner{padding-top:100px;padding-bottom:34px}.visualCaseHero .heroCopy h1{font-size:clamp(3rem,14vw,5rem)}}
