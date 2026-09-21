@@ -205,7 +205,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
       {post.coverImage && (
         <div className="w-full max-w-5xl mx-auto px-4 md:px-6 mb-16">
           <div className="aspect-[21/9] w-full relative rounded-2xl overflow-hidden bg-zinc-100">
-            <ResilientImage src={post.coverImage} alt={post.title} loading="eager" priority sizes="(max-width: 1535px) 100vw, 1024px" className="absolute inset-0 w-full h-full object-cover" />
+            <ResilientImage src={post.coverImage} alt={post.title} loading="eager" className="absolute inset-0 w-full h-full object-cover" />
           </div>
         </div>
       )}
@@ -234,7 +234,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
                   <ResilientImage
                     src={related.coverImage}
                     alt={related.title}
-                    sizes="(max-width: 767px) 100vw, 33vw"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (

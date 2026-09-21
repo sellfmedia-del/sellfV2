@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 import { getCalApi } from "@calcom/embed-react";
 import { sendGAEvent } from "@next/third-parties/google";
 
@@ -118,12 +117,10 @@ export default function CallToAction() {
         </div>
 
         <div className="relative min-h-[520px] overflow-hidden lg:min-h-full">
-          <Image
+          <img
             src="https://cdn.sellfmedia.workers.dev/statics/IMG_1444_edited.jpg"
             alt=""
             aria-hidden="true"
-            fill
-            sizes="(max-width: 1023px) 100vw, 50vw"
             className="absolute inset-0 h-full w-full object-cover grayscale"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,#090b0b_0%,rgba(9,11,11,.72)_10%,rgba(9,11,11,.18)_43%,rgba(9,11,11,.45)_100%)]" />
@@ -137,7 +134,7 @@ export default function CallToAction() {
             <div className="flex -space-x-2">
               {["logoasce.png", "logofundora.png", "logoinwest.png"].map((logo) => (
                 <div key={logo} className="grid h-8 w-8 place-items-center overflow-hidden rounded-full border border-white/20 bg-white p-1">
-                  <img src={`https://cdn.sellfmedia.workers.dev/essentials/${logo}`} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain grayscale" />
+                  <img src={`https://cdn.sellfmedia.workers.dev/essentials/${logo}`} alt="" className="h-full w-full object-contain grayscale" />
                 </div>
               ))}
               <span className="grid h-8 min-w-8 place-items-center rounded-full border border-white/15 bg-[#171919] px-2 text-[9px] text-white/72">+200</span>

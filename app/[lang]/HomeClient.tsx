@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import HomeWorkServices from "@/components/HomeWorkServices";
 import HomeOperatingSystem from "@/components/HomeOperatingSystem";
@@ -68,7 +67,6 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
   const videoContainerRef = useRef<HTMLButtonElement>(null);
   const [videoExpanded, setVideoExpanded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const [videoFrameStyle, setVideoFrameStyle] = useState({ width: "100%", height: "100%" });
 
   const sendVimeoCommand = (method: string, value?: unknown) => {
@@ -85,7 +83,6 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
   };
 
   const handleVideoMouseEnter = () => {
-    setShouldLoadVideo(true);
     setVideoExpanded(true);
     if (!isFullscreen) {
       sendVimeoCommand("setMuted", true);
@@ -94,8 +91,6 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
   };
 
   useEffect(() => {
-    const loadTimer = window.setTimeout(() => setShouldLoadVideo(true), 1800);
-
     const updateVideoCover = () => {
       const container = videoContainerRef.current;
       if (!container) return;
@@ -135,7 +130,6 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     return () => {
-      window.clearTimeout(loadTimer);
       resizeObserver.disconnect();
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
       document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
@@ -143,10 +137,9 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
   }, []);
 
   const handleVideoClick = () => {
+    const video = videoRef.current;
     const container = videoContainerRef.current;
-    if (!container) return;
-
-    setShouldLoadVideo(true);
+    if (!video || !container) return;
 
     sendVimeoCommand("setMuted", false);
     sendVimeoCommand("setVolume", 1);
@@ -250,28 +243,23 @@ export default function HomeClient({ latestPosts }: { latestPosts: HomeBlogPost[
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.08, ease }}
           >
-            <Image
+            <img
               src="https://cdn.sellfmedia.workers.dev/statics/video-screnshot.png"
               alt=""
               aria-hidden="true"
-              fill
-              priority
-              sizes="(max-width: 1023px) 100vw, 58vw"
               className="pointer-events-none absolute inset-0 h-full w-full object-cover"
             />
-            {shouldLoadVideo ? (
-              <iframe
-                ref={videoRef}
-                src={heroVideo}
-                title="Sellf Media showreel"
-                loading="lazy"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                onLoad={ensureVideoPlaying}
-                style={videoFrameStyle}
-                className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-0 transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${isFullscreen ? "scale-100 grayscale-0 contrast-[1.05]" : videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
-              />
-            ) : null}
+            <iframe
+              ref={videoRef}
+              src={heroVideo}
+              title="Sellf Media showreel"
+              loading="eager"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              onLoad={ensureVideoPlaying}
+              style={videoFrameStyle}
+              className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-0 transition-[transform,filter] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${isFullscreen ? "scale-100 grayscale-0 contrast-[1.05]" : videoExpanded ? "scale-[1.012] grayscale-0 contrast-[1.05]" : "scale-100 grayscale-[14%] contrast-[1.03]"}`}
+            />
 
             <div className={`absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/16 transition-opacity duration-500 ${isFullscreen ? "opacity-0" : videoExpanded ? "opacity-45" : "opacity-100"}`} />
             <div className={`absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/32 to-transparent transition-opacity duration-300 ${isFullscreen ? "opacity-0" : "opacity-100"}`} />

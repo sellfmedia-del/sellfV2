@@ -104,8 +104,6 @@ export default async function BlogPage({
                 <ResilientImage
                   src={post.coverImage}
                   alt={post.title}
-                  sizes={index === 0 ? "(max-width: 767px) 100vw, 50vw" : "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"}
-                  priority={index === 0}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               ) : (

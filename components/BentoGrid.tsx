@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 
 // ===== 1. SÖZLÜK MİMARİSİ (DICTIONARY) =====
 const dictionary = {
@@ -769,13 +768,9 @@ export default function BentoGrid() {
               >
                 {config.bgImage && (
                   <div className="absolute inset-x-0 top-0 h-[44%] overflow-hidden bg-[#e4e2dd]">
-                    <Image
-                      src={config.bgImage}
-                      alt=""
-                      aria-hidden="true"
-                      fill
-                      sizes="(max-width: 1023px) 100vw, 33vw"
-                      className="object-cover object-center grayscale-[12%] transition-transform duration-700 group-hover:scale-[1.035]"
+                    <div
+                      className="absolute inset-0 bg-cover bg-center grayscale-[12%] transition-transform duration-700 group-hover:scale-[1.035]"
+                      style={{ backgroundImage: `url("${config.bgImage}")` }}
                     />
                     <div className="absolute inset-0 bg-black/[.04]" />
                   </div>

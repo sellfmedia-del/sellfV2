@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -69,9 +69,9 @@ function PortfolioCard({ item, onClick, currentLang }: { item: PortfolioItem; on
       className="relative w-full text-left break-inside-avoid group overflow-hidden bg-[#deddd8] border border-black/10"
     >
       {item.type === "video" ? (
-        <LazyPortfolioVideo src={item.url} />
+        <video src={item.url} muted loop autoPlay playsInline className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
       ) : (
-        <Image src={item.url} alt={item.title[currentLang]} width={800} height={1200} sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw" className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
+        <Image src={item.url} alt={item.title[currentLang]} width={800} height={1200} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]" unoptimized />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent opacity-80" />
       <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between gap-4 text-white">
@@ -79,36 +79,5 @@ function PortfolioCard({ item, onClick, currentLang }: { item: PortfolioItem; on
         <span className="text-xs opacity-65">↗</span>
       </div>
     </motion.button>
-  );
-}
-
-function LazyPortfolioVideo({ src }: { src: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isNearViewport, setIsNearViewport] = useState(false);
-
-  useEffect(() => {
-    const node = containerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsNearViewport(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "400px 0px" },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={containerRef} className="min-h-[260px] bg-[#d5d4cf]">
-      {isNearViewport ? (
-        <video src={src} muted loop autoPlay playsInline preload="metadata" className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
-      ) : null}
-    </div>
   );
 }
