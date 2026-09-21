@@ -1,5 +1,10 @@
 .page { --accent: #4a4ae0; background: #f1f0ec; min-height: 100vh; }
 .hero { position: relative; min-height: 680px; overflow: hidden; background: #0b0d0d; color: white; }
+.visualCaseHero { min-height: 720px; }
+.visualCaseHero .heroImage { opacity: .52; filter: saturate(.74) contrast(1.08); }
+.visualCaseHero .heroShade { background: linear-gradient(90deg, rgba(4,9,15,.98) 0%, rgba(4,9,15,.82) 46%, rgba(4,9,15,.28) 100%), linear-gradient(180deg, transparent 55%, rgba(4,9,15,.88)); }
+.visualCaseHero .heroCopy { max-width: 850px; }
+.visualCaseHero .heroCopy h1 { font-size: clamp(3.4rem, 6.5vw, 7rem); }
 .heroImage { object-fit: cover; opacity: .65; }
 .heroShade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,10,11,.38), rgba(8,10,11,.97)); }
 .heroInner { position: relative; z-index: 1; min-height: 680px; padding-top: 130px; padding-bottom: 60px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -57,6 +62,8 @@
 .coming { width: min(100%,820px); margin: 4rem auto 0; padding: 2rem; border: 1px dashed rgba(11,13,13,.2); border-radius: 24px; color: #747877; font-size: 13px; }
 @media (max-width: 767px) {
   .hero, .heroInner { min-height: 620px; }
+  .visualCaseHero { min-height: 660px; }
+  .visualCaseHero .heroShade { background: linear-gradient(180deg, rgba(4,9,15,.38), rgba(4,9,15,.97) 68%); }
   .metrics { grid-template-columns: 1fr 1fr; }
   .metrics > div:nth-child(2) { border-right: 0; }
   .metrics > div:nth-child(-n+2) { border-bottom: 1px solid rgba(11,13,13,.14); }
