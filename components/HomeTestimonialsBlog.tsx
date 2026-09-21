@@ -210,7 +210,7 @@ export default function HomeTestimonialsBlog({ lang, posts }: { lang: Lang; post
                     {featured ? (
                       <Link href={`/${lang}/blog/${featured.slug}`} className="group grid overflow-hidden rounded-[28px] border border-black/[.08] bg-white/72 shadow-[0_18px_42px_rgba(0,0,0,.035)] md:grid-cols-[1.08fr_.92fr]">
                         <div className="relative min-h-[270px] overflow-hidden bg-[#deddd8] md:min-h-[330px]">
-                          <ResilientImage src={featured.coverImage} alt={featured.title} loading={groupIndex === 0 ? "eager" : "lazy"} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.025]" />
+                          <ResilientImage src={featured.coverImage} alt={featured.title} loading={groupIndex === 0 ? "eager" : "lazy"} sizes="(max-width: 1023px) 100vw, 36vw" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.025]" />
                         </div>
                         <div className="flex flex-col justify-between px-6 py-6 md:px-7 md:py-7">
                           <div>
@@ -231,7 +231,7 @@ export default function HomeTestimonialsBlog({ lang, posts }: { lang: Lang; post
                         {secondary.map((post) => (
                           <Link key={post._id} href={`/${lang}/blog/${post.slug}`} className="group overflow-hidden rounded-[24px] border border-black/[.08] bg-white/72 shadow-[0_14px_34px_rgba(0,0,0,.025)]">
                             <div className="relative h-[155px] overflow-hidden bg-[#deddd8]">
-                              <ResilientImage src={post.coverImage} alt={post.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.025]" />
+                              <ResilientImage src={post.coverImage} alt={post.title} loading="lazy" sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.025]" />
                             </div>
                             <div className="px-5 py-5">
                               <div className="flex items-center justify-between gap-4 text-[9px] uppercase tracking-[.16em] text-black/36">

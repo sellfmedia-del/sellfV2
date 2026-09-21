@@ -34,6 +34,26 @@ const nextConfig: NextConfig = {
         hostname: "cdn.sanity.io",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "gotradego.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ascezenith.com",
+        pathname: "/**",
+      },
     ],
   },
 

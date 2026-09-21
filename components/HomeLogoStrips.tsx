@@ -43,6 +43,8 @@ function LogoStrip({ logos, reverse = false }: { logos: string[]; reverse?: bool
             <img
               src={logo}
               alt={`Brand Logo ${(index % logos.length) + 1}`}
+              loading="lazy"
+              decoding="async"
               className="max-h-10 max-w-full object-contain grayscale opacity-70 transition-[opacity,filter] duration-300 hover:grayscale-0 hover:opacity-100 md:max-h-12"
             />
           </div>

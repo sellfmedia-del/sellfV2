@@ -44,7 +44,7 @@ export default function PortfolioDetailOverlay({ item, onClose }: Props) {
           {item.type === "video" ? (
             <video src={item.url} autoPlay loop controls className="w-full h-auto max-h-[82vh] object-contain bg-black" />
           ) : (
-            <Image src={item.url} alt={title} width={1800} height={1200} className="w-full h-auto object-contain" priority unoptimized />
+            <Image src={item.url} alt={title} width={1800} height={1200} sizes="100vw" className="w-full h-auto object-contain" priority />
           )}
         </motion.div>
 
@@ -61,7 +61,7 @@ export default function PortfolioDetailOverlay({ item, onClose }: Props) {
                 {isVideo(mediaUrl) ? (
                   <video src={mediaUrl} muted loop autoPlay playsInline className="w-full h-auto object-contain" />
                 ) : (
-                  <Image src={mediaUrl} alt={`${title} — ${index + 1}`} width={1200} height={900} className="w-full h-auto object-contain" unoptimized />
+                  <Image src={mediaUrl} alt={`${title} — ${index + 1}`} width={1200} height={900} sizes="(max-width: 767px) 100vw, 50vw" className="w-full h-auto object-contain" />
                 )}
               </motion.div>
             ))}
