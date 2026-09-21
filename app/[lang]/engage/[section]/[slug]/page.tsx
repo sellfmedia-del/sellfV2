@@ -5,6 +5,7 @@ import {notFound} from 'next/navigation'
 import {PortableText} from '@portabletext/react'
 import {getEngageDetail, type EngageCard, type EngageLocale} from '@/sanity/lib/engage'
 import RegistrationPanel from './RegistrationPanel'
+import VisualCaseStudy from './VisualCaseStudy'
 import styles from './detail.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -81,23 +82,28 @@ export default async function EngageDetailPage({params}: DetailProps) {
   const embed = safeVideoEmbed(item.recordingUrl || item.videoUrl || item.podcastUrl)
   const externalUrl = item.presentationUrl || (!embed ? item.podcastUrl : undefined) || item.externalUrl
   const registrationSection = section === 'webinars' || section === 'events' ? section : null
+  const isVisualCase = item.format === 'visualCase' || item.layoutPreset === 'visualCase'
 
   return (
     <article className={styles.page}>
-      <header className={styles.hero}>
+      <header className={`${styles.hero} ${isVisualCase ? styles.visualCaseHero : ''}`}>
         {item.coverImage && <Image src={item.coverImage} alt="" fill priority sizes="100vw" className={styles.heroImage} />}
         <div className={styles.heroShade} />
         <div className={`sellf-container ${styles.heroInner}`}>
           <Link href={`/${lang}/engage`} className={styles.back}>← {t.back}</Link>
           <div className={styles.heroCopy}>
-            <span>{t[section as keyof typeof t] || 'Sellf Engage'}</span>
+            <span>{isVisualCase ? (lang === 'tr' ? 'Dış Vaka Analizi / External Case' : 'External Case / Dış Vaka Analizi') : (t[section as keyof typeof t] || 'Sellf Engage')}</span>
             <h1>{item.title}</h1>
             {item.summary && <p>{item.summary}</p>}
+            {isVisualCase ? <div className={styles.visualCaseTopics}><span>{lang === 'tr' ? 'MARKA' : 'BRAND'}</span><span>{lang === 'tr' ? 'OPERASYON' : 'OPERATIONS'}</span><span>{lang === 'tr' ? 'KÂRLILIK' : 'PROFITABILITY'}</span><span>{lang === 'tr' ? 'SÜRDÜRÜLEBİLİR BÜYÜME' : 'SUSTAINABLE GROWTH'}</span></div> : null}
             {item.date && <time dateTime={item.date}>{formatDate(item.date, lang, item.datePrecision)}</time>}
           </div>
         </div>
       </header>
 
+      {isVisualCase && item.visualCaseScenes?.length ? (
+        <VisualCaseStudy scenes={item.visualCaseScenes} sources={item.sources} disclosure={item.disclosure} lang={lang} />
+      ) : (
       <div className={`sellf-container ${styles.content}`}>
         {item.metrics && item.metrics.length > 0 && (
           <section className={styles.metrics} aria-label="Metrics">
@@ -142,6 +148,7 @@ export default async function EngageDetailPage({params}: DetailProps) {
 
         {externalUrl && <a href={externalUrl} target="_blank" rel="noreferrer" className={styles.external}>{t.open}<span>↗</span></a>}
       </div>
+      )}
     </article>
   )
 }

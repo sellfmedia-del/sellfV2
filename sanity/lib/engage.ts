@@ -15,8 +15,8 @@ export type EngageCard = {
   timezone?: string
   location?: string
   contentType?: 'showcase' | 'insight'
-  format?: 'article' | 'video' | 'motion' | 'podcast' | 'carousel' | 'presentation'
-  layoutPreset?: 'editorial' | 'mediaFirst' | 'metricFirst'
+  format?: 'article' | 'visualCase' | 'video' | 'motion' | 'podcast' | 'carousel' | 'presentation'
+  layoutPreset?: 'editorial' | 'mediaFirst' | 'metricFirst' | 'visualCase'
   cardStyle?: 'standard' | 'wide' | 'featured'
   eventType?: 'hosted' | 'sponsored' | 'attended' | 'speaker'
   externalUrl?: string
@@ -83,7 +83,38 @@ export type EngageDetail = EngageCard & {
   carousel?: Array<{url: string; caption?: string}>
   metrics?: Array<{value: string; label: string}>
   speakers?: Array<{_id: string; name: string; role?: string; image?: string}>
+  visualCaseScenes?: VisualCaseScene[]
+  sources?: Array<{label: string; url: string}>
+  disclosure?: string
   seo?: {title?: string; description?: string; image?: string; noIndex?: boolean}
+}
+
+type VisualCaseCopy = {title?: string; description?: string}
+
+export type VisualCaseScene = {
+  _key: string
+  _type:
+    | 'visualCaseTimeline'
+    | 'visualCaseLevers'
+    | 'visualCaseMetricComparison'
+    | 'visualCaseFramework'
+    | 'visualCaseFlow'
+    | 'visualCaseEvidence'
+    | 'visualCaseConclusion'
+  eyebrow?: string
+  title?: string
+  description?: string
+  question?: string
+  featuredValue?: string
+  featuredLabel?: string
+  featuredNote?: string
+  image?: string
+  items?: Array<VisualCaseCopy & {label?: string; detail?: string; image?: string}>
+  columns?: Array<VisualCaseCopy & {statement?: string}>
+  steps?: VisualCaseCopy[]
+  points?: VisualCaseCopy[]
+  leftMetric?: {value?: string; label?: string; note?: string}
+  rightMetric?: {value?: string; label?: string; note?: string}
 }
 
 export type EngageArchiveSection = 'webinars' | 'events' | 'content'
@@ -297,6 +328,50 @@ export async function getEngageDetail(
     "carousel": carousel[]{"url": asset->url, "caption": select($lang == "en" => coalesce(caption_en, caption_tr), caption_tr)},
     "metrics": metrics[]{value, "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr)},
     "speakers": speakers[]->{_id, name, "role": select($lang == "en" => coalesce(role_en, role_tr), role_tr), "image": image.asset->url},
+    "visualCaseScenes": visualCaseScenes[]{
+      _key,
+      _type,
+      "eyebrow": select($lang == "en" => coalesce(eyebrow_en, eyebrow_tr), eyebrow_tr),
+      "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+      "description": select($lang == "en" => coalesce(description_en, description_tr), description_tr),
+      "question": select($lang == "en" => coalesce(question_en, question_tr), question_tr),
+      featuredValue,
+      "featuredLabel": select($lang == "en" => coalesce(featuredLabel_en, featuredLabel_tr), featuredLabel_tr),
+      "featuredNote": select($lang == "en" => coalesce(featuredNote_en, featuredNote_tr), featuredNote_tr),
+      "image": image.asset->url,
+      "items": items[]{
+        "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+        "description": select($lang == "en" => coalesce(description_en, description_tr), description_tr),
+        "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr),
+        "detail": select($lang == "en" => coalesce(detail_en, detail_tr), detail_tr),
+        "image": image.asset->url
+      },
+      "columns": columns[]{
+        "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+        "statement": select($lang == "en" => coalesce(statement_en, statement_tr), statement_tr),
+        "description": select($lang == "en" => coalesce(description_en, description_tr), description_tr)
+      },
+      "steps": steps[]{
+        "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+        "description": select($lang == "en" => coalesce(description_en, description_tr), description_tr)
+      },
+      "points": points[]{
+        "title": select($lang == "en" => coalesce(title_en, title_tr), title_tr),
+        "description": select($lang == "en" => coalesce(description_en, description_tr), description_tr)
+      },
+      "leftMetric": leftMetric{
+        value,
+        "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr),
+        "note": select($lang == "en" => coalesce(note_en, note_tr), note_tr)
+      },
+      "rightMetric": rightMetric{
+        value,
+        "label": select($lang == "en" => coalesce(label_en, label_tr), label_tr),
+        "note": select($lang == "en" => coalesce(note_en, note_tr), note_tr)
+      }
+    },
+    sources[]{label, url},
+    "disclosure": select($lang == "en" => coalesce(disclosure_en, disclosure_tr), disclosure_tr),
     "seo": {
       "title": select($lang == "en" => coalesce(seo.title_en, seo.title_tr), seo.title_tr),
       "description": select($lang == "en" => coalesce(seo.description_en, seo.description_tr), seo.description_tr),
