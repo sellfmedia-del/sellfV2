@@ -72,3 +72,18 @@
   .registrationForm > button, .consent, .formError { grid-column: 1; }
   .registrationPanel { border-radius: 22px; }
 }
+
+
+/* Visual case pages follow the approved compact editorial mockup. */
+.visualCaseHero{min-height:500px;background:#07111b}
+.visualCaseHero .heroImage{object-position:center 54%;opacity:.72;filter:saturate(.74) contrast(1.08)}
+.visualCaseHero .heroShade{background:linear-gradient(90deg,rgba(4,10,17,.99) 0%,rgba(4,10,17,.94) 38%,rgba(4,10,17,.48) 68%,rgba(4,10,17,.18) 100%),linear-gradient(180deg,transparent 54%,rgba(4,10,17,.76))}
+.visualCaseHero .heroInner{min-height:500px;padding-top:88px;padding-bottom:38px;justify-content:flex-end}
+.visualCaseHero .back{display:none}
+.visualCaseHero .heroCopy{max-width:690px}
+.visualCaseHero .heroCopy>span{margin-bottom:18px;color:#c3c6cb;font-size:9px;letter-spacing:.22em}
+.visualCaseHero .heroCopy h1{max-width:11ch;font-size:clamp(3.1rem,5.5vw,6.1rem);line-height:.88;letter-spacing:-.065em}
+.visualCaseHero .heroCopy p{max-width:610px;margin-top:18px;color:rgba(255,255,255,.76);font-size:clamp(.95rem,1.2vw,1.12rem);line-height:1.5}
+.visualCaseTopics{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:26px;padding-top:17px;border-top:1px solid rgba(255,255,255,.18)}
+.visualCaseTopics span{color:rgba(255,255,255,.55);font-size:8px;font-weight:700;letter-spacing:.18em}
+@media(max-width:767px){.visualCaseHero,.visualCaseHero .heroInner{min-height:570px}.visualCaseHero .heroImage{object-position:66% center;opacity:.48}.visualCaseHero .heroShade{background:linear-gradient(180deg,rgba(4,10,17,.2),rgba(4,10,17,.98) 62%)}.visualCaseHero .heroInner{padding-top:100px;padding-bottom:34px}.visualCaseHero .heroCopy h1{font-size:clamp(3rem,14vw,5rem)}}
