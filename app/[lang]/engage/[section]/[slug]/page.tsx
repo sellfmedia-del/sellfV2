@@ -92,9 +92,10 @@ export default async function EngageDetailPage({params}: DetailProps) {
         <div className={`sellf-container ${styles.heroInner}`}>
           <Link href={`/${lang}/engage`} className={styles.back}>← {t.back}</Link>
           <div className={styles.heroCopy}>
-            <span>{t[section as keyof typeof t] || 'Sellf Engage'}</span>
+            <span>{isVisualCase ? (lang === 'tr' ? 'Dış Vaka Analizi / External Case' : 'External Case / Dış Vaka Analizi') : (t[section as keyof typeof t] || 'Sellf Engage')}</span>
             <h1>{item.title}</h1>
             {item.summary && <p>{item.summary}</p>}
+            {isVisualCase ? <div className={styles.visualCaseTopics}><span>{lang === 'tr' ? 'MARKA' : 'BRAND'}</span><span>{lang === 'tr' ? 'OPERASYON' : 'OPERATIONS'}</span><span>{lang === 'tr' ? 'KÂRLILIK' : 'PROFITABILITY'}</span><span>{lang === 'tr' ? 'SÜRDÜRÜLEBİLİR BÜYÜME' : 'SUSTAINABLE GROWTH'}</span></div> : null}
             {item.date && <time dateTime={item.date}>{formatDate(item.date, lang, item.datePrecision)}</time>}
           </div>
         </div>
