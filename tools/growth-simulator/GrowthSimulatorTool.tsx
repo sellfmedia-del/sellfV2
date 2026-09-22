@@ -1,0 +1,209 @@
+'use client'
+
+import {useMemo, useState} from 'react'
+import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
+import {compareScenarios, type NumericInputs, type SectorId} from './engine'
+import {getSector, sectors, type FieldConfig} from './config'
+import styles from './growth-simulator.module.css'
+
+type Locale = 'tr' | 'en'
+type Currency = 'TRY' | 'USD' | 'EUR' | 'GBP'
+
+const copy = {
+  tr: {
+    eyebrow: 'SELLF ENGAGE / GROWTH SIMULATOR', title: 'Büyüme kararını, sonuçlarını görmeden verme.',
+    intro: 'Mevcut operasyonunuzu tanımlayın, büyüme değişkenlerini hareket ettirin ve cirodan EBITDA’ya kadar finansal etkiyi anında görün.',
+    back: 'Tüm tool’lara dön', sector: 'İş modelinizi seçin', current: 'Mevcut durum', scenario: 'Büyüme senaryosu',
+    inputs: 'Değişkenler', advanced: 'Detaylı girdileri göster', hideAdvanced: 'Detaylı girdileri gizle', reset: 'Örnek senaryoya dön',
+    outputs: 'Finansal sonuç', revenue: 'Net ciro', expenses: 'Toplam gider', ebitda: 'Öngörülen EBITDA', margin: 'EBITDA marjı',
+    roas: 'ROAS', roi: 'Growth ROI', noRoi: 'Ek yatırım yok', delta: 'EBITDA değişimi', investment: 'Ek büyüme yatırımı',
+    chart: 'Mevcut durum ve senaryo', details: 'Detaylı hesaplama', health: 'Operasyonun finansal sağlığı',
+    strong: 'Güçlü', watch: 'İzlenmeli', critical: 'Kritik', assumptions: 'Hesabın kapsamı',
+    disclaimer: 'Bu çıktı finansal planlama simülasyonudur; muhasebe, vergi veya yatırım tavsiyesi değildir. EBITDA net kâr değildir. Vergi, amortisman ve finansman etkileri yalnızca ilgili modelde ayrıca gösterilir.',
+    baselineLabel: 'Mevcut', scenarioLabel: 'Senaryo', currency: 'Para birimi', currencyNote: 'Para birimi seçimi değerleri dönüştürmez; girilen tutarların birimini belirler.',
+    positive: 'Senaryo, mevcut duruma göre daha yüksek EBITDA üretiyor.', negative: 'Senaryo mevcut duruma göre EBITDA kaybı yaratıyor.',
+    breakEvenGood: 'Senaryo cirosu operasyonel başabaş seviyesinin üzerinde.', breakEvenBad: 'Senaryo cirosu operasyonel başabaş seviyesinin altında.',
+    noWarning: 'Modelde belirgin bir kapasite veya başabaş uyarısı oluşmadı.',
+  },
+  en: {
+    eyebrow: 'SELLF ENGAGE / GROWTH SIMULATOR', title: 'See the financial result before making the growth decision.',
+    intro: 'Describe your current operation, move the growth variables and see the impact from revenue through EBITDA in real time.',
+    back: 'Back to all tools', sector: 'Choose your business model', current: 'Current state', scenario: 'Growth scenario',
+    inputs: 'Variables', advanced: 'Show detailed inputs', hideAdvanced: 'Hide detailed inputs', reset: 'Reset example',
+    outputs: 'Financial result', revenue: 'Net revenue', expenses: 'Total expenses', ebitda: 'Projected EBITDA', margin: 'EBITDA margin',
+    roas: 'ROAS', roi: 'Growth ROI', noRoi: 'No incremental investment', delta: 'EBITDA change', investment: 'Incremental growth investment',
+    chart: 'Current state and scenario', details: 'Detailed calculation', health: 'Financial health',
+    strong: 'Strong', watch: 'Monitor', critical: 'Critical', assumptions: 'Calculation scope',
+    disclaimer: 'This is a financial planning simulation, not accounting, tax or investment advice. EBITDA is not net profit. Tax, depreciation and financing effects are shown separately only where the model supports them.',
+    baselineLabel: 'Current', scenarioLabel: 'Scenario', currency: 'Currency', currencyNote: 'Changing currency does not convert values; it defines the unit of the amounts entered.',
+    positive: 'The scenario produces higher EBITDA than the current state.', negative: 'The scenario produces an EBITDA loss versus the current state.',
+    breakEvenGood: 'Scenario revenue is above operational break-even.', breakEvenBad: 'Scenario revenue is below operational break-even.',
+    noWarning: 'No material capacity or break-even warning was triggered.',
+  },
+} as const
+
+const compact = (value: number, locale: Locale) => new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-US', {notation: 'compact', maximumFractionDigits: 1}).format(value)
+
+const modelTranslations: Record<string, string> = {
+  'Net sipariş': 'Net orders', 'Ücretli trafik': 'Paid traffic', 'Katkı marjı': 'Contribution margin',
+  'Ürün maliyeti': 'Cost of goods', 'Komisyonlar': 'Commissions', 'Lojistik': 'Logistics', 'Reklam harcaması': 'Ad spend',
+  'Sabit operasyon giderleri': 'Fixed operating costs', 'Kazanılan iş': 'Won business', 'Toplam lead': 'Total leads',
+  'Kapasite üstü backlog': 'Backlog above capacity', 'Satış döngüsü': 'Sales cycle', 'Teslimat maliyeti': 'Delivery cost',
+  'Pazarlama harcaması': 'Marketing spend', 'Satış ve teslimat ekipleri': 'Sales and delivery teams', 'Diğer sabit giderler': 'Other fixed costs',
+  'Net işlem': 'Net transactions', 'Mağaza başına ciro': 'Revenue per store', 'Stoksuzluk kaynaklı kayıp': 'Revenue lost to stockouts',
+  'Mağaza başına başabaş': 'Break-even per store', 'Kayıp ve fire': 'Shrinkage and loss', 'Mağaza sabit giderleri': 'Store fixed costs',
+  'Merkez giderleri': 'Central costs', 'Satılabilir m²': 'Sellable sqm', 'Vergi öncesi kâr': 'Pre-tax profit',
+  'Başabaş satış fiyatı / m²': 'Break-even price / sqm', 'Başabaş stok satış oranı': 'Break-even inventory sell-through',
+  'Arsa maliyeti': 'Land cost', 'İnşaat maliyeti': 'Construction cost', 'Beklenmeyen gider payı': 'Contingency',
+  'Proje ve ruhsat giderleri': 'Project and permit costs', 'Pazarlama ve satış': 'Marketing and sales', 'Genel yönetim': 'Overhead',
+  'Finansman maliyeti (EBITDA dışı)': 'Finance cost (outside EBITDA)',
+  'İade oranı kârlılığı belirgin biçimde baskılıyor.': 'The return rate is materially suppressing profitability.',
+  'Ciro, operasyonel başabaş seviyesinin altında.': 'Revenue is below operational break-even.',
+  'Tanınan gelir operasyonel başabaş seviyesinin altında.': 'Recognized revenue is below operational break-even.',
+  'Stok bulunabilirliği satış potansiyelini belirgin biçimde sınırlıyor.': 'Stock availability is materially limiting sales potential.',
+  'Toplam ciro mağaza ağının başabaş seviyesinin altında.': 'Total revenue is below the store network break-even level.',
+  'Projenin başabaşa ulaşması için stokun çok yüksek bir bölümünün satılması gerekiyor.': 'A very high share of inventory must be sold for the project to break even.',
+  'Finansman maliyeti sonrasında proje zarar üretiyor.': 'The project produces a loss after financing costs.',
+}
+
+function localizeModelText(text: string, lang: Locale) {
+  if (lang === 'tr') return text
+  if (text.startsWith('Talep kapasiteyi ')) return text.replace('Talep kapasiteyi ', 'Demand exceeds capacity by ').replace(' iş aşıyor; gelir aynı dönemde gerçekleşemiyor.', ' deals; the revenue cannot be recognized in the same period.')
+  return modelTranslations[text] ?? text
+}
+
+export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
+  const t = copy[lang]
+  const [sectorId, setSectorId] = useState<SectorId>('ecommerce')
+  const sector = getSector(sectorId)
+  const [baselineBySector, setBaselineBySector] = useState<Record<SectorId, NumericInputs>>(() => Object.fromEntries(sectors.map((item) => [item.id, {...item.baseline}])) as Record<SectorId, NumericInputs>)
+  const [scenarioBySector, setScenarioBySector] = useState<Record<SectorId, NumericInputs>>(() => Object.fromEntries(sectors.map((item) => [item.id, {...item.scenario}])) as Record<SectorId, NumericInputs>)
+  const [advanced, setAdvanced] = useState(false)
+  const [currency, setCurrency] = useState<Currency>('TRY')
+
+  const baseline = baselineBySector[sectorId]
+  const scenario = scenarioBySector[sectorId]
+  const result = useMemo(() => compareScenarios(sectorId, baseline, scenario), [sectorId, baseline, scenario])
+
+  const money = (value: number) => new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {style: 'currency', currency, maximumFractionDigits: 0}).format(value)
+  const number = (value: number) => new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {maximumFractionDigits: 1}).format(value)
+  const formatField = (value: number, field: FieldConfig) => field.unit === 'currency' ? money(value) : field.unit === 'percent' ? `%${number(value)}` : field.unit === 'months' ? `${number(value)} ${lang === 'tr' ? 'ay' : 'mo'}` : number(value)
+  const visibleFields = sector.fields.filter((field) => advanced || !field.advanced)
+
+  const update = (mode: 'baseline' | 'scenario', key: string, value: number) => {
+    const setter = mode === 'baseline' ? setBaselineBySector : setScenarioBySector
+    setter((all) => ({...all, [sectorId]: {...all[sectorId], [key]: Number.isFinite(value) ? value : 0}}))
+  }
+
+  const reset = () => {
+    setBaselineBySector((all) => ({...all, [sectorId]: {...sector.baseline}}))
+    setScenarioBySector((all) => ({...all, [sectorId]: {...sector.scenario}}))
+  }
+
+  const healthTone = result.scenario.ebitda < 0 ? 'critical' : result.scenario.ebitdaMargin < 10 || result.scenario.revenue < result.scenario.breakEvenRevenue ? 'watch' : 'strong'
+  const healthLabel = healthTone === 'critical' ? t.critical : healthTone === 'watch' ? t.watch : t.strong
+  const chartData = [
+    {name: t.baselineLabel, revenue: result.baseline.revenue, expenses: result.baseline.expenses, ebitda: result.baseline.ebitda},
+    {name: t.scenarioLabel, revenue: result.scenario.revenue, expenses: result.scenario.expenses, ebitda: result.scenario.ebitda},
+  ]
+
+  return <div className={styles.shell}>
+    <section className={styles.hero}>
+      <div className={styles.heroGlow} />
+      <div className="sellf-container">
+        <a href={`/${lang}/engage/tools`} className={styles.back}>← {t.back}</a>
+        <span className={styles.eyebrow}>{t.eyebrow}</span>
+        <h1>{t.title}</h1>
+        <p>{t.intro}</p>
+      </div>
+    </section>
+
+    <section className={`sellf-container ${styles.workspace}`}>
+      <div className={styles.modelHead}>
+        <div><span className={styles.step}>01</span><h2>{t.sector}</h2></div>
+        <div className={styles.currencyWrap}>
+          <label htmlFor="currency">{t.currency}</label>
+          <select id="currency" value={currency} onChange={(event) => setCurrency(event.target.value as Currency)}>{(['TRY', 'USD', 'EUR', 'GBP'] as Currency[]).map((item) => <option key={item}>{item}</option>)}</select>
+        </div>
+      </div>
+      <div className={styles.sectorGrid}>
+        {sectors.map((item) => <button key={item.id} type="button" onClick={() => setSectorId(item.id)} className={item.id === sectorId ? styles.sectorActive : ''}>
+          <strong>{item.name[lang]}</strong><span>{item.description[lang]}</span>
+        </button>)}
+      </div>
+      <p className={styles.currencyNote}>{t.currencyNote}</p>
+
+      <div className={styles.simulatorGrid}>
+        <div className={styles.controls}>
+          <div className={styles.panelHeading}><div><span className={styles.step}>02</span><h2>{t.inputs}</h2></div><button type="button" onClick={reset}>{t.reset}</button></div>
+          <div className={styles.columnLabels}><span /> <b>{t.current}</b><b>{t.scenario}</b></div>
+          <div className={styles.fields}>
+            {visibleFields.map((field) => <div className={styles.field} key={field.key}>
+              <div className={styles.fieldTop}><label htmlFor={`${field.key}-scenario`}>{field.label[lang]}</label><strong>{formatField(scenario[field.key], field)}</strong></div>
+              <div className={styles.fieldCompare}>
+                <input aria-label={`${field.label[lang]} - ${t.current}`} type="number" min={field.min} max={field.max} step={field.step} value={baseline[field.key]} onChange={(event) => update('baseline', field.key, Number(event.target.value))} />
+                <input aria-label={`${field.label[lang]} - ${t.scenario}`} type="number" min={field.min} max={field.max} step={field.step} value={scenario[field.key]} onChange={(event) => update('scenario', field.key, Number(event.target.value))} />
+              </div>
+              <input id={`${field.key}-scenario`} className={styles.range} type="range" min={field.min} max={field.max} step={field.step} value={scenario[field.key]} onChange={(event) => update('scenario', field.key, Number(event.target.value))} />
+            </div>)}
+          </div>
+          <button className={styles.advancedButton} type="button" onClick={() => setAdvanced((value) => !value)}>{advanced ? t.hideAdvanced : t.advanced}<span>{advanced ? '−' : '+'}</span></button>
+        </div>
+
+        <div className={styles.results}>
+          <div className={styles.panelHeading}><div><span className={styles.step}>03</span><h2>{t.outputs}</h2></div><span className={`${styles.healthPill} ${styles[healthTone]}`}>{healthLabel}</span></div>
+          <div className={styles.metricGrid}>
+            <Metric label={t.revenue} value={money(result.scenario.revenue)} delta={result.scenario.revenue - result.baseline.revenue} formatter={money} />
+            <Metric label={t.ebitda} value={money(result.scenario.ebitda)} delta={result.ebitdaDelta} formatter={money} emphasized />
+            <Metric label={t.margin} value={`%${number(result.scenario.ebitdaMargin)}`} delta={result.scenario.ebitdaMargin - result.baseline.ebitdaMargin} formatter={(value) => `${value >= 0 ? '+' : ''}${number(value)} puan`} />
+            <Metric label={t.roas} value={result.scenario.roas === null ? '—' : `${number(result.scenario.roas)}x`} delta={(result.scenario.roas ?? 0) - (result.baseline.roas ?? 0)} formatter={(value) => `${value >= 0 ? '+' : ''}${number(value)}x`} />
+            <Metric label={t.roi} value={result.growthRoi === null ? t.noRoi : `%${number(result.growthRoi)}`} />
+            <Metric label={t.expenses} value={money(result.scenario.expenses)} delta={result.scenario.expenses - result.baseline.expenses} formatter={money} />
+          </div>
+
+          <div className={styles.investmentStrip}>
+            <div><span>{t.delta}</span><strong>{money(result.ebitdaDelta)}</strong></div>
+            <div><span>{t.investment}</span><strong>{money(result.growthInvestment)}</strong></div>
+          </div>
+
+          <div className={styles.chartPanel}>
+            <h3>{t.chart}</h3>
+            <div className={styles.chart}>
+              <ResponsiveContainer width="100%" height="100%"><BarChart data={chartData} margin={{top: 12, right: 4, left: 0, bottom: 0}}>
+                <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
+                <XAxis dataKey="name" stroke="rgba(255,255,255,.45)" tickLine={false} axisLine={false} />
+                <YAxis stroke="rgba(255,255,255,.35)" tickFormatter={(value) => compact(Number(value), lang)} tickLine={false} axisLine={false} width={58} />
+                <Tooltip formatter={(value) => money(Number(value))} contentStyle={{background: '#111827', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12}} />
+                <Legend wrapperStyle={{fontSize: 11}} />
+                <Bar dataKey="revenue" name={t.revenue} fill="#7777ef" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="expenses" name={t.expenses} fill="#36415d" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="ebitda" name="EBITDA" fill="#d6d6ff" radius={[5, 5, 0, 0]} />
+              </BarChart></ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.lowerGrid}>
+        <section className={styles.detailPanel}><span className={styles.step}>04</span><h2>{t.details}</h2>
+          <div className={styles.detailRows}>{result.scenario.breakdown.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{money(item.value)}</strong></div>)}</div>
+          <div className={styles.secondaryGrid}>
+            {result.scenario.secondary.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{item.format === 'currency' ? money(item.value) : item.format === 'percent' ? `%${number(item.value)}` : item.format === 'months' ? `${number(item.value)} ${lang === 'tr' ? 'ay' : 'mo'}` : number(item.value)}</strong></div>)}
+          </div>
+        </section>
+        <section className={styles.healthPanel}><span className={styles.step}>05</span><h2>{t.health}</h2>
+          <ul>
+            <li>{result.ebitdaDelta >= 0 ? t.positive : t.negative}</li>
+            <li>{result.scenario.revenue >= result.scenario.breakEvenRevenue ? t.breakEvenGood : t.breakEvenBad}</li>
+            {(result.scenario.warnings.length ? result.scenario.warnings : [t.noWarning]).map((warning) => <li key={warning}>{localizeModelText(warning, lang)}</li>)}
+          </ul>
+          <div className={styles.disclaimer}><strong>{t.assumptions}</strong><p>{t.disclaimer}</p></div>
+        </section>
+      </div>
+    </section>
+  </div>
+}
+
+function Metric({label, value, delta, formatter, emphasized = false}: {label: string; value: string; delta?: number; formatter?: (value: number) => string; emphasized?: boolean}) {
+  return <div className={`${styles.metric} ${emphasized ? styles.metricEmphasized : ''}`}><span>{label}</span><strong>{value}</strong>{delta !== undefined && formatter && <small className={delta >= 0 ? styles.up : styles.down}>{delta >= 0 ? '↑' : '↓'} {formatter(Math.abs(delta))}</small>}</div>
+}

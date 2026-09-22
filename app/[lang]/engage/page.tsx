@@ -179,13 +179,16 @@ export default async function EngagePage({params}: PageProps) {
   const eventItems = data.events.length ? data.events.slice(0, 4).map((item, index) => fromCms(item, lang, eventSeeds[index]?.image || images.hero, item.eventType || 'EVENT')) : eventSeeds
 
   const toolSeeds: DisplayItem[] = [
-    {id: 't1', title: 'Channel Maturity Assessment', summary: lang === 'tr' ? 'Kanallarını kıyasla ve önceliklerini belirle.' : 'Benchmark your channels and find what to prioritize.', image: images.tools, href: '#tools', label: 'ASSESSMENT'},
+    {id: 't1', title: 'Growth Simulator', summary: lang === 'tr' ? 'Büyüme senaryonun ciro, EBITDA ve ROI etkisini canlı modelle.' : 'Model the revenue, EBITDA and ROI impact of your growth scenario.', image: images.tools, href: `/${lang}/engage/tools/growth-simulator`, label: 'SIMULATOR'},
     {id: 't2', title: 'Growth Readiness Score', summary: lang === 'tr' ? 'Büyüme hazırlığını net biçimde gör.' : 'Get a clear view of your growth readiness.', image: images.tools, href: '#tools', label: 'SCORE'},
     {id: 't3', title: 'Marketing Profitability Calculator', summary: lang === 'tr' ? 'Yatırımdan önce gerçek etkiyi modelle.' : 'Model real impact before you invest.', image: images.tools, href: '#tools', label: 'CALCULATOR'},
     {id: 't4', title: 'SellfScale', summary: lang === 'tr' ? 'Büyüme sistemini uçtan uca haritala.' : 'Map your growth system from end to end.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
     {id: 't5', title: 'SellfCompete', summary: lang === 'tr' ? 'Nerede olduğunu ve sıradaki hamleni gör.' : 'See where you stand and where to move next.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
   ]
-  const toolItems = data.tools.length ? data.tools.slice(0, 5).map((item, index) => fromCms(item, lang, images.tools, toolSeeds[index]?.label || 'TOOL')) : toolSeeds
+  const remainingToolItems = data.tools.length
+    ? data.tools.slice(0, 4).map((item, index) => fromCms(item, lang, images.tools, toolSeeds[index + 1]?.label || 'TOOL'))
+    : toolSeeds.slice(1)
+  const toolItems = [toolSeeds[0], ...remainingToolItems].slice(0, 5)
 
   const contentSeeds: DisplayItem[] = [
     {id: 'c1', title: 'Early Mover, or Just an Undefined Bet?', image: images.hero, href: '#latest', label: 'VIDEO', author: 'Sellf Media'},
@@ -216,7 +219,7 @@ export default async function EngagePage({params}: PageProps) {
 
     <section className={`${styles.whiteSection} ${styles.eventsSection}`} id="events"><div className="sellf-container"><div className={styles.lightHeading}><div><span>{t.eventEyebrow}</span><h2>{t.eventTitle}</h2></div><ArrowLink href={`/${lang}/engage/events`}>{t.allEvents}</ArrowLink></div><div className={styles.operatorGrid}>{eventItems.map((item, index) => <OperatorCard key={item.id} item={item} index={index} />)}</div></div></section>
 
-    <section className={`${styles.toolsSection} ${styles.curveBlue}`} id="tools"><div className="sellf-container"><div className={styles.toolsHeading}><div><span>{t.toolsEyebrow}</span><h2>{t.toolsTitle}</h2></div><p>{t.toolsNote}</p><ArrowLink href={`/${lang}/engage/tools`} light>{t.allTools}</ArrowLink></div><div className={styles.toolsGrid}>{toolItems.map((item, index) => <Link href={`/${lang}/engage/tools`} key={item.id} className={styles.toolCard}><h3>{item.title}<span>→</span></h3><ToolVisual index={index} /><p>{item.summary}</p></Link>)}</div></div></section>
+    <section className={`${styles.toolsSection} ${styles.curveBlue}`} id="tools"><div className="sellf-container"><div className={styles.toolsHeading}><div><span>{t.toolsEyebrow}</span><h2>{t.toolsTitle}</h2></div><p>{t.toolsNote}</p><ArrowLink href={`/${lang}/engage/tools`} light>{t.allTools}</ArrowLink></div><div className={styles.toolsGrid}>{toolItems.map((item, index) => <Link href={item.href.startsWith('/') ? item.href : `/${lang}/engage/tools`} key={item.id} className={styles.toolCard}><h3>{item.title}<span>→</span></h3><ToolVisual index={index} /><p>{item.summary}</p></Link>)}</div></div></section>
 
     <section className={`${styles.whiteSection} ${styles.latestSection}`} id="latest"><div className="sellf-container"><div className={styles.latestHeading}><div><span>{t.latestEyebrow}</span><h2>{t.latestTitle}</h2></div><Link href={`/${lang}/engage/content`} className={styles.filterPill}>{t.allContent}<span aria-hidden="true"> →</span></Link></div><div className={styles.latestGrid}>{contentItems.map((item) => <Link href={item.href} key={item.id} className={styles.latestCard}><div className={styles.latestMedia}><CardImage src={item.image} alt={item.title} sizes="(max-width: 760px) 80vw, 17vw" /><span>{item.label}</span></div><h3>{item.title}</h3><p><span className={styles.avatarDot} />{item.author}</p></Link>)}</div></div></section>
 

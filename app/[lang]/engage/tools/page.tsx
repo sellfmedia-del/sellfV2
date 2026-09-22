@@ -11,6 +11,7 @@ const copy = {
     description: 'İşinizi değerlendirmek, fırsatları görmek ve daha doğru kararlar almak için geliştirdiğimiz native araçlar.',
     back: 'Engage’e dön',
     soon: 'Geliştiriliyor',
+    ready: 'Kullanıma hazır',
     note: 'Her araç Sellf tarafından native component olarak geliştirilecek ve kendi sayfasında kullanılabilecek.',
   },
   en: {
@@ -19,11 +20,13 @@ const copy = {
     description: 'Native tools designed to help you diagnose your business, identify opportunities and make better decisions.',
     back: 'Back to Engage',
     soon: 'In development',
+    ready: 'Ready to use',
     note: 'Each tool will be built by Sellf as a native component and will be available on its own page.',
   },
 } as const
 
 const tools = [
+  {title: 'Growth Simulator', tr: 'Sektörünüze özel değişkenlerle büyümenin finansal etkisini canlı olarak modelleyin.', en: 'Model the financial impact of growth with variables tailored to your sector.', slug: 'growth-simulator', ready: true},
   {title: 'Channel Maturity Assessment', tr: 'Kanallarınızı karşılaştırın ve neye öncelik vereceğinizi görün.'},
   {title: 'Growth Readiness Score', tr: 'Büyümeye ne kadar hazır olduğunuzu net biçimde değerlendirin.'},
   {title: 'Marketing Profitability Calculator', tr: 'Yatırım yapmadan önce gerçek kârlılık etkisini modelleyin.'},
@@ -66,12 +69,15 @@ export default async function EngageToolsPage({params}: ToolsPageProps) {
     <section className={`sellf-container ${styles.content}`}>
       <p className={styles.note}>{t.note}</p>
       <div className={styles.grid}>
-        {tools.map((tool, index) => <article className={styles.card} key={tool.title}>
-          <div className={styles.visual}><span>0{index + 1}</span><i /></div>
-          <small>{t.soon}</small>
-          <h2>{tool.title}</h2>
-          <p>{lang === 'tr' ? tool.tr : tool.title === 'Channel Maturity Assessment' ? 'Benchmark your channels and see what to prioritize.' : tool.title === 'Growth Readiness Score' ? 'Assess how ready your organization is for growth.' : tool.title === 'Marketing Profitability Calculator' ? 'Model real profitability before you invest.' : tool.title === 'SellfScale' ? 'Map your growth system from end to end.' : 'See where you stand and where to move next.'}</p>
-        </article>)}
+        {tools.map((tool, index) => {
+          const body = <>
+            <div className={styles.visual}><span>0{index + 1}</span><i /></div>
+            <small>{'ready' in tool && tool.ready ? t.ready : t.soon}</small>
+            <h2>{tool.title}</h2>
+            <p>{lang === 'tr' ? tool.tr : 'en' in tool ? tool.en : tool.title === 'Channel Maturity Assessment' ? 'Benchmark your channels and see what to prioritize.' : tool.title === 'Growth Readiness Score' ? 'Assess how ready your organization is for growth.' : tool.title === 'Marketing Profitability Calculator' ? 'Model real profitability before you invest.' : tool.title === 'SellfScale' ? 'Map your growth system from end to end.' : 'See where you stand and where to move next.'}</p>
+          </>
+          return 'slug' in tool ? <Link href={`/${lang}/engage/tools/${tool.slug}`} className={styles.card} key={tool.title}>{body}</Link> : <article className={styles.card} key={tool.title}>{body}</article>
+        })}
       </div>
     </section>
   </main>
