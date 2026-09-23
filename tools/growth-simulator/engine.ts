@@ -24,6 +24,33 @@ export type ComparisonResult = {
   growthRoi: number | null
 }
 
+export type TimelinePoint = {
+  month: number
+  revenue: number
+  expenses: number
+  ebitda: number
+  cashFlow: number
+  cumulativeCash: number
+  backlog: number
+  capacity: number
+  inventory: number
+}
+
+export type TimelineResult = {
+  kind: 'b2b' | 'retail' | 'realEstate'
+  points: TimelinePoint[]
+  summary: {
+    firstRevenueMonth: number | null
+    endingBacklog: number | null
+    fullRampMonth: number | null
+    paybackMonth: number | null
+    maxFunding: number | null
+    cashBreakEvenMonth: number | null
+    endingInventory: number | null
+    derivedFinanceCost: number | null
+  }
+}
+
 const finite = (value: number) => Number.isFinite(value) ? value : 0
 const nonNegative = (value: number) => Math.max(0, finite(value))
 const percentage = (value: number) => Math.min(100, nonNegative(value))
@@ -257,4 +284,181 @@ export function compareScenarios(sector: SectorId, baselineInputs: NumericInputs
   }
 
   return {baseline, scenario, ebitdaDelta, growthInvestment, growthRoi: growthInvestment > 0 ? ebitdaDelta / growthInvestment * 100 : null}
+}
+
+function b2bTimeline(x: NumericInputs): TimelineResult {
+  const horizon = 12
+  const salesCycle = Math.max(1, Math.round(nonNegative(x.salesCycleMonths)))
+  const projectDuration = Math.max(1, Math.round(nonNegative(x.projectDurationMonths)))
+  const marketingSpend = nonNegative(x.marketingSpend)
+  const paidLeads = safeDivide(marketingSpend, nonNegative(x.cpl))
+  const totalLeads = paidLeads + nonNegative(x.nonPaidLeads)
+  const expectedWins = totalLeads * percentage(x.qualificationRate) / 100 * percentage(x.proposalRate) / 100 * percentage(x.winRate) / 100
+  const capacity = nonNegative(x.deliveryCapacity)
+  const averageDeal = nonNegative(x.averageDeal)
+  const existingRevenue = nonNegative(x.existingRevenue)
+  const deliveryCostRate = percentage(x.deliveryCostRate) / 100
+  const commissionRate = percentage(x.salesCommissionRate) / 100
+  const fixed = nonNegative(x.salesPayroll) + nonNegative(x.deliveryPayroll) + nonNegative(x.marketingOps) + nonNegative(x.tech) + nonNegative(x.otherFixed)
+  const closedByMonth: number[] = []
+  const points: TimelinePoint[] = []
+  let backlog = 0
+  let cumulativeCash = -nonNegative(x.growthInvestment)
+  let firstRevenueMonth: number | null = null
+
+  for (let index = 0; index < horizon; index += 1) {
+    const arrivals = index >= salesCycle ? expectedWins : 0
+    const availableDemand = backlog + arrivals
+    const delivered = Math.min(availableDemand, capacity)
+    backlog = nonNegative(availableDemand - delivered)
+    closedByMonth[index] = delivered
+    const firstActiveCohort = Math.max(0, index - projectDuration + 1)
+    const activeDeals = closedByMonth.slice(firstActiveCohort, index + 1).reduce((sum, wins) => sum + wins, 0)
+    const newRevenue = activeDeals * averageDeal / projectDuration
+    if (firstRevenueMonth === null && newRevenue > 0) firstRevenueMonth = index + 1
+    const revenue = existingRevenue + newRevenue
+    const variableCosts = revenue * deliveryCostRate + newRevenue * commissionRate
+    const expenses = variableCosts + fixed + marketingSpend
+    const ebitda = revenue - expenses
+    cumulativeCash += ebitda
+    points.push({month: index + 1, revenue, expenses, ebitda, cashFlow: ebitda, cumulativeCash, backlog, capacity, inventory: 0})
+  }
+
+  return {
+    kind: 'b2b', points,
+    summary: {
+      firstRevenueMonth, endingBacklog: backlog, fullRampMonth: null,
+      paybackMonth: null, maxFunding: null, cashBreakEvenMonth: null,
+      endingInventory: null, derivedFinanceCost: null,
+    },
+  }
+}
+
+function retailTimeline(baseline: NumericInputs, scenario: NumericInputs): TimelineResult {
+  const openingMonth = Math.max(1, Math.round(nonNegative(scenario.storeOpeningMonth)))
+  const rampMonths = Math.max(1, Math.round(nonNegative(scenario.rampUpMonths)))
+  const horizon = Math.min(24, Math.max(12, openingMonth + rampMonths + 3))
+  const baselineStores = nonNegative(baseline.storeCount)
+  const scenarioStores = nonNegative(scenario.storeCount)
+  const existingStores = Math.min(baselineStores, scenarioStores)
+  const newStores = nonNegative(scenarioStores - baselineStores)
+  const demandPerStore = nonNegative(scenario.footfallPerStore) * percentage(scenario.conversionRate) / 100
+  const transactionsPerStore = demandPerStore * percentage(scenario.stockAvailability) / 100 * (1 - percentage(scenario.returnRate) / 100)
+  const revenuePerStore = transactionsPerStore * nonNegative(scenario.aov)
+  const variablePerStore = revenuePerStore * (percentage(scenario.cogsRate) + percentage(scenario.shrinkageRate) + percentage(scenario.commissionRate)) / 100 + transactionsPerStore * nonNegative(scenario.transactionCost)
+  const fixedPerStore = nonNegative(scenario.rentPerStore) + nonNegative(scenario.staffPerStore) + nonNegative(scenario.utilitiesPerStore) + nonNegative(scenario.otherStoreCost)
+  const centralFixed = nonNegative(scenario.centralPayroll) + nonNegative(scenario.marketingOps) + nonNegative(scenario.tech) + nonNegative(scenario.otherCentral) + nonNegative(scenario.marketingSpend)
+  const openingInvestment = newStores * (nonNegative(scenario.newStoreCapex) + nonNegative(scenario.initialStockPerStore))
+  const points: TimelinePoint[] = []
+  let cumulativeCash = 0
+  let paybackMonth: number | null = null
+  let investmentDeployed = false
+
+  for (let month = 1; month <= horizon; month += 1) {
+    const isOpen = newStores > 0 && month >= openingMonth
+    const ramp = isOpen ? Math.min(1, (month - openingMonth + 1) / rampMonths) : 0
+    const equivalentNewStores = newStores * ramp
+    const operatingNewStores = isOpen ? newStores : 0
+    const revenue = (existingStores + equivalentNewStores) * revenuePerStore
+    const variableCosts = (existingStores + equivalentNewStores) * variablePerStore
+    const storeFixed = (existingStores + operatingNewStores) * fixedPerStore
+    const expenses = variableCosts + storeFixed + centralFixed
+    const ebitda = revenue - expenses
+    const incrementalNewEbitda = equivalentNewStores * (revenuePerStore - variablePerStore) - operatingNewStores * fixedPerStore
+    const investment = month === openingMonth ? openingInvestment : 0
+    if (investment > 0) investmentDeployed = true
+    const cashFlow = incrementalNewEbitda - investment
+    cumulativeCash += cashFlow
+    if (investmentDeployed && paybackMonth === null && cumulativeCash >= 0) paybackMonth = month
+    points.push({month, revenue, expenses, ebitda, cashFlow, cumulativeCash, backlog: 0, capacity: existingStores + equivalentNewStores, inventory: 0})
+  }
+
+  const minCash = Math.min(0, ...points.map((point) => point.cumulativeCash))
+  return {
+    kind: 'retail', points,
+    summary: {
+      firstRevenueMonth: newStores > 0 ? openingMonth : null, endingBacklog: null,
+      fullRampMonth: newStores > 0 ? openingMonth + rampMonths - 1 : null,
+      paybackMonth, maxFunding: newStores > 0 ? -minCash : null,
+      cashBreakEvenMonth: null, endingInventory: null, derivedFinanceCost: null,
+    },
+  }
+}
+
+function realEstateTimeline(x: NumericInputs): TimelineResult {
+  const duration = Math.max(1, Math.min(60, Math.round(nonNegative(x.projectDurationMonths))))
+  const salesStart = Math.max(1, Math.min(duration, Math.round(nonNegative(x.salesStartMonth))))
+  const collectionMonths = Math.max(1, Math.min(60, Math.round(nonNegative(x.collectionMonths))))
+  const horizon = Math.min(72, duration + collectionMonths)
+  const area = nonNegative(x.sellableArea)
+  const netPrice = nonNegative(x.pricePerSqm) * (1 - percentage(x.discountRate) / 100)
+  const monthlySalesArea = area * percentage(x.monthlySalesRate) / 100
+  const downPaymentRate = percentage(x.downPaymentRate) / 100
+  const constructionTotal = area * nonNegative(x.constructionCostPerSqm) * (1 + percentage(x.contingencyRate) / 100)
+  const weights = Array.from({length: duration}, (_, index) => Math.sin(Math.PI * (index + 1) / (duration + 1)) ** 2)
+  const weightTotal = weights.reduce((sum, weight) => sum + weight, 0)
+  const collections = Array.from({length: horizon}, () => 0)
+  const contractValues = Array.from({length: horizon}, () => 0)
+  let remainingArea = area
+
+  for (let index = salesStart - 1; index < duration && remainingArea > 0; index += 1) {
+    const soldArea = Math.min(remainingArea, monthlySalesArea)
+    const contractValue = soldArea * netPrice
+    contractValues[index] = contractValue
+    collections[index] += contractValue * downPaymentRate
+    const financed = contractValue * (1 - downPaymentRate)
+    for (let offset = 1; offset <= collectionMonths; offset += 1) {
+      const collectionIndex = index + offset
+      if (collectionIndex < horizon) collections[collectionIndex] += financed / collectionMonths
+    }
+    remainingArea -= soldArea
+  }
+
+  const monthlyRate = percentage(x.annualFinanceRate) / 1200
+  const openingCash = nonNegative(x.openingCash)
+  const monthlyMarketing = nonNegative(x.marketingSpend) / duration
+  const monthlyOverhead = nonNegative(x.overhead) / duration
+  const points: TimelinePoint[] = []
+  let projectCumulativeCash = 0
+  let inventory = area
+  let derivedFinanceCost = 0
+  let maxFunding = 0
+
+  for (let index = 0; index < horizon; index += 1) {
+    const contractValue = contractValues[index]
+    inventory = Math.max(0, inventory - safeDivide(contractValue, netPrice))
+    const constructionSpend = index < duration ? constructionTotal * weights[index] / weightTotal : 0
+    const upfront = index === 0 ? nonNegative(x.landCost) + nonNegative(x.softCosts) + nonNegative(x.growthInitiative) : 0
+    const operatingSpend = index < duration ? monthlyMarketing + monthlyOverhead : 0
+    const commission = contractValue * percentage(x.salesCommissionRate) / 100
+    const preFinanceSpend = constructionSpend + upfront + operatingSpend + commission
+    const preFinanceBalance = openingCash + projectCumulativeCash + collections[index] - preFinanceSpend
+    const financeCharge = preFinanceBalance < 0 ? -preFinanceBalance * monthlyRate : 0
+    derivedFinanceCost += financeCharge
+    const expenses = preFinanceSpend + financeCharge
+    const cashFlow = collections[index] - expenses
+    projectCumulativeCash += cashFlow
+    const cashBalance = openingCash + projectCumulativeCash
+    maxFunding = Math.max(maxFunding, -cashBalance)
+    points.push({month: index + 1, revenue: collections[index], expenses, ebitda: cashFlow, cashFlow, cumulativeCash: cashBalance, backlog: 0, capacity: 0, inventory})
+  }
+
+  const firstCollection = points.find((point) => point.revenue > 0)
+  const lastNegativeIndex = points.reduce((last, point, index) => point.cumulativeCash < 0 ? index : last, -1)
+  const cashBreakEvenIndex = lastNegativeIndex >= 0 ? points.findIndex((point, index) => index > lastNegativeIndex && point.cumulativeCash >= 0) : -1
+  return {
+    kind: 'realEstate', points,
+    summary: {
+      firstRevenueMonth: firstCollection?.month ?? null, endingBacklog: null, fullRampMonth: null,
+      paybackMonth: null, maxFunding, cashBreakEvenMonth: cashBreakEvenIndex >= 0 ? cashBreakEvenIndex + 1 : null,
+      endingInventory: inventory, derivedFinanceCost,
+    },
+  }
+}
+
+export function calculateTimeline(sector: SectorId, baselineInputs: NumericInputs, scenarioInputs: NumericInputs): TimelineResult | null {
+  if (sector === 'b2b') return b2bTimeline(scenarioInputs)
+  if (sector === 'retail') return retailTimeline(baselineInputs, scenarioInputs)
+  if (sector === 'realEstate') return realEstateTimeline(scenarioInputs)
+  return null
 }

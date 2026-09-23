@@ -1,8 +1,8 @@
 'use client'
 
 import {useMemo, useState} from 'react'
-import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
-import {compareScenarios, type NumericInputs, type SectorId} from './engine'
+import {Bar, BarChart, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
+import {calculateTimeline, compareScenarios, type NumericInputs, type SectorId} from './engine'
 import {getSector, sectors, type FieldConfig} from './config'
 import styles from './growth-simulator.module.css'
 
@@ -25,6 +25,13 @@ const copy = {
     breakEvenGood: 'Senaryo cirosu operasyonel başabaş seviyesinin üzerinde.', breakEvenBad: 'Senaryo cirosu operasyonel başabaş seviyesinin altında.',
     breakEvenUnavailable: 'Pozitif birim katkısı olmadığı için başabaş noktası oluşmuyor.', points: 'puan',
     noWarning: 'Modelde belirgin bir kapasite veya başabaş uyarısı oluşmadı.',
+    timeView: 'Zaman görünümü', timeIntro: 'Steady-state sonucunun aylara nasıl yayıldığını ve nakit etkisinin ne zaman oluştuğunu görün.',
+    month: 'Ay', timelineRevenue: 'Gelir / tahsilat', timelineEbitda: 'EBITDA / net nakit', timelineExpenses: 'Gider / proje harcaması', backlog: 'Backlog', cumulativeCash: 'Kümülatif nakit',
+    firstRevenue: 'Yeni gelirin başladığı ay', endingBacklog: '12. ay backlog', fullRamp: 'Tam kapasite ayı', payback: 'Geri ödeme ayı', maxFunding: 'Maksimum finansman ihtiyacı',
+    cashBreakEven: 'Nakit başabaş ayı', endingInventory: 'Dönem sonu stok', derivedFinance: 'Hesaplanan finansman maliyeti', notReached: 'Dönem içinde oluşmadı',
+    b2bTimeNote: 'Yeni lead kohortları satış döngüsü tamamlandıktan sonra kapanır; sözleşme geliri proje süresine eşit dağıtılır.',
+    retailTimeNote: 'Yeni mağazalar açılış ayından itibaren doğrusal ramp-up ile olgunlaşır; CAPEX ve ilk stok geri ödeme hesabına dahil edilir.',
+    realEstateTimeNote: 'İnşaat harcamaları S-eğrisiyle, tahsilatlar peşinat ve taksit planıyla dağıtılır; finansman maliyeti aylık nakit açığından türetilir.',
   },
   en: {
     eyebrow: 'SELLF ENGAGE / GROWTH SIMULATOR', title: 'See the financial result before making the growth decision.',
@@ -41,6 +48,13 @@ const copy = {
     breakEvenGood: 'Scenario revenue is above operational break-even.', breakEvenBad: 'Scenario revenue is below operational break-even.',
     breakEvenUnavailable: 'There is no break-even point because unit contribution is not positive.', points: 'pts',
     noWarning: 'No material capacity or break-even warning was triggered.',
+    timeView: 'Time view', timeIntro: 'See how the steady-state result unfolds by month and when its cash impact occurs.',
+    month: 'Month', timelineRevenue: 'Revenue / collections', timelineEbitda: 'EBITDA / net cash', timelineExpenses: 'Costs / project spend', backlog: 'Backlog', cumulativeCash: 'Cumulative cash',
+    firstRevenue: 'First month of new revenue', endingBacklog: 'Month-12 backlog', fullRamp: 'Full-ramp month', payback: 'Payback month', maxFunding: 'Maximum funding need',
+    cashBreakEven: 'Cash break-even month', endingInventory: 'Ending inventory', derivedFinance: 'Derived finance cost', notReached: 'Not reached in period',
+    b2bTimeNote: 'New lead cohorts close after the sales cycle; contract revenue is spread evenly across the project duration.',
+    retailTimeNote: 'New stores ramp linearly from their opening month; CAPEX and initial inventory are included in payback.',
+    realEstateTimeNote: 'Construction spend follows an S-curve, collections follow down-payment and installment terms, and financing cost is derived from monthly cash deficits.',
   },
 } as const
 
@@ -88,6 +102,7 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
   const baseline = baselineBySector[sectorId]
   const scenario = scenarioBySector[sectorId]
   const result = useMemo(() => compareScenarios(sectorId, baseline, scenario), [sectorId, baseline, scenario])
+  const timeline = useMemo(() => calculateTimeline(sectorId, baseline, scenario), [sectorId, baseline, scenario])
 
   const money = (value: number) => new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {style: 'currency', currency, maximumFractionDigits: 0}).format(value)
   const number = (value: number) => new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {maximumFractionDigits: 1}).format(value)
@@ -114,6 +129,22 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
     {name: t.scenarioLabel, revenue: result.scenario.revenue, expenses: result.scenario.expenses, ebitda: result.scenario.ebitda},
   ]
   const modelWarnings = result.scenario.warnings.filter((warning) => result.scenario.breakEvenRevenue !== null || !warning.startsWith('Pozitif birim katkısı'))
+  const timelineData = timeline?.points.map((point) => ({...point, label: `${t.month} ${point.month}`})) ?? []
+  const monthValue = (value: number | null) => value === null ? t.notReached : `${t.month} ${number(value)}`
+  const timelineSummary = timeline ? timeline.kind === 'b2b' ? [
+    {label: t.firstRevenue, value: monthValue(timeline.summary.firstRevenueMonth)},
+    {label: t.endingBacklog, value: number(timeline.summary.endingBacklog ?? 0)},
+  ] : timeline.kind === 'retail' ? [
+    {label: t.fullRamp, value: monthValue(timeline.summary.fullRampMonth)},
+    {label: t.payback, value: monthValue(timeline.summary.paybackMonth)},
+    {label: t.maxFunding, value: timeline.summary.maxFunding === null ? '—' : money(timeline.summary.maxFunding)},
+  ] : [
+    {label: t.maxFunding, value: timeline.summary.maxFunding === null ? '—' : money(timeline.summary.maxFunding)},
+    {label: t.cashBreakEven, value: monthValue(timeline.summary.cashBreakEvenMonth)},
+    {label: t.endingInventory, value: `${number(timeline.summary.endingInventory ?? 0)} m²`},
+    {label: t.derivedFinance, value: money(timeline.summary.derivedFinanceCost ?? 0)},
+  ] : []
+  const timelineNote = timeline?.kind === 'b2b' ? t.b2bTimeNote : timeline?.kind === 'retail' ? t.retailTimeNote : t.realEstateTimeNote
 
   return <div className={styles.shell}>
     <section className={styles.hero}>
@@ -192,14 +223,37 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
         </div>
       </div>
 
+      {timeline && <section className={styles.timelinePanel}>
+        <div className={styles.timelineHeading}>
+          <div><span className={styles.step}>04</span><h2>{t.timeView}</h2><p>{t.timeIntro}</p></div>
+          <div className={styles.timelineSummary}>{timelineSummary.map((item) => <div key={item.label}><span>{item.label}</span><strong>{item.value}</strong></div>)}</div>
+        </div>
+        <div className={styles.timelineChart}>
+          <ResponsiveContainer width="100%" height="100%"><ComposedChart data={timelineData} margin={{top: 12, right: 10, left: 0, bottom: 0}}>
+            <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
+            <XAxis dataKey="label" stroke="rgba(255,255,255,.45)" tickLine={false} axisLine={false} minTickGap={24} />
+            <YAxis yAxisId="money" stroke="rgba(255,255,255,.35)" tickFormatter={(value) => compact(Number(value), lang)} tickLine={false} axisLine={false} width={62} />
+            {timeline.kind === 'b2b' && <YAxis yAxisId="volume" orientation="right" stroke="rgba(170,170,255,.55)" tickLine={false} axisLine={false} width={36} />}
+            <Tooltip formatter={(value, name) => name === t.backlog ? number(Number(value)) : money(Number(value))} contentStyle={{background: '#111827', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12}} />
+            <Legend wrapperStyle={{fontSize: 11}} />
+            <Bar yAxisId="money" dataKey="revenue" name={t.timelineRevenue} fill="#7777ef" radius={[4, 4, 0, 0]} />
+            {timeline.kind === 'realEstate' && <Bar yAxisId="money" dataKey="expenses" name={t.timelineExpenses} fill="#36415d" radius={[4, 4, 0, 0]} />}
+            {timeline.kind !== 'realEstate' && <Line yAxisId="money" type="monotone" dataKey="ebitda" name={t.timelineEbitda} stroke="#d6d6ff" strokeWidth={2} dot={false} />}
+            {timeline.kind !== 'b2b' && <Line yAxisId="money" type="monotone" dataKey="cumulativeCash" name={t.cumulativeCash} stroke="#75d9a7" strokeWidth={2} dot={false} />}
+            {timeline.kind === 'b2b' && <Line yAxisId="volume" type="stepAfter" dataKey="backlog" name={t.backlog} stroke="#f5c878" strokeWidth={2} dot={false} />}
+          </ComposedChart></ResponsiveContainer>
+        </div>
+        <p className={styles.timelineNote}>{timelineNote}</p>
+      </section>}
+
       <div className={styles.lowerGrid}>
-        <section className={styles.detailPanel}><span className={styles.step}>04</span><h2>{t.details}</h2>
+        <section className={styles.detailPanel}><span className={styles.step}>{timeline ? '05' : '04'}</span><h2>{t.details}</h2>
           <div className={styles.detailRows}>{result.scenario.breakdown.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{money(item.value)}</strong></div>)}</div>
           <div className={styles.secondaryGrid}>
             {result.scenario.secondary.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{item.value === null ? '—' : item.format === 'currency' ? money(item.value) : item.format === 'percent' ? `%${number(item.value)}` : item.format === 'months' ? `${number(item.value)} ${lang === 'tr' ? 'ay' : 'mo'}` : number(item.value)}</strong></div>)}
           </div>
         </section>
-        <section className={styles.healthPanel}><span className={styles.step}>05</span><h2>{t.health}</h2>
+        <section className={styles.healthPanel}><span className={styles.step}>{timeline ? '06' : '05'}</span><h2>{t.health}</h2>
           <ul>
             <li>{result.ebitdaDelta >= 0 ? t.positive : t.negative}</li>
             <li>{result.scenario.breakEvenRevenue === null ? t.breakEvenUnavailable : result.scenario.revenue >= result.scenario.breakEvenRevenue ? t.breakEvenGood : t.breakEvenBad}</li>

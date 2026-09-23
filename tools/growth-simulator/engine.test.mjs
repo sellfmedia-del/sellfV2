@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {calculateScenario, compareScenarios} from './engine.ts'
+import {calculateScenario, calculateTimeline, compareScenarios} from './engine.ts'
 
 const closeTo = (actual, expected, tolerance = 0.01) => {
   assert.ok(Math.abs(actual - expected) <= tolerance, `expected ${actual} to be within ${tolerance} of ${expected}`)
@@ -10,7 +10,7 @@ const b2bBaseline = {
   marketingSpend: 300000, cpl: 1500, nonPaidLeads: 120, qualificationRate: 35,
   proposalRate: 55, winRate: 25, averageDeal: 400000, deliveryCapacity: 18,
   revenueRecognitionRate: 60, existingRevenue: 2000000, deliveryCostRate: 45,
-  salesCommissionRate: 0, salesCycleMonths: 3, salesPayroll: 500000,
+  salesCommissionRate: 0, salesCycleMonths: 3, projectDurationMonths: 6, salesPayroll: 500000,
   deliveryPayroll: 1050000, marketingOps: 200000, tech: 120000,
   otherFixed: 180000, growthInvestment: 0,
 }
@@ -72,4 +72,44 @@ test('non-positive unit contribution has no false break-even', () => {
 test('Growth ROI denominator includes incremental operating and one-off investment', () => {
   const result = compareScenarios('b2b', b2bBaseline, b2bScenario)
   assert.equal(result.growthInvestment, 1000000)
+})
+
+test('B2B timeline delays new revenue until the sales cycle closes and carries backlog', () => {
+  const timeline = calculateTimeline('b2b', b2bBaseline, b2bScenario)
+  assert.equal(timeline.kind, 'b2b')
+  assert.equal(timeline.summary.firstRevenueMonth, 4)
+  assert.deepEqual(timeline.points.slice(0, 3).map((point) => point.revenue), [2000000, 2000000, 2000000])
+  assert.ok(timeline.points[3].revenue > 2000000)
+  closeTo(timeline.points[3].backlog, 2.99336)
+  assert.ok(timeline.summary.endingBacklog > timeline.points[3].backlog)
+})
+
+test('B2B timeline does not report revenue outside its visible horizon', () => {
+  const timeline = calculateTimeline('b2b', b2bBaseline, {...b2bScenario, salesCycleMonths: 24})
+  assert.equal(timeline.summary.firstRevenueMonth, null)
+  assert.ok(timeline.points.every((point) => point.revenue === b2bScenario.existingRevenue))
+})
+
+test('retail timeline applies opening investment and reaches full ramp gradually', () => {
+  const baseline = {storeCount: 10}
+  const scenario = {storeCount: 12, footfallPerStore: 19500, conversionRate: 20, stockAvailability: 96, returnRate: 2.5, aov: 950, marketingSpend: 1600000, cogsRate: 48.5, shrinkageRate: 1, commissionRate: 1.8, transactionCost: 16, rentPerStore: 255000, staffPerStore: 330000, utilitiesPerStore: 62000, otherStoreCost: 32000, centralPayroll: 800000, marketingOps: 300000, tech: 190000, otherCentral: 230000, newStoreCapex: 4000000, initialStockPerStore: 1200000, storeOpeningMonth: 2, rampUpMonths: 6}
+  const timeline = calculateTimeline('retail', baseline, scenario)
+  assert.equal(timeline.kind, 'retail')
+  assert.equal(timeline.summary.fullRampMonth, 7)
+  assert.equal(timeline.points[0].capacity, 10)
+  assert.ok(timeline.points[1].capacity > 10 && timeline.points[1].capacity < 12)
+  assert.equal(timeline.points[6].capacity, 12)
+  assert.ok(timeline.summary.maxFunding > 0)
+})
+
+test('real-estate timeline reconciles collections, inventory and financing need', () => {
+  const scenario = {sellableArea: 12000, pricePerSqm: 48000, discountRate: 0, constructionCostPerSqm: 19500, contingencyRate: 10, marketingSpend: 12000000, landCost: 100000000, softCosts: 18000000, salesCommissionRate: 3, overhead: 24000000, growthInitiative: 3000000, projectDurationMonths: 24, salesStartMonth: 3, monthlySalesRate: 5, downPaymentRate: 35, collectionMonths: 10, openingCash: 70000000, annualFinanceRate: 32}
+  const timeline = calculateTimeline('realEstate', scenario, scenario)
+  assert.equal(timeline.kind, 'realEstate')
+  assert.equal(timeline.summary.firstRevenueMonth, 3)
+  closeTo(timeline.points.reduce((sum, point) => sum + point.revenue, 0), 576000000)
+  closeTo(timeline.summary.endingInventory, 0)
+  assert.ok(timeline.summary.maxFunding > 0)
+  assert.ok(timeline.summary.derivedFinanceCost > 0)
+  closeTo(timeline.summary.maxFunding, -Math.min(...timeline.points.map((point) => point.cumulativeCash)))
 })
