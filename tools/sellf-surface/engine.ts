@@ -331,7 +331,7 @@ export function auditSurface(assets: ScannedAsset[], locale: Locale, businessMod
   const verifiedChecks = Object.values(dimensionsResult).reduce((sum, item) => sum + item.verifiedChecks, 0)
   const scannedAssets = assets.filter((asset) => asset.source !== 'unavailable').length
   const coverage = requestedAssets ? scannedAssets / requestedAssets : 0
-  const confidence = verifiedChecks >= 24 && coverage >= .8 ? 'high' : verifiedChecks >= 10 && coverage >= .5 ? 'medium' : 'limited'
+  const confidence = verifiedChecks >= 20 && coverage >= .8 ? 'high' : (verifiedChecks >= 6 && coverage >= .8) || (verifiedChecks >= 10 && coverage >= .5) ? 'medium' : 'limited'
   const criticalCount = new Set(findings.filter((item) => item.severity === 'critical').map((item) => item.code)).size
   const verdictKey = score === null || confidence === 'limited' ? 'review' : criticalCount >= 2 || score < 45 ? 'notReady' : criticalCount || score < 72 ? 'conditional' : 'ready'
   const verdictCopy = copy[locale].verdict[verdictKey]
