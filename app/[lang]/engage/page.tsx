@@ -180,7 +180,7 @@ export default async function EngagePage({params}: PageProps) {
 
   const toolSeeds: DisplayItem[] = [
     {id: 't1', title: 'Growth Simulator', summary: lang === 'tr' ? 'Büyüme senaryonun ciro, EBITDA ve ROI etkisini canlı modelle.' : 'Model the revenue, EBITDA and ROI impact of your growth scenario.', image: images.tools, href: `/${lang}/engage/tools/growth-simulator`, label: 'SIMULATOR'},
-    {id: 't2', title: 'Growth Readiness Score', summary: lang === 'tr' ? 'Büyüme hazırlığını net biçimde gör.' : 'Get a clear view of your growth readiness.', image: images.tools, href: '#tools', label: 'SCORE'},
+    {id: 't2', title: 'Report Audit', summary: lang === 'tr' ? 'Raporunun doğru metriklerle doğru kararı destekleyip desteklemediğini gör.' : 'See whether your report supports the right decision with the right metrics.', image: images.tools, href: `/${lang}/engage/tools/report-audit`, label: 'AUDIT'},
     {id: 't3', title: 'Marketing Profitability Calculator', summary: lang === 'tr' ? 'Yatırımdan önce gerçek etkiyi modelle.' : 'Model real impact before you invest.', image: images.tools, href: '#tools', label: 'CALCULATOR'},
     {id: 't4', title: 'SellfScale', summary: lang === 'tr' ? 'Büyüme sistemini uçtan uca haritala.' : 'Map your growth system from end to end.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
     {id: 't5', title: 'SellfCompete', summary: lang === 'tr' ? 'Nerede olduğunu ve sıradaki hamleni gör.' : 'See where you stand and where to move next.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
