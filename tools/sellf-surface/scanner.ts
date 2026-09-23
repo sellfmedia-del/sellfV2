@@ -3,6 +3,7 @@ import 'server-only'
 import {lookup} from 'node:dns/promises'
 import {isIP} from 'node:net'
 import type {AssetInput, ScannedAsset, ScannedPage} from './types'
+import {inspectHtml, inspectRobots, inspectSitemap} from './inspectors'
 
 const MAX_RESPONSE_BYTES = 1_250_000
 const USER_AGENT = 'SellfSurfaceAudit/1.0 (+https://www.sellfmedia.com/engage)'
@@ -43,7 +44,7 @@ async function assertPublicUrl(url: URL) {
 async function readLimitedText(response: Response) {
   const declared = Number(response.headers.get('content-length') || 0)
   if (declared > MAX_RESPONSE_BYTES) throw new Error('response_too_large')
-  if (!response.body) return ''
+  if (!response.body) return {text: '', size: 0}
   const reader = response.body.getReader()
   const decoder = new TextDecoder()
   let size = 0
@@ -58,16 +59,17 @@ async function readLimitedText(response: Response) {
     }
     output += decoder.decode(value, {stream: true})
   }
-  return output + decoder.decode()
+  return {text: output + decoder.decode(), size}
 }
 
 async function safeFetch(initial: URL, timeoutMs = 8000) {
   let current = new URL(initial)
+  const startedAt = performance.now()
   for (let redirect = 0; redirect <= 4; redirect += 1) {
     await assertPublicUrl(current)
     const response = await fetch(current, {
       redirect: 'manual',
-      headers: {'user-agent': USER_AGENT, accept: 'text/html,application/xhtml+xml;q=0.9,text/plain;q=0.6'},
+      headers: {'user-agent': USER_AGENT, accept: 'text/html,application/xhtml+xml,application/xml;q=0.8,text/xml;q=0.8,text/plain;q=0.6'},
       signal: AbortSignal.timeout(timeoutMs),
       cache: 'no-store',
     })
@@ -78,10 +80,29 @@ async function safeFetch(initial: URL, timeoutMs = 8000) {
       continue
     }
     const contentType = response.headers.get('content-type')?.toLowerCase() || ''
-    if (response.ok && !contentType.includes('text/html') && !contentType.includes('text/plain') && !contentType.includes('application/xhtml')) throw new Error('unsupported_content')
-    return {response, finalUrl: current, text: await readLimitedText(response)}
+    if (response.ok && !contentType.includes('text/html') && !contentType.includes('text/plain') && !contentType.includes('application/xhtml') && !contentType.includes('application/xml') && !contentType.includes('text/xml')) throw new Error('unsupported_content')
+    const body = await readLimitedText(response)
+    return {response, finalUrl: current, text: body.text, responseBytes: body.size, responseTimeMs: Math.round(performance.now() - startedAt), redirectCount: redirect}
   }
   throw new Error('too_many_redirects')
+}
+
+async function probeStatus(initial: URL) {
+  let current = new URL(initial)
+  for (let redirect = 0; redirect <= 3; redirect += 1) {
+    await assertPublicUrl(current)
+    const response = await fetch(current, {redirect: 'manual', headers: {'user-agent': USER_AGENT, accept: 'text/html,*/*;q=0.5', range: 'bytes=0-1024'}, signal: AbortSignal.timeout(5000), cache: 'no-store'})
+    if ([301, 302, 303, 307, 308].includes(response.status)) {
+      const location = response.headers.get('location')
+      await response.body?.cancel()
+      if (!location) return response.status
+      current = new URL(location, current)
+      continue
+    }
+    await response.body?.cancel()
+    return response.status
+  }
+  return 310
 }
 
 function decodeEntities(value: string) {
@@ -146,7 +167,7 @@ function extractLinks(html: string, baseUrl: URL) {
   return {internal: unique(internal), external: unique(external), social: unique(social)}
 }
 
-export function extractPage(html: string, url: string, status = 200): ScannedPage {
+export function extractPage(html: string, url: string, status = 200, transport?: {responseTimeMs?: number; responseBytes?: number; redirectCount?: number; headers?: Headers}): ScannedPage {
   const base = new URL(url)
   const visibleText = stripHtml(html)
   const lower = visibleText.toLowerCase()
@@ -161,9 +182,16 @@ export function extractPage(html: string, url: string, status = 200): ScannedPag
   const imagesWithoutAlt = images.filter((tag) => !getAttribute(tag, 'alt').trim()).length
   const emails = unique([...(html.match(/mailto:([^"'\s?>]+)/gi) || []).map((item) => item.slice(7)), ...(visibleText.match(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi) || [])])
   const phones = unique([...(html.match(/tel:([^"'\s?>]+)/gi) || []).map((item) => decodeURIComponent(item.slice(4))), ...(visibleText.match(/(?:\+?\d[\d\s().-]{8,}\d)/g) || [])]).slice(0, 8)
-  const ctaPattern = /\b(teklif|başvur|kayıt|satın al|sepete ekle|randevu|iletişim|demo|hemen başla|incele|keşfet|fiyat al|quote|apply|register|buy|add to cart|book|contact|demo|start now|get started|learn more|discover)\b/gi
+  const ctaPattern = /(teklif|başvur|kayıt|satın al|sepete ekle|randevu|iletişim|demo|hemen başla|incele|keşfet|fiyat al|quote|apply|register|buy|add to cart|book|contact|start now|get started|learn more|discover)/gi
   const ctaCount = (visibleText.match(ctaPattern) || []).length
   const scriptText = html.toLowerCase()
+  const inspection = inspectHtml(html)
+  const securityHeaders = transport?.headers ? {
+    csp: Boolean(transport.headers.get('content-security-policy')),
+    hsts: Boolean(transport.headers.get('strict-transport-security')),
+    contentTypeOptions: transport.headers.get('x-content-type-options')?.toLowerCase() === 'nosniff',
+    referrerPolicy: Boolean(transport.headers.get('referrer-policy')),
+  } : undefined
   return {
     url, status, title,
     description: metaContent(html, 'description'),
@@ -190,20 +218,33 @@ export function extractPage(html: string, url: string, status = 200): ScannedPag
     hasProofSignal: /müşteri|referans|başarı hikay|vaka analiz|yorumlar|değerlendirme|testimonial|case stud|clients?|reviews?|trusted by|success stor/i.test(lower),
     hasPricingSignal: /fiyat|paket|ücret|price|pricing|plans?\b/i.test(lower),
     hasThankYouSignal: links.internal.some((item) => /thank-you|thankyou|tesekkur|teşekkür/i.test(item)),
+    responseTimeMs: transport?.responseTimeMs,
+    responseBytes: transport?.responseBytes,
+    redirectCount: transport?.redirectCount,
+    contentType: transport?.headers?.get('content-type') || undefined,
+    securityHeaders,
+    ...inspection,
+    mixedContentCount: base.protocol === 'https:' ? (html.match(/(?:src=["']http:\/\/|url\(["']?http:\/\/)/gi) || []).length : 0,
   }
 }
 
-async function robotsAllows(url: URL) {
+async function scanRobots(url: URL) {
   try {
     const robotsUrl = new URL('/robots.txt', url.origin)
     const {response, text} = await safeFetch(robotsUrl, 4000)
-    if (!response.ok) return true
-    const groups = text.split(/(?=^user-agent:)/gim)
-    const general = groups.filter((group) => /user-agent:\s*\*/i.test(group)).join('\n')
-    const disallows = [...general.matchAll(/^disallow:\s*(\S+)/gim)].map((match) => match[1]).filter(Boolean)
-    return !disallows.some((path) => path === '/' || (path && url.pathname.startsWith(path)))
+    return inspectRobots(text, url, response.status)
   } catch {
-    return true
+    return inspectRobots('', url, 0)
+  }
+}
+
+async function scanSitemap(url: URL, candidates: string[]) {
+  const sitemapUrl = new URL(candidates[0] || '/sitemap.xml', url.origin)
+  try {
+    const {response, text} = await safeFetch(sitemapUrl, 5000)
+    return inspectSitemap(text, sitemapUrl, url.origin, response.status)
+  } catch {
+    return inspectSitemap('', sitemapUrl, url.origin, 0)
   }
 }
 
@@ -219,48 +260,67 @@ function prioritizedLinks(page: ScannedPage, origin: string) {
 async function scanWebAsset(input: AssetInput): Promise<ScannedAsset> {
   const requested = normalizeUrl(input.url)
   const fetchedAt = new Date().toISOString()
-  if (!await robotsAllows(requested)) return {id: input.id, kind: input.kind, requestedUrl: requested.toString(), finalUrl: requested.toString(), source: 'unavailable', pages: [], evidenceText: input.evidenceText || '', fetchedAt, warnings: ['robots.txt taramaya izin vermiyor']}
+  const robots = await scanRobots(requested)
+  const sitemapPromise = input.kind === 'website' ? scanSitemap(requested, robots.sitemapUrls) : Promise.resolve(undefined)
+  if (robots.blocksRequestedPath) return {id: input.id, kind: input.kind, requestedUrl: requested.toString(), finalUrl: requested.toString(), source: 'unavailable', pages: [], evidenceText: input.evidenceText || '', fetchedAt, warnings: ['robots.txt taramaya izin vermiyor'], robots, sitemap: await sitemapPromise}
   const first = await safeFetch(requested)
-  const firstPage = extractPage(first.text, first.finalUrl.toString(), first.response.status)
+  const firstPage = extractPage(first.text, first.finalUrl.toString(), first.response.status, {...first, headers: first.response.headers})
+  if (first.response.ok) {
+    const probeTargets = firstPage.internalLinks.filter((item) => item !== first.finalUrl.toString()).slice(0, 8)
+    const probed = await Promise.all(probeTargets.map(async (item) => {
+      try { return {url: item, status: await probeStatus(new URL(item))} } catch { return {url: item, status: 0} }
+    }))
+    firstPage.brokenInternalLinks = probed.filter((item) => item.status === 0 || item.status >= 400)
+  }
   const pages = [firstPage]
   if (input.kind === 'website' && first.response.ok) {
     const candidates = prioritizedLinks(firstPage, first.finalUrl.origin).filter((item) => item !== first.finalUrl.toString()).slice(0, 4)
     const additional = await Promise.all(candidates.map(async (candidate) => {
       try {
         const result = await safeFetch(new URL(candidate), 6500)
-        return extractPage(result.text, result.finalUrl.toString(), result.response.status)
+        return extractPage(result.text, result.finalUrl.toString(), result.response.status, {...result, headers: result.response.headers})
       } catch (error) {
         return {url: candidate, status: 0, title: '', description: '', language: '', canonical: '', h1Count: 0, h2Count: 0, wordCount: 0, forms: 0, formFields: 0, ctaCount: 0, internalLinks: [], externalLinks: [], socialLinks: [], emails: [], phones: [], imageCount: 0, imagesWithoutAlt: 0, hasViewport: false, hasNoIndex: false, hasStructuredData: false, hasOpenGraph: false, hasTwitterCard: false, hasAnalytics: false, hasTagManager: false, hasAdPixel: false, hasConsentSignal: false, hasHreflang: false, hasPrivacyLink: false, hasContactLink: false, hasProofSignal: false, hasPricingSignal: false, hasThankYouSignal: false, fetchError: error instanceof Error ? error.message : 'fetch_failed'} satisfies ScannedPage
       }
     }))
     pages.push(...additional)
   }
-  return {id: input.id, kind: input.kind, requestedUrl: requested.toString(), finalUrl: first.finalUrl.toString(), source: 'crawl', pages, evidenceText: input.evidenceText || '', fetchedAt, warnings: []}
+  return {id: input.id, kind: input.kind, requestedUrl: requested.toString(), finalUrl: first.finalUrl.toString(), source: 'crawl', pages, evidenceText: input.evidenceText || '', fetchedAt, warnings: [], robots, sitemap: await sitemapPromise}
 }
 
 function detectPlatform(url: URL) {
   return socialHosts.find((host) => url.hostname === host || url.hostname.endsWith(`.${host}`)) || url.hostname
 }
 
-async function scanSocialAsset(input: AssetInput): Promise<ScannedAsset> {
+async function scanPublicProfileAsset(input: AssetInput): Promise<ScannedAsset> {
   const requested = normalizeUrl(input.url)
   const fetchedAt = new Date().toISOString()
   const manual = (input.evidenceText || '').trim()
   try {
     const result = await safeFetch(requested, 6500)
-    const page = extractPage(result.text, result.finalUrl.toString(), result.response.status)
+    const page = extractPage(result.text, result.finalUrl.toString(), result.response.status, {...result, headers: result.response.headers})
     const publicText = stripHtml(result.text).slice(0, 12_000)
     const usablePublicText = publicText.length > 120 ? publicText : ''
     const evidenceText = [manual, usablePublicText].filter(Boolean).join('\n')
-    return {id: input.id, kind: 'social', requestedUrl: requested.toString(), finalUrl: result.finalUrl.toString(), source: manual && usablePublicText ? 'mixed' : manual ? 'manual-evidence' : usablePublicText ? 'public-page' : 'unavailable', platform: detectPlatform(requested), pages: usablePublicText ? [page] : [], evidenceText, fetchedAt, warnings: usablePublicText ? [] : ['Platform okunabilir profil verisi döndürmedi']}
+    return {id: input.id, kind: input.kind, requestedUrl: requested.toString(), finalUrl: result.finalUrl.toString(), source: manual && usablePublicText ? 'mixed' : manual ? 'manual-evidence' : usablePublicText ? 'public-page' : 'unavailable', platform: detectPlatform(requested), pages: usablePublicText ? [page] : [], evidenceText, fetchedAt, warnings: usablePublicText ? [] : ['Platform okunabilir profil verisi döndürmedi']}
   } catch (error) {
-    return {id: input.id, kind: 'social', requestedUrl: requested.toString(), finalUrl: requested.toString(), source: manual ? 'manual-evidence' : 'unavailable', platform: detectPlatform(requested), pages: [], evidenceText: manual, fetchedAt, warnings: [error instanceof Error ? error.message : 'fetch_failed']}
+    return {id: input.id, kind: input.kind, requestedUrl: requested.toString(), finalUrl: requested.toString(), source: manual ? 'manual-evidence' : 'unavailable', platform: detectPlatform(requested), pages: [], evidenceText: manual, fetchedAt, warnings: [error instanceof Error ? error.message : 'fetch_failed']}
   }
+}
+
+function scanEmailAsset(input: AssetInput): ScannedAsset {
+  const html = (input.evidenceText || '').trim()
+  const fetchedAt = new Date().toISOString()
+  if (!html) return {id: input.id, kind: 'email', requestedUrl: '', finalUrl: '', source: 'unavailable', pages: [], evidenceText: '', fetchedAt, warnings: ['HTML içeriği eklenmedi']}
+  const page = extractPage(html, 'https://email.sellf-surface.local/', 200)
+  return {id: input.id, kind: 'email', requestedUrl: '', finalUrl: '', source: 'uploaded-html', pages: [page], evidenceText: html.slice(0, 100_000), fetchedAt, warnings: []}
 }
 
 export async function scanAsset(input: AssetInput): Promise<ScannedAsset> {
   try {
-    return input.kind === 'social' ? await scanSocialAsset(input) : await scanWebAsset(input)
+    if (input.kind === 'email') return scanEmailAsset(input)
+    if (input.kind === 'social' || input.kind === 'youtube' || input.kind === 'google-business') return await scanPublicProfileAsset(input)
+    return await scanWebAsset(input)
   } catch (error) {
     let requestedUrl = input.url
     try { requestedUrl = normalizeUrl(input.url).toString() } catch {}

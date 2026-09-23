@@ -6,7 +6,7 @@ import type {AssetInput, AssetKind, BusinessModel, Locale, PrimaryGoal, SurfaceA
 export const runtime = 'nodejs'
 export const maxDuration = 45
 
-const assetKinds = new Set<AssetKind>(['website', 'landing', 'social'])
+const assetKinds = new Set<AssetKind>(['website', 'landing', 'social', 'youtube', 'google-business', 'email'])
 const businessModels = new Set<BusinessModel>(['ecommerce', 'b2b', 'service', 'retail', 'saas', 'other'])
 const primaryGoals = new Set<PrimaryGoal>(['lead', 'sale', 'trust', 'awareness'])
 const rateBuckets = new Map<string, number[]>()
@@ -26,13 +26,13 @@ function exceedsRateLimit(request: Request) {
 
 function cleanAssets(value: unknown): AssetInput[] {
   if (!Array.isArray(value)) return []
-  return value.slice(0, 4).flatMap((item, index) => {
+  return value.slice(0, 6).flatMap((item, index) => {
     if (!item || typeof item !== 'object') return []
     const candidate = item as Record<string, unknown>
     const kind = typeof candidate.kind === 'string' && assetKinds.has(candidate.kind as AssetKind) ? candidate.kind as AssetKind : null
     const url = typeof candidate.url === 'string' ? candidate.url.trim().slice(0, 2048) : ''
-    const evidenceText = typeof candidate.evidenceText === 'string' ? candidate.evidenceText.trim().slice(0, 20_000) : ''
-    if (!kind || !url) return []
+    const evidenceText = typeof candidate.evidenceText === 'string' ? candidate.evidenceText.trim().slice(0, 100_000) : ''
+    if (!kind || (kind === 'email' ? !evidenceText : !url)) return []
     return [{id: typeof candidate.id === 'string' ? candidate.id.slice(0, 80) : `asset-${index + 1}`, kind, url, evidenceText}]
   })
 }
