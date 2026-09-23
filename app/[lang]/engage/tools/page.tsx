@@ -28,8 +28,8 @@ const copy = {
 const tools = [
   {title: 'Growth Simulator', tr: 'Sektörünüze özel değişkenlerle büyümenin finansal etkisini canlı olarak modelleyin.', en: 'Model the financial impact of growth with variables tailored to your sector.', slug: 'growth-simulator', ready: true},
   {title: 'Report Audit', tr: 'Raporunuzu alanına ve amacına uygun metriklerle değerlendirin.', en: 'Evaluate your report with metrics tailored to its area and purpose.', slug: 'report-audit', ready: true},
+  {title: 'Sellf Surface', tr: 'Website, landing page ve sosyal profillerinizdeki büyüme sızıntılarını kanıtlarıyla görün.', en: 'Find evidence-backed growth leaks across websites, landing pages and social profiles.', slug: 'sellf-surface', ready: true},
   {title: 'Growth Readiness Score', tr: 'Büyümeye ne kadar hazır olduğunuzu net biçimde değerlendirin.'},
-  {title: 'Marketing Profitability Calculator', tr: 'Yatırım yapmadan önce gerçek kârlılık etkisini modelleyin.'},
   {title: 'SellfScale', tr: 'Büyüme sisteminizi uçtan uca haritalayın.'},
   {title: 'SellfCompete', tr: 'Pazardaki konumunuzu ve sıradaki hamlenizi görün.'},
 ] as const
@@ -74,7 +74,7 @@ export default async function EngageToolsPage({params}: ToolsPageProps) {
             <div className={styles.visual}><span>0{index + 1}</span><i /></div>
             <small>{'ready' in tool && tool.ready ? t.ready : t.soon}</small>
             <h2>{tool.title}</h2>
-            <p>{lang === 'tr' ? tool.tr : 'en' in tool ? tool.en : tool.title === 'Growth Readiness Score' ? 'Assess how ready your organization is for growth.' : tool.title === 'Marketing Profitability Calculator' ? 'Model real profitability before you invest.' : tool.title === 'SellfScale' ? 'Map your growth system from end to end.' : 'See where you stand and where to move next.'}</p>
+            <p>{lang === 'tr' ? tool.tr : 'en' in tool ? tool.en : tool.title === 'Growth Readiness Score' ? 'Assess how ready your organization is for growth.' : tool.title === 'SellfScale' ? 'Map your growth system from end to end.' : 'See where you stand and where to move next.'}</p>
           </>
           return 'slug' in tool ? <Link href={`/${lang}/engage/tools/${tool.slug}`} className={styles.card} key={tool.title}>{body}</Link> : <article className={styles.card} key={tool.title}>{body}</article>
         })}
