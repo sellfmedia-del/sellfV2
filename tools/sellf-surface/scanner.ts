@@ -170,7 +170,7 @@ function extractLinks(html: string, baseUrl: URL) {
 export function extractPage(html: string, url: string, status = 200, transport?: {responseTimeMs?: number; responseBytes?: number; redirectCount?: number; headers?: Headers}): ScannedPage {
   const base = new URL(url)
   const visibleText = stripHtml(html)
-  const lower = visibleText.toLowerCase()
+  const lower = visibleText.replace(/İ/g, 'i').toLowerCase()
   const links = extractLinks(html, base)
   const title = stripHtml(html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '')
   const htmlTag = html.match(/<html\b[^>]*>/i)?.[0] || ''
@@ -183,7 +183,7 @@ export function extractPage(html: string, url: string, status = 200, transport?:
   const emails = unique([...(html.match(/mailto:([^"'\s?>]+)/gi) || []).map((item) => item.slice(7)), ...(visibleText.match(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi) || [])])
   const phones = unique([...(html.match(/tel:([^"'\s?>]+)/gi) || []).map((item) => decodeURIComponent(item.slice(4))), ...(visibleText.match(/(?:\+?\d[\d\s().-]{8,}\d)/g) || [])]).slice(0, 8)
   const ctaPattern = /(teklif|başvur|kayıt|satın al|sepete ekle|randevu|iletişim|demo|hemen başla|incele|keşfet|fiyat al|quote|apply|register|buy|add to cart|book|contact|start now|get started|learn more|discover)/gi
-  const ctaCount = (visibleText.match(ctaPattern) || []).length
+  const ctaCount = (lower.match(ctaPattern) || []).length
   const scriptText = html.toLowerCase()
   const inspection = inspectHtml(html)
   const securityHeaders = transport?.headers ? {
