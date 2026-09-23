@@ -70,3 +70,11 @@ test('cross-asset audit detects missing website-to-social connection', () => {
   const result = auditSurface([website, social], 'en', 'b2b', 'lead')
   assert.ok(result.findings.some((item) => item.code === 'social-connection'))
 })
+
+test('repeated inner-page CTA gaps do not create a contradictory not-ready verdict', () => {
+  const innerGap = page({url: 'https://example.com/about', ctaCount: 0})
+  const result = auditSurface([asset({pages: [page(), innerGap, {...innerGap, url: 'https://example.com/services'}]})], 'tr', 'b2b', 'lead')
+  assert.ok(result.score >= 80)
+  assert.notEqual(result.verdict.status, 'not-ready')
+  assert.ok(result.findings.filter((item) => item.code === 'cta').every((item) => item.severity === 'important'))
+})
