@@ -23,6 +23,7 @@ const copy = {
     baselineLabel: 'Mevcut', scenarioLabel: 'Senaryo', currency: 'Para birimi', currencyNote: 'Para birimi seçimi değerleri dönüştürmez; girilen tutarların birimini belirler.',
     positive: 'Senaryo, mevcut duruma göre daha yüksek EBITDA üretiyor.', negative: 'Senaryo mevcut duruma göre EBITDA kaybı yaratıyor.',
     breakEvenGood: 'Senaryo cirosu operasyonel başabaş seviyesinin üzerinde.', breakEvenBad: 'Senaryo cirosu operasyonel başabaş seviyesinin altında.',
+    breakEvenUnavailable: 'Pozitif birim katkısı olmadığı için başabaş noktası oluşmuyor.', points: 'puan',
     noWarning: 'Modelde belirgin bir kapasite veya başabaş uyarısı oluşmadı.',
   },
   en: {
@@ -38,6 +39,7 @@ const copy = {
     baselineLabel: 'Current', scenarioLabel: 'Scenario', currency: 'Currency', currencyNote: 'Changing currency does not convert values; it defines the unit of the amounts entered.',
     positive: 'The scenario produces higher EBITDA than the current state.', negative: 'The scenario produces an EBITDA loss versus the current state.',
     breakEvenGood: 'Scenario revenue is above operational break-even.', breakEvenBad: 'Scenario revenue is below operational break-even.',
+    breakEvenUnavailable: 'There is no break-even point because unit contribution is not positive.', points: 'pts',
     noWarning: 'No material capacity or break-even warning was triggered.',
   },
 } as const
@@ -47,8 +49,9 @@ const compact = (value: number, locale: Locale) => new Intl.NumberFormat(locale 
 const modelTranslations: Record<string, string> = {
   'Net sipariş': 'Net orders', 'Ücretli trafik': 'Paid traffic', 'Katkı marjı': 'Contribution margin',
   'Ürün maliyeti': 'Cost of goods', 'Komisyonlar': 'Commissions', 'Lojistik': 'Logistics', 'Reklam harcaması': 'Ad spend',
-  'Sabit operasyon giderleri': 'Fixed operating costs', 'Kazanılan iş': 'Won business', 'Toplam lead': 'Total leads',
+  'Sabit operasyon giderleri': 'Fixed operating costs', 'Kazanılan iş': 'Won business', 'Teslim edilebilir iş': 'Deliverable business', 'Toplam lead': 'Total leads',
   'Kapasite üstü backlog': 'Backlog above capacity', 'Satış döngüsü': 'Sales cycle', 'Teslimat maliyeti': 'Delivery cost',
+  'Yeni muhasebeleşen gelir': 'New recognized revenue', 'Mevcut müşteri geliri': 'Existing-customer revenue', 'Satış komisyonu': 'Sales commission',
   'Pazarlama harcaması': 'Marketing spend', 'Satış ve teslimat ekipleri': 'Sales and delivery teams', 'Diğer sabit giderler': 'Other fixed costs',
   'Net işlem': 'Net transactions', 'Mağaza başına ciro': 'Revenue per store', 'Stoksuzluk kaynaklı kayıp': 'Revenue lost to stockouts',
   'Mağaza başına başabaş': 'Break-even per store', 'Kayıp ve fire': 'Shrinkage and loss', 'Mağaza sabit giderleri': 'Store fixed costs',
@@ -64,6 +67,7 @@ const modelTranslations: Record<string, string> = {
   'Toplam ciro mağaza ağının başabaş seviyesinin altında.': 'Total revenue is below the store network break-even level.',
   'Projenin başabaşa ulaşması için stokun çok yüksek bir bölümünün satılması gerekiyor.': 'A very high share of inventory must be sold for the project to break even.',
   'Finansman maliyeti sonrasında proje zarar üretiyor.': 'The project produces a loss after financing costs.',
+  'Pozitif birim katkısı oluşmadığı için operasyonel başabaş mümkün değil.': 'Operational break-even is not possible because unit contribution is not positive.',
 }
 
 function localizeModelText(text: string, lang: Locale) {
@@ -92,7 +96,10 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
 
   const update = (mode: 'baseline' | 'scenario', key: string, value: number) => {
     const setter = mode === 'baseline' ? setBaselineBySector : setScenarioBySector
-    setter((all) => ({...all, [sectorId]: {...all[sectorId], [key]: Number.isFinite(value) ? value : 0}}))
+    const field = sector.fields.find((item) => item.key === key)
+    const safeValue = Number.isFinite(value) ? value : field?.min ?? 0
+    const clampedValue = field ? Math.min(field.max, Math.max(field.min, safeValue)) : Math.max(0, safeValue)
+    setter((all) => ({...all, [sectorId]: {...all[sectorId], [key]: clampedValue}}))
   }
 
   const reset = () => {
@@ -100,12 +107,13 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
     setScenarioBySector((all) => ({...all, [sectorId]: {...sector.scenario}}))
   }
 
-  const healthTone = result.scenario.ebitda < 0 ? 'critical' : result.scenario.ebitdaMargin < 10 || result.scenario.revenue < result.scenario.breakEvenRevenue ? 'watch' : 'strong'
+  const healthTone = result.scenario.ebitda < 0 ? 'critical' : result.scenario.ebitdaMargin < 10 || result.scenario.breakEvenRevenue === null || result.scenario.revenue < result.scenario.breakEvenRevenue ? 'watch' : 'strong'
   const healthLabel = healthTone === 'critical' ? t.critical : healthTone === 'watch' ? t.watch : t.strong
   const chartData = [
     {name: t.baselineLabel, revenue: result.baseline.revenue, expenses: result.baseline.expenses, ebitda: result.baseline.ebitda},
     {name: t.scenarioLabel, revenue: result.scenario.revenue, expenses: result.scenario.expenses, ebitda: result.scenario.ebitda},
   ]
+  const modelWarnings = result.scenario.warnings.filter((warning) => result.scenario.breakEvenRevenue !== null || !warning.startsWith('Pozitif birim katkısı'))
 
   return <div className={styles.shell}>
     <section className={styles.hero}>
@@ -155,8 +163,8 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
           <div className={styles.metricGrid}>
             <Metric label={t.revenue} value={money(result.scenario.revenue)} delta={result.scenario.revenue - result.baseline.revenue} formatter={money} />
             <Metric label={t.ebitda} value={money(result.scenario.ebitda)} delta={result.ebitdaDelta} formatter={money} emphasized />
-            <Metric label={t.margin} value={`%${number(result.scenario.ebitdaMargin)}`} delta={result.scenario.ebitdaMargin - result.baseline.ebitdaMargin} formatter={(value) => `${value >= 0 ? '+' : ''}${number(value)} puan`} />
-            <Metric label={t.roas} value={result.scenario.roas === null ? '—' : `${number(result.scenario.roas)}x`} delta={(result.scenario.roas ?? 0) - (result.baseline.roas ?? 0)} formatter={(value) => `${value >= 0 ? '+' : ''}${number(value)}x`} />
+            <Metric label={t.margin} value={`%${number(result.scenario.ebitdaMargin)}`} delta={result.scenario.ebitdaMargin - result.baseline.ebitdaMargin} formatter={(value) => `${value >= 0 ? '+' : ''}${number(value)} ${t.points}`} />
+            <Metric label={t.roas} value={result.scenario.roas === null ? '—' : `${number(result.scenario.roas)}x`} delta={result.scenario.roas === null || result.baseline.roas === null ? undefined : result.scenario.roas - result.baseline.roas} formatter={(value) => `${value >= 0 ? '+' : ''}${number(value)}x`} />
             <Metric label={t.roi} value={result.growthRoi === null ? t.noRoi : `%${number(result.growthRoi)}`} />
             <Metric label={t.expenses} value={money(result.scenario.expenses)} delta={result.scenario.expenses - result.baseline.expenses} formatter={money} />
           </div>
@@ -188,14 +196,14 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
         <section className={styles.detailPanel}><span className={styles.step}>04</span><h2>{t.details}</h2>
           <div className={styles.detailRows}>{result.scenario.breakdown.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{money(item.value)}</strong></div>)}</div>
           <div className={styles.secondaryGrid}>
-            {result.scenario.secondary.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{item.format === 'currency' ? money(item.value) : item.format === 'percent' ? `%${number(item.value)}` : item.format === 'months' ? `${number(item.value)} ${lang === 'tr' ? 'ay' : 'mo'}` : number(item.value)}</strong></div>)}
+            {result.scenario.secondary.map((item) => <div key={item.label}><span>{localizeModelText(item.label, lang)}</span><strong>{item.value === null ? '—' : item.format === 'currency' ? money(item.value) : item.format === 'percent' ? `%${number(item.value)}` : item.format === 'months' ? `${number(item.value)} ${lang === 'tr' ? 'ay' : 'mo'}` : number(item.value)}</strong></div>)}
           </div>
         </section>
         <section className={styles.healthPanel}><span className={styles.step}>05</span><h2>{t.health}</h2>
           <ul>
             <li>{result.ebitdaDelta >= 0 ? t.positive : t.negative}</li>
-            <li>{result.scenario.revenue >= result.scenario.breakEvenRevenue ? t.breakEvenGood : t.breakEvenBad}</li>
-            {(result.scenario.warnings.length ? result.scenario.warnings : [t.noWarning]).map((warning) => <li key={warning}>{localizeModelText(warning, lang)}</li>)}
+            <li>{result.scenario.breakEvenRevenue === null ? t.breakEvenUnavailable : result.scenario.revenue >= result.scenario.breakEvenRevenue ? t.breakEvenGood : t.breakEvenBad}</li>
+            {(modelWarnings.length ? modelWarnings : result.scenario.breakEvenRevenue === null ? [] : [t.noWarning]).map((warning) => <li key={warning}>{localizeModelText(warning, lang)}</li>)}
           </ul>
           <div className={styles.disclaimer}><strong>{t.assumptions}</strong><p>{t.disclaimer}</p></div>
         </section>
