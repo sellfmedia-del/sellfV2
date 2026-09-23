@@ -15,7 +15,7 @@ const copy = {
     purposeTitle: 'Raporun amacı', purposeIntro: 'Aynı metrik, farklı kararlar için farklı önem taşıyabilir.',
     uploadTitle: 'Raporu ekleyin', upload: 'Dosya seçin veya buraya bırakın',
     uploadNote: 'CSV, TSV, TXT, JSON, Markdown ve HTML doğrudan okunur. PDF, Excel ve PowerPoint dosyalarında metrikleri aşağıdan doğrulayabilirsiniz.',
-    selectedFile: 'Seçilen dosya', readable: 'Metin başarıyla okundu', manualReview: 'Manuel doğrulama gerekli',
+    selectedFile: 'Seçilen dosya', readable: 'Metin başarıyla okundu', manualReview: 'Manuel doğrulama gerekli', readError: 'Dosya okunamadı; metrikleri manuel doğrulayın',
     pasteLabel: 'Rapor metni veya kolon başlıkları', pastePlaceholder: 'Rapor metnini, KPI listesini ya da tablo başlıklarını buraya yapıştırabilirsiniz…',
     metricTitle: 'Metrik doğrulaması', metricIntro: 'Otomatik bulunan metrikleri kontrol edin; raporda bulunan diğer metrikleri işaretleyin.',
     reviewComplete: 'Manuel metrik kontrolünü tamamladım',
@@ -41,7 +41,7 @@ const copy = {
     purposeTitle: 'Report purpose', purposeIntro: 'The same metric can carry different weight for different decisions.',
     uploadTitle: 'Add the report', upload: 'Choose a file or drop it here',
     uploadNote: 'CSV, TSV, TXT, JSON, Markdown and HTML are read directly. For PDF, Excel and PowerPoint files, confirm the metrics below.',
-    selectedFile: 'Selected file', readable: 'Text read successfully', manualReview: 'Manual verification required',
+    selectedFile: 'Selected file', readable: 'Text read successfully', manualReview: 'Manual verification required', readError: 'The file could not be read; verify the metrics manually',
     pasteLabel: 'Report text or column headers', pastePlaceholder: 'Paste report text, KPI lists or table headers here…',
     metricTitle: 'Metric verification', metricIntro: 'Review automatically detected metrics and select any others present in the report.',
     reviewComplete: 'I completed the manual metric review',
@@ -77,6 +77,7 @@ export default function ReportAuditTool({lang}: {lang: Locale}) {
   const [reportText, setReportText] = useState('')
   const [fileName, setFileName] = useState('')
   const [readable, setReadable] = useState(false)
+  const [fileReadFailed, setFileReadFailed] = useState(false)
   const [reviewComplete, setReviewComplete] = useState(false)
   const [confirmedMetrics, setConfirmedMetrics] = useState<string[]>([])
   const [excludedMetrics, setExcludedMetrics] = useState<string[]>([])
@@ -115,18 +116,22 @@ export default function ReportAuditTool({lang}: {lang: Locale}) {
   const loadFile = async (file?: File) => {
     if (!file) return
     setFileName(file.name)
+    setFileReadFailed(false)
+    setReportText('')
+    setReadable(false)
+    resetEvidence()
     const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
     if (!directTextExtensions.includes(extension)) {
-      setReportText('')
-      setReadable(false)
-      resetEvidence()
       return
     }
-    const raw = await file.text()
-    const parsed = extension === 'html' || extension === 'htm' ? new DOMParser().parseFromString(raw, 'text/html').body.textContent ?? '' : raw
-    setReportText(parsed)
-    setReadable(parsed.trim().length > 0)
-    resetEvidence()
+    try {
+      const raw = await file.text()
+      const parsed = extension === 'html' || extension === 'htm' ? new DOMParser().parseFromString(raw, 'text/html').body.textContent ?? '' : raw
+      setReportText(parsed)
+      setReadable(parsed.trim().length > 0)
+    } catch {
+      setFileReadFailed(true)
+    }
   }
 
   const toggleMetric = (key: string, checked: boolean) => {
@@ -165,8 +170,8 @@ export default function ReportAuditTool({lang}: {lang: Locale}) {
           <i>↑</i><strong>{t.upload}</strong><small>{t.uploadNote}</small>
         </button>
         <input ref={fileInput} className={styles.fileInput} type="file" accept=".csv,.tsv,.txt,.json,.md,.html,.htm,.pdf,.xlsx,.xls,.pptx" onChange={(event) => void loadFile(event.target.files?.[0])} />
-        {fileName && <div className={styles.fileStatus}><span>{t.selectedFile}: <b>{fileName}</b></span><strong className={readable ? styles.statusGood : styles.statusReview}>{readable ? t.readable : t.manualReview}</strong></div>}
-        <label className={styles.textLabel}>{t.pasteLabel}<textarea value={reportText} placeholder={t.pastePlaceholder} onChange={(event) => {setReportText(event.target.value); setReadable(event.target.value.trim().length > 0); resetEvidence()}} /></label>
+        {fileName && <div className={styles.fileStatus}><span>{t.selectedFile}: <b>{fileName}</b></span><strong className={readable ? styles.statusGood : styles.statusReview}>{fileReadFailed ? t.readError : readable ? t.readable : t.manualReview}</strong></div>}
+        <label className={styles.textLabel}>{t.pasteLabel}<textarea value={reportText} placeholder={t.pastePlaceholder} onChange={(event) => {setReportText(event.target.value); setReadable(event.target.value.trim().length > 0); setFileReadFailed(false); resetEvidence()}} /></label>
 
         <header className={styles.sectionHeading}><span>04</span><div><h2>{t.metricTitle}</h2><p>{t.metricIntro}</p></div></header>
         <div className={styles.metricGroups}>{selectedAreaIds.map((areaId, areaIndex) => {
