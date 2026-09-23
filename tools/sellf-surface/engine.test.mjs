@@ -110,6 +110,7 @@ test('email HTML uses an email-specific ruleset instead of website SEO rules', (
   assert.ok(!result.findings.some((item) => item.code === 'canonical' || item.code === 'structured-data'))
   assert.ok(result.assetScores[0].score >= 90)
   assert.ok(result.pillars.assetHealth.score !== null)
+  assert.equal(result.confidence, 'medium')
 })
 
 test('YouTube and Google Business receive their own observable rules', () => {
