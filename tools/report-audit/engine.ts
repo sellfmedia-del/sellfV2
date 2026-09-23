@@ -1,4 +1,5 @@
 import {getArea, reportAreas, type Locale, type MetricDefinition, type ReportAreaId, type ReportPurposeId} from './config.ts'
+import {buildAuditNarrative, type AuditNarrative} from './narrative.ts'
 
 export type AuditContext = {
   periodDefined: boolean
@@ -53,6 +54,7 @@ export type AuditResult = {
   confidence: 'high' | 'medium' | 'needs-review'
   metrics: MetricAssessment[]
   findings: AuditFinding[]
+  narrative: AuditNarrative
   detectedCount: number
   requiredCount: number
   missingRequiredCount: number
@@ -217,6 +219,14 @@ export function auditReport(input: AuditInput): AuditResult {
 
   const confirmedShare = metrics.length ? metrics.filter((item) => item.source === 'confirmed').length / metrics.length : 0
   const confidence = !evidenceUsable ? 'needs-review' : confirmedShare >= .5 || (input.readable && text.length >= 400) ? 'high' : 'medium'
+  const narrative = buildAuditNarrative({
+    locale: input.locale,
+    primaryArea: input.primaryArea,
+    purpose: input.purpose,
+    evidenceUsable,
+    metrics,
+    signals: contextState,
+  })
 
   return {
     score,
@@ -224,6 +234,7 @@ export function auditReport(input: AuditInput): AuditResult {
     confidence,
     metrics,
     findings,
+    narrative,
     detectedCount: metrics.filter((item) => item.status === 'found').length,
     requiredCount: requiredMetrics.length,
     missingRequiredCount: requiredMetrics.filter((item) => item.status === 'missing').length,

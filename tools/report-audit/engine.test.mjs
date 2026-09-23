@@ -55,6 +55,9 @@ test('marketing investment audit recommends ROI only when the purpose makes it r
   assert.ok(!monitoring.metrics.some((item) => item.metric.id === 'roi'))
   assert.ok(investment.metrics.some((item) => item.metric.id === 'roi' && item.status === 'missing'))
   assert.equal(investment.missingRequiredCount, 0)
+  assert.equal(investment.narrative.verdict.status, 'conditional')
+  assert.ok(investment.narrative.risks.some((item) => item.code === 'investment-economics-risk'))
+  assert.ok(investment.narrative.actions.some((item) => item.code === 'investment-economics-action'))
 })
 
 test('finance audit does not import unrelated marketing requirements', () => {
@@ -107,4 +110,66 @@ test('metric detection can be limited to selected areas', () => {
   const metrics = detectMetrics('CAC ve EBITDA raporu', ['finance'])
   assert.ok(metrics.includes('finance:ebitda'))
   assert.ok(!metrics.includes('marketing:cac'))
+})
+
+test('complete reports receive a decision-ready five-part narrative', () => {
+  const result = audit({reportText: 'OTIF, sevkiyat adedi, sevkiyat başına maliyet, teslimat süresi, kapasite kullanımı, hasar oranı ve hesaplama metodolojisi'})
+  assert.equal(result.narrative.verdict.status, 'ready')
+  assert.ok(result.narrative.strengths.length > 0)
+  assert.ok(result.narrative.risks.length > 0)
+  assert.ok(result.narrative.questions.length >= 3)
+  assert.ok(result.narrative.actions.length > 0)
+})
+
+test('purpose-specific context gaps change the verdict and recommendations', () => {
+  const reportText = 'OTIF, sevkiyat adedi, sevkiyat başına maliyet, teslimat süresi, kapasite kullanımı ve hasar oranı'
+  const monitoring = audit({reportText})
+  const diagnosis = audit({purpose: 'diagnosis', reportText, context: {...completeContext, segmented: false}})
+  assert.equal(monitoring.narrative.verdict.status, 'ready')
+  assert.equal(diagnosis.narrative.verdict.status, 'conditional')
+  assert.ok(diagnosis.narrative.risks.some((item) => item.code === 'signal-risk:segmentation'))
+  assert.notEqual(monitoring.narrative.questions[0].title, diagnosis.narrative.questions[0].title)
+})
+
+test('missing core metrics create a not-ready verdict and immediate actions', () => {
+  const result = audit({primaryArea: 'finance', reportText: 'Gelir ve brüt kâr'})
+  assert.equal(result.narrative.verdict.status, 'not-ready')
+  assert.ok(result.narrative.risks.some((item) => item.code.startsWith('metric-risk:')))
+  assert.ok(result.narrative.actions.some((item) => item.priority === 'now' && item.code.startsWith('metric-action:')))
+})
+
+test('every report area receives distinct management questions', () => {
+  const reports = {
+    marketing: 'Pazarlama harcaması, atfedilen gelir, yeni müşteri, müşteri edinme maliyeti ve katkı marjı',
+    sales: 'Pipeline değeri, aşama dönüşümü, kazanma oranı, satış döngüsü ve satış tahmini',
+    commerce: 'Net ciro, sipariş, dönüşüm oranı, ortalama sepet, brüt marj, iade oranı ve stok bulunabilirliği',
+    finance: 'Gelir, brüt kâr, operasyonel gider, EBITDA, nakit akışı ve bütçe sapması',
+    operations: 'OTIF, sevkiyat adedi, sevkiyat başına maliyet, teslimat süresi, kapasite kullanımı ve hasar oranı',
+    project: 'Fiziksel ilerleme, bütçe gerçekleşen, satış hızı, tahsilat, kalan stok ve finansman ihtiyacı',
+  }
+  const areaQuestions = Object.entries(reports).map(([primaryArea, reportText]) => audit({primaryArea, reportText}).narrative.questions[1].title)
+  assert.equal(new Set(areaQuestions).size, Object.keys(reports).length)
+})
+
+test('all six purposes produce a distinct decision lens', () => {
+  const reportText = 'OTIF, sevkiyat adedi, sevkiyat başına maliyet, teslimat süresi, kapasite kullanımı, hasar oranı, SLA, backlog, rota verimliliği ve operasyon yatırımı geri dönüşü'
+  const purposes = ['monitoring', 'diagnosis', 'allocation', 'forecast', 'investment', 'executive']
+  const questions = purposes.map((purpose) => audit({purpose, reportText}).narrative.questions[0].title)
+  assert.equal(new Set(questions).size, purposes.length)
+})
+
+test('unreadable files keep the narrative in review state without invented advice', () => {
+  const result = audit({readable: false, reportText: ''})
+  assert.equal(result.narrative.verdict.status, 'review')
+  assert.deepEqual(result.narrative.strengths, [])
+  assert.deepEqual(result.narrative.risks, [])
+  assert.deepEqual(result.narrative.questions, [])
+  assert.deepEqual(result.narrative.actions, [])
+})
+
+test('English audits localize every narrative section', () => {
+  const result = audit({locale: 'en', reportText: 'OTIF, shipment volume, cost per shipment, delivery time, capacity utilization and damage rate'})
+  assert.match(result.narrative.verdict.title, /report|decision/i)
+  assert.ok(result.narrative.strengths.every((item) => !/[çğıöşü]/i.test(item.title)))
+  assert.match(result.narrative.questions[0].detail, /performance monitoring/i)
 })

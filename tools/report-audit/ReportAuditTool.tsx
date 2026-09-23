@@ -24,6 +24,8 @@ const copy = {
     resultTitle: 'Audit sonucu', waiting: 'Dosya ekleyin, metin yapıştırın veya metrikleri doğrulayın.',
     score: 'Rapor sağlığı', confidence: 'Analiz güveni', high: 'Yüksek', medium: 'Orta', needsReview: 'Doğrulama gerekli',
     detectedCount: 'Bulunan metrik', requiredCount: 'Zorunlu metrik', missingCount: 'Kritik eksik', findings: 'Öncelikli bulgular',
+    verdict: 'Genel hüküm', strengths: 'Güçlü yönler', risks: 'Kritik riskler ve eksikler', questions: 'Yönetimin sorması gerekenler', actions: 'Öncelikli aksiyon planı',
+    now: 'Şimdi', next: 'Sonraki adım', monitor: 'İzle',
     noFindings: 'Kritik bir eksik tespit edilmedi.', critical: 'Kritik', important: 'Önemli', improvement: 'İyileştirme', positive: 'Güçlü', verification: 'Doğrulama',
     dimensions: {dataReliability: 'Veri güvenilirliği', context: 'Bağlam ve karşılaştırma', domainCompleteness: 'Alan metrikleri', decisionUsefulness: 'Karar üretme gücü', presentation: 'Sunum netliği'},
     contextLabels: {
@@ -50,6 +52,8 @@ const copy = {
     resultTitle: 'Audit result', waiting: 'Add a file, paste text or confirm metrics.',
     score: 'Report health', confidence: 'Analysis confidence', high: 'High', medium: 'Medium', needsReview: 'Review required',
     detectedCount: 'Metrics found', requiredCount: 'Required metrics', missingCount: 'Critical gaps', findings: 'Priority findings',
+    verdict: 'Overall verdict', strengths: 'Strengths', risks: 'Critical risks and gaps', questions: 'Questions management should ask', actions: 'Priority action plan',
+    now: 'Now', next: 'Next', monitor: 'Monitor',
     noFindings: 'No critical gap was detected.', critical: 'Critical', important: 'Important', improvement: 'Improvement', positive: 'Strong', verification: 'Verification',
     dimensions: {dataReliability: 'Data reliability', context: 'Context and comparison', domainCompleteness: 'Domain metrics', decisionUsefulness: 'Decision usefulness', presentation: 'Presentation clarity'},
     contextLabels: {
@@ -197,7 +201,13 @@ export default function ReportAuditTool({lang}: {lang: Locale}) {
           <div className={styles.scoreRow}><div className={styles.scoreRing} style={{'--score': `${result.score ?? 0}%`} as CSSProperties}><strong>{result.score ?? '—'}</strong><span>/100</span></div><div><span>{t.score}</span><strong>{getArea(primaryArea).label[lang]}</strong><small>{getPurpose(purpose).label[lang]}</small></div></div>
           <div className={styles.summaryGrid}><div><span>{t.detectedCount}</span><strong>{result.detectedCount}</strong></div><div><span>{t.requiredCount}</span><strong>{result.requiredCount}</strong></div><div><span>{t.missingCount}</span><strong>{result.missingRequiredCount}</strong></div><div><span>{t.confidence}</span><strong>{confidenceLabel}</strong></div></div>
           <div className={styles.dimensionList}>{(Object.keys(result.dimensions) as Array<keyof typeof result.dimensions>).map((key) => <div key={key}><div><span>{t.dimensions[key]}</span><strong>{result.dimensions[key] ?? 0}/{dimensionMaximums[key]}</strong></div><i><b style={{width: `${((result.dimensions[key] ?? 0) / dimensionMaximums[key]) * 100}%`}} /></i></div>)}</div>
-          <div className={styles.findings}><h3>{t.findings}</h3>{result.findings.length ? result.findings.slice(0, 12).map((finding) => <article key={finding.code} className={styles[finding.severity]}><span>{t[finding.severity]}</span><strong>{finding.title}</strong><p>{finding.detail}</p></article>) : <p className={styles.noFindings}>{t.noFindings}</p>}</div>
+          <div className={styles.narrative}>
+            <section className={`${styles.verdict} ${styles[result.narrative.verdict.status]}`}><span>{t.verdict}</span><strong>{result.narrative.verdict.title}</strong><p>{result.narrative.verdict.detail}</p></section>
+            <section className={styles.narrativeSection}><h3>{t.strengths}</h3>{result.narrative.strengths.length ? result.narrative.strengths.map((item) => <article key={item.code} className={styles.strengthItem}><strong>{item.title}</strong><p>{item.detail}</p></article>) : <p className={styles.noFindings}>{t.noFindings}</p>}</section>
+            <section className={styles.narrativeSection}><h3>{t.risks}</h3>{result.narrative.risks.map((item) => <article key={item.code} className={styles.riskItem}><strong>{item.title}</strong><p>{item.detail}</p></article>)}</section>
+            <section className={styles.narrativeSection}><h3>{t.questions}</h3><ol className={styles.questionList}>{result.narrative.questions.map((item) => <li key={item.code}>{item.title}</li>)}</ol></section>
+            <section className={styles.narrativeSection}><h3>{t.actions}</h3><div className={styles.actionList}>{result.narrative.actions.map((item) => <article key={item.code}><span className={styles[item.priority]}>{t[item.priority]}</span><div><strong>{item.title}</strong><p>{item.detail}</p></div></article>)}</div></section>
+          </div>
         </>}
       </aside>
     </div>
