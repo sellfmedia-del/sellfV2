@@ -57,6 +57,8 @@ const currencies: Record<Currency, {tr: string; en: string; locale: string}> = {
   EUR: {tr: '€ Euro', en: '€ Euro', locale: 'de-DE'}, GBP: {tr: '£ Sterlin', en: '£ Pound Sterling', locale: 'en-GB'},
 }
 
+const roundToSingleDecimal = (value: number) => Math.round((value + Number.EPSILON) * 10) / 10
+
 function Field({label, value, onChange, suffix, min = 0, step = 1}: {label: string; value: number; onChange: (value: number) => void; suffix?: string; min?: number; step?: number}) {
   return <label className={styles.field}><span>{label}</span><div><input type="number" min={min} step={step} value={value} onChange={(event) => onChange(Number(event.target.value))} />{suffix && <i>{suffix}</i>}</div></label>
 }
@@ -125,7 +127,7 @@ export default function SellfMarketFitTool({lang}: Props) {
   function applyChannelProfile(selected: SalesChannel = channel) {
     const profile = channelProfiles[selected]
     setCosts((current) => ({...current, commissionRate: profile.commission, paymentRate: profile.payment, returnRate: profile.returns, plannedDiscountRate: profile.discount, outboundLogistics: profile.shipping, distribution: profile.distribution, marketingPerOrder: profile.marketing}))
-    setScenarios((current) => current.map((scenario, index) => ({...scenario, shippingCost: profile.shipping, commissionRate: profile.commission, returnRate: profile.returns, discountRate: Math.max(0, profile.discount + (index === 1 ? -3 : index === 2 ? 5 : 0)), cac: profile.cac * (index === 1 ? .9 : index === 2 ? 1.2 : 1), conversionRate: profile.conversion * (index === 1 ? 1.15 : index === 2 ? 1.3 : 1), unitsPerOrder: profile.units})))
+    setScenarios((current) => current.map((scenario, index) => ({...scenario, shippingCost: profile.shipping, commissionRate: profile.commission, returnRate: profile.returns, discountRate: Math.max(0, profile.discount + (index === 1 ? -3 : index === 2 ? 5 : 0)), cac: profile.cac * (index === 1 ? .9 : index === 2 ? 1.2 : 1), conversionRate: roundToSingleDecimal(profile.conversion * (index === 1 ? 1.15 : index === 2 ? 1.3 : 1)), unitsPerOrder: profile.units})))
     if (selected === 'store') setChannelEconomics((current) => ({...current, channel: selected, monthlyFixedCost: current.monthlyFixedCost || 250000, expectedMonthlyUnits: current.expectedMonthlyUnits || 1000, tradeMarginRate: 0, paymentTermDays: 0, annualFinancingRate: 0, minimumOrderUnits: 1}))
     if (selected === 'b2b') setChannelEconomics((current) => ({...current, channel: selected, monthlyFixedCost: 0, expectedMonthlyUnits: 0, tradeMarginRate: current.tradeMarginRate || 25, paymentTermDays: current.paymentTermDays || 60, annualFinancingRate: current.annualFinancingRate || 45, minimumOrderUnits: current.minimumOrderUnits <= 1 ? 50 : current.minimumOrderUnits}))
     if (selected === 'marketplace' || selected === 'own-site') setChannelEconomics({...initialChannelEconomics, channel: selected})
