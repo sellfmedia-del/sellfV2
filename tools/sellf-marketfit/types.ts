@@ -1,7 +1,19 @@
 export type Locale = 'tr' | 'en'
 export type Currency = 'TRY' | 'USD' | 'EUR' | 'GBP'
-export type SalesChannel = 'marketplace' | 'own-site' | 'store' | 'wholesale' | 'distributor'
+export type SalesChannel = 'marketplace' | 'own-site' | 'store' | 'b2b'
 export type Marketplace = 'trendyol' | 'hepsiburada' | 'amazon-tr' | 'n11' | 'other'
+export type StoreFormat = 'own-store' | 'chain' | 'department-store' | 'pop-up'
+export type B2BModel = 'wholesale' | 'distributor' | 'dealer' | 'corporate'
+
+export type ChannelEconomics = {
+  channel: SalesChannel
+  monthlyFixedCost: number
+  expectedMonthlyUnits: number
+  tradeMarginRate: number
+  paymentTermDays: number
+  annualFinancingRate: number
+  minimumOrderUnits: number
+}
 
 export type CostInputs = {
   production: number
@@ -29,6 +41,8 @@ export type PriceResult = {
   targetSalePrice: number | null
   recommendedListPrice: number | null
   netRevenue: number
+  netRevenueAfterFees: number
+  channelCostPerOrder: number
   contribution: number
   contributionMargin: number
   maxDiscountRate: number | null
@@ -89,12 +103,19 @@ export type MarketEvidence = {
   reviewCount?: number
   freeShipping?: boolean
   packageQuantity?: number
+  unitAmount?: number
   unitLabel?: string
+  observedAt?: string
 }
 
 export type MarketSummary = {
   evidenceCount: number
+  comparableCount: number
+  excludedCount: number
   confidence: 'unavailable' | 'low' | 'medium' | 'high'
+  confidenceScore: number
+  confidenceReasons: string[]
+  comparisonUnit: string | null
   minimum: number | null
   maximum: number | null
   median: number | null
@@ -115,6 +136,9 @@ export type MarketScanRequest = {
   competitorUrls?: string[]
   channel: SalesChannel
   marketplace?: Marketplace
+  storeFormat?: StoreFormat
+  b2bModel?: B2BModel
+  marketArea?: string
   currency: Currency
   manualEvidence?: string
 }

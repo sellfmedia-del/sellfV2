@@ -102,11 +102,15 @@ function walkJson(value: unknown, source: string, baseUrl: string, output: Marke
     const offer = offersRaw && typeof offersRaw === 'object' ? offersRaw as Record<string, unknown> : {}
     const aggregate = item.aggregateRating && typeof item.aggregateRating === 'object' ? item.aggregateRating as Record<string, unknown> : {}
     const price = number(offer.price || offer.lowPrice || item.price)
+    const sizeText = text(item.size || item.weight)
+    const sizeMatch = sizeText.match(/([\d.,]+)\s*(kg|g|gr|l|lt|ml|adet|piece|pcs)/i)
     if (price > 0) output.push({
       title: text(item.name) || 'Ürün', url: text(item.url || offer.url) || baseUrl, source, price,
       listPrice: number(offer.highPrice) || undefined, rating: number(aggregate.ratingValue) || undefined,
       reviewCount: number(aggregate.reviewCount || aggregate.ratingCount) || undefined,
       freeShipping: /free|ücretsiz/i.test(JSON.stringify(offer.shippingDetails || '')) || undefined,
+      unitAmount: sizeMatch ? number(sizeMatch[1]) : undefined,
+      unitLabel: sizeMatch?.[2],
     })
   }
   Object.values(item).forEach((child) => {
@@ -143,6 +147,9 @@ export function parseManualEvidence(value: string): MarketEvidence[] {
       reviewCount: number(parts[4]) || undefined,
       freeShipping: parts[5] ? /evet|yes|free|ücretsiz|1/i.test(parts[5]) : undefined,
       packageQuantity: number(parts[6]) || undefined,
+      unitAmount: number(parts[7]) || undefined,
+      unitLabel: parts[8] || undefined,
+      observedAt: /^\d{4}-\d{2}-\d{2}$/.test(parts[9] || '') ? parts[9] : undefined,
     }]
   })
 }
@@ -179,16 +186,26 @@ export async function scanMarket(request: MarketScanRequest): Promise<MarketScan
   if (searchUrl) discovered = await scanOne(searchUrl, request.marketplace || 'marketplace-search')
   evidence.push(...discovered)
   const unique = [...new Map(evidence.map((item) => [`${item.title.toLowerCase()}|${item.price}`, item])).values()]
-  const summary = summarizeMarket(unique, currentProduct?.price)
+  const summary = summarizeMarket(unique)
   const automaticCount = batches.flat().length + discovered.length + (currentProduct ? 1 : 0)
+  const unavailableNotes: Record<MarketScanRequest['channel'], string> = {
+    marketplace: 'Pazaryeri herkese açık ürün verisi sunmadı. Rakip linkleri veya manuel fiyat satırları ekleyin.',
+    'own-site': 'Rakip sitelerden doğrulanabilir ürün verisi alınamadı. Doğrudan ürün linkleri veya manuel fiyat satırları ekleyin.',
+    store: 'Fiziksel mağaza ve raf fiyatları otomatik taranamaz. Mağaza, bölge ve tarih içeren manuel raf kanıtları ekleyin.',
+    b2b: 'B2B fiyatları çoğunlukla herkese açık değildir. Teklif, fiyat listesi veya bayi görüşmelerinden doğrulanmış satırlar ekleyin.',
+  }
+  const successNotes: Record<MarketScanRequest['channel'], string> = {
+    marketplace: 'Herkese açık pazaryeri verileri ve kullanıcı kanıtları birlikte değerlendirildi.',
+    'own-site': 'Rakip ürün sayfaları ve kullanıcı kanıtları birlikte değerlendirildi.',
+    store: 'Girilen raf fiyatları mağaza ve bölge bağlamında değerlendirildi.',
+    b2b: 'Girilen B2B teklif ve fiyat listesi kanıtları kanal bağlamında değerlendirildi.',
+  }
   return {
     evidence: unique.slice(0, 40), currentProduct, summary,
     discovery: {
-      attempted: Boolean(searchUrl || request.productUrl || competitors.length), sourceUrl: searchUrl,
-      status: automaticCount > 0 ? unique.length >= 5 ? 'completed' : 'partial' : 'unavailable',
-      note: automaticCount > 0
-        ? 'Herkese açık ürün verileri ve kullanıcı kanıtları birlikte değerlendirildi.'
-        : 'Platform herkese açık ürün verisi sunmadı. Rakip linkleri veya manuel fiyat satırları ekleyin.',
+      attempted: Boolean(searchUrl || request.productUrl || competitors.length || evidence.length), sourceUrl: searchUrl,
+      status: unique.length >= 5 ? 'completed' : unique.length > 0 ? 'partial' : 'unavailable',
+      note: automaticCount > 0 || evidence.length > 0 ? successNotes[request.channel] : unavailableNotes[request.channel],
     },
   }
 }

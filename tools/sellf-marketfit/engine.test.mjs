@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {assessMarketFit, calculatePrice, calculateSalesPlan, defaultCosts, derivePositioning, summarizeMarket} from './engine.ts'
+import {assessMarketFit, buildPriceStrategies, calculatePrice, calculateSalesPlan, defaultCosts, derivePositioning, summarizeMarket} from './engine.ts'
 
 const close = (actual, expected, tolerance = .01) => assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} ≠ ${expected}`)
 
@@ -59,6 +59,57 @@ test('package quantity normalizes comparable unit prices', () => {
   ])
   assert.equal(summary.minimum, 80)
   assert.equal(summary.maximum, 100)
+})
+
+test('weight and volume evidence is normalized while incompatible units are excluded', () => {
+  const summary = summarizeMarket([
+    {title: '250 g', source: 'manual', price: 100, unitAmount: 250, unitLabel: 'g'},
+    {title: '500 g', source: 'manual', price: 180, unitAmount: 500, unitLabel: 'g'},
+    {title: '1 kg', source: 'manual', price: 350, unitAmount: 1, unitLabel: 'kg'},
+    {title: 'single', source: 'manual', price: 90},
+  ])
+  assert.equal(summary.comparisonUnit, '100 g')
+  assert.equal(summary.comparableCount, 3)
+  assert.equal(summary.excludedCount, 1)
+  close(summary.minimum, 35)
+  close(summary.maximum, 40)
+})
+
+test('extreme price outliers do not distort a sufficiently sized corridor', () => {
+  const summary = summarizeMarket([100, 105, 110, 115, 120, 9999].map((price) => ({title: `${price}`, source: 'manual', price})))
+  assert.equal(summary.maximum, 120)
+  assert.equal(summary.excludedCount, 1)
+})
+
+test('physical retail allocates monthly fixed cost to each unit', () => {
+  const channel = {channel: 'store', monthlyFixedCost: 10000, expectedMonthlyUnits: 100, tradeMarginRate: 0, paymentTermDays: 0, annualFinancingRate: 0, minimumOrderUnits: 1}
+  const base = calculatePrice({...defaultCosts, marketingPerOrder: 0}, undefined, undefined)
+  const store = calculatePrice({...defaultCosts, marketingPerOrder: 0}, undefined, undefined, channel)
+  assert.ok(store.targetSalePrice > base.targetSalePrice)
+  assert.ok(store.expectedNonMarketingCost >= base.expectedNonMarketingCost + 99)
+})
+
+test('B2B price includes buyer margin and payment-term financing', () => {
+  const channel = {channel: 'b2b', monthlyFixedCost: 0, expectedMonthlyUnits: 0, tradeMarginRate: 25, paymentTermDays: 60, annualFinancingRate: 45, minimumOrderUnits: 50}
+  const base = calculatePrice(defaultCosts)
+  const b2b = calculatePrice(defaultCosts, undefined, undefined, channel)
+  assert.ok(b2b.targetSalePrice > base.targetSalePrice)
+})
+
+test('B2B sales plan enforces minimum order quantity', () => {
+  const channel = {channel: 'b2b', monthlyFixedCost: 0, expectedMonthlyUnits: 0, tradeMarginRate: 20, paymentTermDays: 30, annualFinancingRate: 30, minimumOrderUnits: 50}
+  const scenario = {id: 'b2b', name: 'B2B', listPrice: 1000, discountRate: 0, shippingCost: 0, commissionRate: 0, returnRate: 0, cac: 0, conversionRate: 10, unitsPerOrder: 1}
+  const target = {targetType: 'units', targetValue: 100, existingCustomerShare: 0, repeatOrdersPerNewCustomer: 0, organicNewCustomerShare: 0, fixedPeriodCosts: 0, cacRangeLow: 0, cacRangeHigh: 0}
+  const result = calculateSalesPlan({...defaultCosts, marketingPerOrder: 0}, target, scenario, channel)
+  close(result.requiredOrders, 2)
+  close(result.requiredGrossUnits, 100)
+})
+
+test('pricing strategies preserve ordered target prices', () => {
+  const strategies = buildPriceStrategies(defaultCosts)
+  assert.equal(strategies.length, 3)
+  assert.ok(strategies[0].result.targetSalePrice < strategies[1].result.targetSalePrice)
+  assert.ok(strategies[1].result.targetSalePrice < strategies[2].result.targetSalePrice)
 })
 
 test('market fit reports a gap when profitable price exceeds observed corridor', () => {

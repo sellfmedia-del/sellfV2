@@ -1,12 +1,14 @@
 import {NextResponse} from 'next/server'
 import {scanMarket} from '@/tools/sellf-marketfit/scanner'
-import type {Currency, Marketplace, MarketScanRequest, SalesChannel} from '@/tools/sellf-marketfit/types'
+import type {B2BModel, Currency, Marketplace, MarketScanRequest, SalesChannel, StoreFormat} from '@/tools/sellf-marketfit/types'
 
 export const runtime = 'nodejs'
 export const maxDuration = 45
 
-const channels = new Set<SalesChannel>(['marketplace', 'own-site', 'store', 'wholesale', 'distributor'])
+const channels = new Set<SalesChannel>(['marketplace', 'own-site', 'store', 'b2b'])
 const marketplaces = new Set<Marketplace>(['trendyol', 'hepsiburada', 'amazon-tr', 'n11', 'other'])
+const storeFormats = new Set<StoreFormat>(['own-store', 'chain', 'department-store', 'pop-up'])
+const b2bModels = new Set<B2BModel>(['wholesale', 'distributor', 'dealer', 'corporate'])
 const currencies = new Set<Currency>(['TRY', 'USD', 'EUR', 'GBP'])
 const rateBuckets = new Map<string, number[]>()
 
@@ -36,6 +38,9 @@ export async function POST(request: Request) {
       competitorUrls: Array.isArray(body.competitorUrls) ? body.competitorUrls.map(cleanUrl).filter(Boolean).slice(0, 8) : [],
       channel: channels.has(body.channel as SalesChannel) ? body.channel as SalesChannel : 'own-site',
       marketplace: marketplaces.has(body.marketplace as Marketplace) ? body.marketplace as Marketplace : undefined,
+      storeFormat: storeFormats.has(body.storeFormat as StoreFormat) ? body.storeFormat as StoreFormat : undefined,
+      b2bModel: b2bModels.has(body.b2bModel as B2BModel) ? body.b2bModel as B2BModel : undefined,
+      marketArea: typeof body.marketArea === 'string' ? body.marketArea.trim().slice(0, 120) : '',
       currency: currencies.has(body.currency as Currency) ? body.currency as Currency : 'TRY',
       manualEvidence: typeof body.manualEvidence === 'string' ? body.manualEvidence.slice(0, 50_000) : '',
     }
