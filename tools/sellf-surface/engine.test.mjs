@@ -72,6 +72,13 @@ test('cross-asset audit detects missing website-to-social connection', () => {
   assert.ok(result.findings.some((item) => item.code === 'social-connection'))
 })
 
+test('profile-only audits do not invent a missing website connection', () => {
+  const youtube = asset({kind: 'youtube', evidenceText: 'Channel description with website https://example.com and recent videos.'})
+  const business = asset({id: 'asset-2', kind: 'google-business', evidenceText: 'Business category, phone +90 212 000 00 00, hours, reviews and website https://example.com.'})
+  const result = auditSurface([youtube, business], 'en', 'b2b', 'lead')
+  assert.ok(!result.findings.some((item) => item.code === 'social-connection'))
+})
+
 test('repeated inner-page CTA gaps do not create a contradictory not-ready verdict', () => {
   const innerGap = page({url: 'https://example.com/about', ctaCount: 0})
   const result = auditSurface([asset({pages: [page(), innerGap, {...innerGap, url: 'https://example.com/services'}]})], 'tr', 'b2b', 'lead')
