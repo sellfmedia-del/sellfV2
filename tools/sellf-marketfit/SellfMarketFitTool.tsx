@@ -68,7 +68,7 @@ export default function SellfMarketFitTool({lang}: Props) {
   const [productType, setProductType] = useState('Yüz temizleme jeli')
   const [productUrl, setProductUrl] = useState('')
   const [competitorUrls, setCompetitorUrls] = useState('')
-  const [manualEvidence, setManualEvidence] = useState('Rakip A | 699 | 799 | 4.6 | 820 | evet\nRakip B | 749 | 899 | 4.4 | 410 | evet\nRakip C | 829 | 829 | 4.7 | 1260 | evet\nRakip D | 899 | 999 | 4.5 | 260 | hayır\nRakip E | 949 | 1099 | 4.8 | 640 | evet')
+  const [manualEvidence, setManualEvidence] = useState('Doğal yüz temizleme jeli | 699 | 799 | 4.6 | 820 | evet\nHassas cilt yüz yıkama jeli | 749 | 899 | 4.4 | 410 | evet\nNiacinamide arındırıcı temizleme jeli | 829 | 829 | 4.7 | 1260 | evet\nDermatolojik yüz temizleme jeli | 899 | 999 | 4.5 | 260 | hayır\nNemlendirici günlük temizleme jeli | 949 | 1099 | 4.8 | 640 | evet')
   const [marketResult, setMarketResult] = useState<MarketScanResult | null>(null)
   const [marketLoading, setMarketLoading] = useState(false)
   const [marketError, setMarketError] = useState('')
