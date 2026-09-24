@@ -15,24 +15,26 @@ export const defaultCosts: CostInputs = {
 function normalizedCosts(input: CostInputs, override?: Partial<ScenarioInputs>, channel?: ChannelEconomics) {
   const returnRate = percent(override?.returnRate ?? input.returnRate) / 100
   const returnLoss = percent(input.returnLossRate) / 100
+  const unitsPerOrder = Math.max(1, nonNegative(override?.unitsPerOrder ?? 1), channel?.channel === 'b2b' ? nonNegative(channel.minimumOrderUnits) : 0)
   const landed = nonNegative(input.production) + nonNegative(input.packaging) + nonNegative(input.inboundLogistics)
   const storeAllocation = channel?.channel === 'store'
-    ? divide(nonNegative(channel.monthlyFixedCost), nonNegative(channel.expectedMonthlyUnits)) * Math.max(1, nonNegative(override?.unitsPerOrder ?? 1))
+    ? divide(nonNegative(channel.monthlyFixedCost), nonNegative(channel.expectedMonthlyUnits))
     : 0
-  const fulfilment = nonNegative(override?.shippingCost ?? input.outboundLogistics) + nonNegative(input.distribution) + nonNegative(input.operations) + nonNegative(input.otherVariable) + storeAllocation
+  const fulfilment = divide(nonNegative(override?.shippingCost ?? input.outboundLogistics), unitsPerOrder) + nonNegative(input.distribution) + nonNegative(input.operations) + nonNegative(input.otherVariable) + storeAllocation
   const recoverableLanded = landed * (1 - returnRate + returnRate * returnLoss)
   const expectedReturnHandling = returnRate * nonNegative(input.returnHandling)
   return {
     retainedRate: 1 - returnRate,
     landed,
     nonMarketing: recoverableLanded + fulfilment + expectedReturnHandling,
-    marketing: nonNegative(input.marketingPerOrder),
+    marketing: divide(nonNegative(input.marketingPerOrder), unitsPerOrder),
     vat: percent(input.vatRate) / 100,
     feeRate: (percent(override?.commissionRate ?? input.commissionRate) + percent(input.paymentRate)
       + (channel?.channel === 'b2b' ? percent(channel.tradeMarginRate) : 0)) / 100
       + (channel?.channel === 'b2b' ? percent(channel.annualFinancingRate) / 100 * nonNegative(channel.paymentTermDays) / 365 : 0),
     margin: percent(input.targetMargin) / 100,
     storeAllocation,
+    unitsPerOrder,
   }
 }
 
@@ -57,7 +59,7 @@ export function calculatePrice(input: CostInputs, listPrice?: number, override?:
   const contribution = netRevenue - fees - totalFixedPerOrder
   const contributionMargin = divide(contribution, netRevenue) * 100
   const targetContribution = netRevenue * c.margin
-  const allowedCac = Math.max(0, netRevenue - fees - c.nonMarketing - targetContribution)
+  const allowedCac = Math.max(0, netRevenue - fees - c.nonMarketing - targetContribution) * c.unitsPerOrder
   const maxDiscountRate = effectiveList > 0 && breakEvenSalePrice !== null
     ? Math.max(0, Math.min(100, (1 - breakEvenSalePrice / effectiveList) * 100))
     : null
@@ -72,7 +74,7 @@ export function calculatePrice(input: CostInputs, listPrice?: number, override?:
   return {
     landedCost: c.landed, expectedNonMarketingCost: c.nonMarketing,
     breakEvenSalePrice, targetSalePrice, recommendedListPrice, netRevenue,
-    netRevenueAfterFees: netRevenue - fees, channelCostPerOrder: c.storeAllocation,
+    netRevenueAfterFees: netRevenue - fees, channelCostPerOrder: c.storeAllocation * c.unitsPerOrder,
     contribution, contributionMargin, maxDiscountRate, allowedCac,
     viable: breakEvenSalePrice !== null && salePrice >= breakEvenSalePrice,
     warnings,
@@ -85,7 +87,7 @@ export function calculateSalesPlan(costs: CostInputs, target: SalesTargetInputs,
   const returnRate = percent(scenario.returnRate) / 100
   const unitsPerOrder = Math.max(.01, nonNegative(scenario.unitsPerOrder), channel?.channel === 'b2b' ? nonNegative(channel.minimumOrderUnits) : 0)
   const keptUnitsPerOrder = unitsPerOrder * (1 - returnRate)
-  const retainedRevenuePerOrder = salePrice * (1 - returnRate)
+  const retainedRevenuePerOrder = salePrice * keptUnitsPerOrder
   const requiredOrders = target.targetType === 'units'
     ? divide(nonNegative(target.targetValue), keptUnitsPerOrder)
     : divide(nonNegative(target.targetValue), retainedRevenuePerOrder)
@@ -98,7 +100,8 @@ export function calculateSalesPlan(costs: CostInputs, target: SalesTargetInputs,
   const conversion = percent(scenario.conversionRate) / 100
   const requiredVisits = conversion > 0 ? requiredPaidCustomers / conversion : null
   const perOrder = calculatePrice(costs, scenario.listPrice, scenario, channel)
-  const contributionBeforeMarketingPerOrder = perOrder.contribution + nonNegative(costs.marketingPerOrder)
+  const marketingPerUnit = divide(nonNegative(costs.marketingPerOrder), unitsPerOrder)
+  const contributionBeforeMarketingPerOrder = (perOrder.contribution + marketingPerUnit) * unitsPerOrder
   const breakEvenMarketingBudget = Math.max(0, contributionBeforeMarketingPerOrder * requiredOrders - nonNegative(target.fixedPeriodCosts))
   const marketingBudgetLow = requiredPaidCustomers * nonNegative(target.cacRangeLow)
   const marketingBudgetHigh = requiredPaidCustomers * nonNegative(target.cacRangeHigh)

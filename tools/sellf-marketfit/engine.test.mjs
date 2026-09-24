@@ -105,6 +105,25 @@ test('B2B sales plan enforces minimum order quantity', () => {
   close(result.requiredGrossUnits, 100)
 })
 
+test('revenue targets account for every unit in a multi-unit order', () => {
+  const scenario = {id: 'multi', name: 'Multi', listPrice: 100, discountRate: 0, shippingCost: 20, commissionRate: 0, returnRate: 0, cac: 0, conversionRate: 10, unitsPerOrder: 10}
+  const target = {targetType: 'revenue', targetValue: 10000, existingCustomerShare: 0, repeatOrdersPerNewCustomer: 0, organicNewCustomerShare: 0, fixedPeriodCosts: 0, cacRangeLow: 0, cacRangeHigh: 0}
+  const result = calculateSalesPlan({...defaultCosts, marketingPerOrder: 0}, target, scenario)
+  close(result.requiredOrders, 10)
+  close(result.requiredGrossUnits, 100)
+  close(result.revenue, 10000)
+})
+
+test('per-order shipping and marketing are allocated across order units', () => {
+  const single = {id: 'single', name: 'Single', listPrice: 1000, discountRate: 0, shippingCost: 100, commissionRate: 0, returnRate: 0, cac: 0, conversionRate: 1, unitsPerOrder: 1}
+  const multi = {...single, id: 'multi', unitsPerOrder: 10}
+  const costs = {...defaultCosts, marketingPerOrder: 100, vatRate: 0, targetMargin: 0}
+  const singlePrice = calculatePrice(costs, single.listPrice, single)
+  const multiPrice = calculatePrice(costs, multi.listPrice, multi)
+  assert.ok(multiPrice.expectedNonMarketingCost < singlePrice.expectedNonMarketingCost)
+  assert.ok(multiPrice.breakEvenSalePrice < singlePrice.breakEvenSalePrice)
+})
+
 test('pricing strategies preserve ordered target prices', () => {
   const strategies = buildPriceStrategies(defaultCosts)
   assert.equal(strategies.length, 3)
