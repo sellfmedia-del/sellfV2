@@ -1,0 +1,171 @@
+'use client'
+
+import Link from 'next/link'
+import {useMemo, useState} from 'react'
+import {assessMarketFit, calculatePrice, calculateSalesPlan, defaultCosts, derivePositioning} from './engine'
+import type {CostInputs, Currency, MarketScanResult, Marketplace, SalesChannel, SalesTargetInputs, ScenarioInputs} from './types'
+import styles from './sellf-marketfit.module.css'
+
+type Props = {lang: 'tr' | 'en'}
+type Mode = 'market' | 'planner'
+type PlannerMode = 'price' | 'target'
+
+const initialScenarios: ScenarioInputs[] = [
+  {id: 'current', name: 'Mevcut', listPrice: 899, discountRate: 10, shippingCost: 42, commissionRate: 18, returnRate: 8, cac: 120, conversionRate: 2.2, unitsPerOrder: 1},
+  {id: 'controlled', name: 'Kontrollü', listPrice: 949, discountRate: 5, shippingCost: 42, commissionRate: 15, returnRate: 6, cac: 110, conversionRate: 2.6, unitsPerOrder: 1},
+  {id: 'aggressive', name: 'Agresif', listPrice: 999, discountRate: 15, shippingCost: 42, commissionRate: 18, returnRate: 10, cac: 145, conversionRate: 3, unitsPerOrder: 1.1},
+]
+
+const initialTarget: SalesTargetInputs = {targetType: 'revenue', targetValue: 1000000, existingCustomerShare: 20, repeatOrdersPerNewCustomer: .2, organicNewCustomerShare: 25, fixedPeriodCosts: 60000, cacRangeLow: 90, cacRangeHigh: 150}
+
+const copy = {
+  tr: {
+    back: 'Tüm tool’lara dön', eyebrow: 'SELLF ENGAGE / SELLF MARKETFIT',
+    title: 'Pazarın kabul ettiği fiyat ile kârlı fiyatınız kesişiyor mu?',
+    intro: 'Pazar sinyallerini, birim ekonomiyi ve satış hedefini aynı karar sisteminde birleştirin.',
+    market: 'Pazar konumlandırması', planner: 'Fiyat & satış planı', price: 'Doğru fiyatı bul', target: 'Satış hedefini planla',
+    noAi: 'AI kullanmaz', noPaid: 'Ücretli API kullanmaz', evidence: 'Kanıtsız sonuç üretmez',
+  },
+  en: {
+    back: 'Back to all tools', eyebrow: 'SELLF ENGAGE / SELLF MARKETFIT',
+    title: 'Does the price your market accepts meet the price your margin requires?',
+    intro: 'Combine market signals, unit economics and sales targets in one decision system.',
+    market: 'Market positioning', planner: 'Pricing & sales plan', price: 'Find the right price', target: 'Plan a sales target',
+    noAi: 'No AI', noPaid: 'No paid API', evidence: 'No claim without evidence',
+  },
+} as const
+
+const labels = {
+  production: ['Üretim / tedarik', 'Production / sourcing'], packaging: ['Ambalaj', 'Packaging'], inboundLogistics: ['Giriş lojistiği', 'Inbound logistics'],
+  outboundLogistics: ['Müşteri lojistiği', 'Customer shipping'], distribution: ['Dağıtım', 'Distribution'], operations: ['Operasyon', 'Operations'],
+  otherVariable: ['Diğer değişken maliyet', 'Other variable cost'], returnHandling: ['İade işlem maliyeti', 'Return handling'], marketingPerOrder: ['Sipariş başı pazarlama', 'Marketing per order'],
+  vatRate: ['Vergi / KDV', 'Tax / VAT'], commissionRate: ['Kanal komisyonu', 'Channel commission'], paymentRate: ['Ödeme komisyonu', 'Payment fee'],
+  returnRate: ['İade oranı', 'Return rate'], returnLossRate: ['İadede ürün kaybı', 'Product loss on return'], targetMargin: ['Hedef katkı marjı', 'Target contribution margin'], plannedDiscountRate: ['Planlanan indirim', 'Planned discount'],
+} as const
+
+const currencies: Record<Currency, {tr: string; en: string; locale: string}> = {
+  TRY: {tr: '₺ Türk Lirası', en: '₺ Turkish Lira', locale: 'tr-TR'}, USD: {tr: '$ ABD Doları', en: '$ US Dollar', locale: 'en-US'},
+  EUR: {tr: '€ Euro', en: '€ Euro', locale: 'de-DE'}, GBP: {tr: '£ Sterlin', en: '£ Pound Sterling', locale: 'en-GB'},
+}
+
+function Field({label, value, onChange, suffix, min = 0, step = 1}: {label: string; value: number; onChange: (value: number) => void; suffix?: string; min?: number; step?: number}) {
+  return <label className={styles.field}><span>{label}</span><div><input type="number" min={min} step={step} value={value} onChange={(event) => onChange(Number(event.target.value))} />{suffix && <i>{suffix}</i>}</div></label>
+}
+
+function Metric({label, value, note, tone}: {label: string; value: string; note?: string; tone?: 'good' | 'warn'}) {
+  return <article className={`${styles.metric} ${tone === 'good' ? styles.good : tone === 'warn' ? styles.warn : ''}`}><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</article>
+}
+
+export default function SellfMarketFitTool({lang}: Props) {
+  const t = copy[lang]
+  const li = lang === 'tr' ? 0 : 1
+  const [mode, setMode] = useState<Mode>('market')
+  const [plannerMode, setPlannerMode] = useState<PlannerMode>('price')
+  const [currency, setCurrency] = useState<Currency>('TRY')
+  const [channel, setChannel] = useState<SalesChannel>('marketplace')
+  const [marketplace, setMarketplace] = useState<Marketplace>('trendyol')
+  const [category, setCategory] = useState('Kişisel bakım')
+  const [productType, setProductType] = useState('Yüz temizleme jeli')
+  const [productUrl, setProductUrl] = useState('')
+  const [competitorUrls, setCompetitorUrls] = useState('')
+  const [manualEvidence, setManualEvidence] = useState('Rakip A | 699 | 799 | 4.6 | 820 | evet\nRakip B | 749 | 899 | 4.4 | 410 | evet\nRakip C | 829 | 829 | 4.7 | 1260 | evet\nRakip D | 899 | 999 | 4.5 | 260 | hayır\nRakip E | 949 | 1099 | 4.8 | 640 | evet')
+  const [marketResult, setMarketResult] = useState<MarketScanResult | null>(null)
+  const [marketLoading, setMarketLoading] = useState(false)
+  const [marketError, setMarketError] = useState('')
+  const [costs, setCosts] = useState<CostInputs>(defaultCosts)
+  const [target, setTarget] = useState<SalesTargetInputs>(initialTarget)
+  const [scenarios, setScenarios] = useState<ScenarioInputs[]>(initialScenarios)
+  const [activeScenario, setActiveScenario] = useState(0)
+
+  const formatMoney = (value: number | null) => value === null || !Number.isFinite(value) ? '—' : new Intl.NumberFormat(currencies[currency].locale, {style: 'currency', currency, maximumFractionDigits: 0}).format(value)
+  const formatNumber = (value: number | null) => value === null || !Number.isFinite(value) ? '—' : new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {maximumFractionDigits: 1}).format(value)
+  const active = scenarios[activeScenario]
+  const priceResult = useMemo(() => calculatePrice(costs, active.listPrice, active), [costs, active])
+  const planResults = useMemo(() => scenarios.map((scenario) => calculateSalesPlan(costs, target, scenario)), [costs, target, scenarios])
+  const marketFit = marketResult ? assessMarketFit(marketResult.summary, priceResult) : null
+  const positioning = marketResult ? derivePositioning(marketResult.evidence, marketResult.summary, marketResult.currentProduct?.price ?? priceResult.targetSalePrice, channel, lang) : null
+
+  function updateCost(key: keyof CostInputs, value: number) { setCosts((current) => ({...current, [key]: value})) }
+  function updateTarget(key: keyof SalesTargetInputs, value: number | string) { setTarget((current) => ({...current, [key]: value})) }
+  function updateScenario(index: number, key: keyof ScenarioInputs, value: number | string) { setScenarios((current) => current.map((scenario, scenarioIndex) => scenarioIndex === index ? {...scenario, [key]: value} : scenario)) }
+
+  async function scan() {
+    setMarketLoading(true); setMarketError('')
+    try {
+      const response = await fetch('/api/engage/marketfit', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({category, productType, productUrl, competitorUrls: competitorUrls.split(/\r?\n/).map((item) => item.trim()).filter(Boolean), channel, marketplace, currency, manualEvidence})})
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Analysis failed')
+      setMarketResult(data)
+    } catch (error) { setMarketError(error instanceof Error ? error.message : 'Analysis failed') }
+    finally { setMarketLoading(false) }
+  }
+
+  const channels: Array<[SalesChannel, string, string]> = [
+    ['marketplace', 'Pazaryeri', 'Marketplace'], ['own-site', 'Kendi online sitesi', 'Own online store'], ['store', 'Fiziksel mağaza', 'Physical store'],
+    ['wholesale', 'Toptan', 'Wholesale'], ['distributor', 'Bayi / distribütör', 'Dealer / distributor'],
+  ]
+
+  return <main className={styles.page}>
+    <section className={styles.hero}><div className={styles.orb} /><div className="sellf-container">
+      <Link href={`/${lang}/engage/tools`} className={styles.back}>← {t.back}</Link><span className={styles.eyebrow}>{t.eyebrow}</span>
+      <h1>{t.title}</h1><p>{t.intro}</p><div className={styles.badges}><span>✓ {t.noAi}</span><span>✓ {t.noPaid}</span><span>✓ {t.evidence}</span></div>
+    </div></section>
+    <section className={`sellf-container ${styles.workspace}`}>
+      <nav className={styles.modeTabs}><button className={mode === 'market' ? styles.activeTab : ''} onClick={() => setMode('market')}>01 <b>{t.market}</b></button><button className={mode === 'planner' ? styles.activeTab : ''} onClick={() => setMode('planner')}>02 <b>{t.planner}</b></button></nav>
+
+      {mode === 'market' ? <div className={styles.twoCol}>
+        <div className={styles.panel}><div className={styles.panelHead}><span>01</span><div><h2>{t.market}</h2><p>{lang === 'tr' ? 'Ürün ve kanal bağlamını tanımlayın; motor yalnızca doğrulayabildiği fiyatları kullanır.' : 'Define the product and channel; the engine uses only prices it can verify.'}</p></div></div>
+          <div className={styles.formGrid}><label className={styles.field}><span>{lang === 'tr' ? 'Ürün kategorisi' : 'Product category'}</span><div><input value={category} onChange={(e) => setCategory(e.target.value)} /></div></label><label className={styles.field}><span>{lang === 'tr' ? 'Ürün tipi' : 'Product type'}</span><div><input value={productType} onChange={(e) => setProductType(e.target.value)} /></div></label>
+            <label className={styles.field}><span>{lang === 'tr' ? 'Para birimi' : 'Currency'}</span><div><select value={currency} onChange={(e) => setCurrency(e.target.value as Currency)}>{Object.entries(currencies).map(([id, value]) => <option value={id} key={id}>{value[lang]}</option>)}</select></div></label><label className={styles.field}><span>{lang === 'tr' ? 'Satış kanalı' : 'Sales channel'}</span><div><select value={channel} onChange={(e) => setChannel(e.target.value as SalesChannel)}>{channels.map(([id, tr, en]) => <option value={id} key={id}>{lang === 'tr' ? tr : en}</option>)}</select></div></label>
+            {channel === 'marketplace' && <label className={styles.field}><span>{lang === 'tr' ? 'Pazaryeri' : 'Marketplace'}</span><div><select value={marketplace} onChange={(e) => setMarketplace(e.target.value as Marketplace)}><option value="trendyol">Trendyol</option><option value="hepsiburada">Hepsiburada</option><option value="amazon-tr">Amazon Türkiye</option><option value="n11">N11</option><option value="other">{lang === 'tr' ? 'Diğer' : 'Other'}</option></select></div></label>}
+            <label className={`${styles.field} ${styles.full}`}><span>{lang === 'tr' ? 'Kendi ürün linkiniz · isteğe bağlı' : 'Your product URL · optional'}</span><div><input type="url" placeholder="https://..." value={productUrl} onChange={(e) => setProductUrl(e.target.value)} /></div></label>
+            <label className={`${styles.field} ${styles.full}`}><span>{lang === 'tr' ? 'Rakip ürün linkleri · her satıra bir URL' : 'Competitor product URLs · one per line'}</span><textarea rows={3} placeholder="https://..." value={competitorUrls} onChange={(e) => setCompetitorUrls(e.target.value)} /></label>
+            <label className={`${styles.field} ${styles.full}`}><span>{lang === 'tr' ? 'Manuel pazar kanıtı' : 'Manual market evidence'}</span><textarea rows={6} value={manualEvidence} onChange={(e) => setManualEvidence(e.target.value)} /><small>{lang === 'tr' ? 'Format: Ürün | satış fiyatı | liste fiyatı | puan | yorum | ücretsiz kargo | paket adedi' : 'Format: Product | sale price | list price | rating | reviews | free shipping | pack quantity'}</small></label>
+          </div><button className={styles.primary} onClick={scan} disabled={marketLoading}>{marketLoading ? (lang === 'tr' ? 'Pazar taranıyor…' : 'Scanning market…') : (lang === 'tr' ? 'Pazarı analiz et →' : 'Analyze market →')}</button>{marketError && <p className={styles.error}>{marketError}</p>}
+        </div>
+        <aside className={`${styles.panel} ${styles.results}`}><div className={styles.panelHead}><span>02</span><div><h2>{lang === 'tr' ? 'Pazar kararı' : 'Market decision'}</h2><p>{marketResult?.discovery.note || (lang === 'tr' ? 'Sonuçlar tarama ve eklediğiniz kanıtlar üzerinden oluşur.' : 'Results are based on the scan and evidence you submit.')}</p></div></div>
+          {!marketResult ? <div className={styles.empty}><i>↗</i><strong>{lang === 'tr' ? 'Henüz pazar kanıtı analiz edilmedi.' : 'No market evidence analyzed yet.'}</strong><p>{lang === 'tr' ? 'Örnek satırlar hazır. Analizi çalıştırarak fiyat koridorunu görün.' : 'Sample rows are ready. Run the analysis to see the price corridor.'}</p></div> : <>
+            <div className={styles.confidence}><span>{lang === 'tr' ? 'Kanıt güveni' : 'Evidence confidence'}</span><strong>{marketResult.summary.confidence.toUpperCase()}</strong><small>{marketResult.summary.evidenceCount} {lang === 'tr' ? 'fiyat sinyali' : 'price signals'}</small></div>
+            <div className={styles.metrics}><Metric label={lang === 'tr' ? 'Gözlemlenen aralık' : 'Observed range'} value={`${formatMoney(marketResult.summary.minimum)} – ${formatMoney(marketResult.summary.maximum)}`} /><Metric label="Median" value={formatMoney(marketResult.summary.median)} /><Metric label={lang === 'tr' ? 'Önerilen koridor' : 'Suggested corridor'} value={`${formatMoney(marketResult.summary.suggestedLow)} – ${formatMoney(marketResult.summary.suggestedHigh)}`} tone="good" /><Metric label={lang === 'tr' ? 'İndirim kullanımı' : 'Discount prevalence'} value={marketResult.summary.discountPrevalence === null ? '—' : `%${formatNumber(marketResult.summary.discountPrevalence)}`} /></div>
+            <div className={`${styles.decision} ${marketFit?.status === 'gap' ? styles.decisionWarn : ''}`}><span>{lang === 'tr' ? 'Pazar × kârlılık kesişimi' : 'Market × margin intersection'}</span><strong>{marketFit?.status === 'fit' ? (lang === 'tr' ? 'UYUMLU' : 'FIT') : marketFit?.status === 'gap' ? (lang === 'tr' ? 'FİYAT BOŞLUĞU' : 'PRICE GAP') : (lang === 'tr' ? 'DOĞRULAMA GEREKLİ' : 'NEEDS EVIDENCE')}</strong><p>{marketFit?.message}</p>{marketFit?.gap ? <b>{lang === 'tr' ? 'Koridor üzerindeki fark: ' : 'Gap above corridor: '}{formatMoney(marketFit.gap)}</b> : null}</div>
+            {positioning && <div className={styles.positioning}><span>{lang === 'tr' ? 'Önerilen pazarlama konumu' : 'Suggested marketing position'}</span><h3>{positioning.territory}</h3><p>{positioning.recommendation}</p><small>{positioning.avoid}</small>{positioning.commonTerms.length > 0 && <div>{positioning.commonTerms.map((term) => <b key={term}>{term}</b>)}</div>}</div>}
+            <div className={styles.evidenceList}>{marketResult.evidence.slice(0, 6).map((item, index) => <article key={`${item.title}-${index}`}><div><strong>{item.title}</strong><small>{item.source}</small></div><b>{formatMoney(item.price)}</b></article>)}</div>
+          </>}
+          <div className={styles.compete}><span>SELLF COMPETE</span><h3>{lang === 'tr' ? 'Rekabet analizini sürekli hale getirin.' : 'Turn competitive analysis into a continuous system.'}</h3><p>{lang === 'tr' ? 'Sürekli rakip takibi, kampanya değişimleri ve daha geniş ürün karşılaştırmaları için.' : 'For continuous competitor tracking, campaign changes and broader product comparisons.'}</p><a href="https://sellfcompete.com" target="_blank" rel="noreferrer">{lang === 'tr' ? 'SellfCompete’i incele →' : 'Explore SellfCompete →'}</a></div>
+        </aside>
+      </div> : <>
+        <div className={styles.subTabs}><button className={plannerMode === 'price' ? styles.activeSub : ''} onClick={() => setPlannerMode('price')}>{t.price}</button><button className={plannerMode === 'target' ? styles.activeSub : ''} onClick={() => setPlannerMode('target')}>{t.target}</button></div>
+        <div className={styles.twoCol}>
+          <div className={styles.panel}><div className={styles.panelHead}><span>01</span><div><h2>{plannerMode === 'price' ? t.price : t.target}</h2><p>{plannerMode === 'price' ? (lang === 'tr' ? 'Maliyetleri ve hedef marjı eksiksiz tanımlayın.' : 'Define costs and target margin completely.') : (lang === 'tr' ? 'Hedef hacmi ve müşteri ekonomisini tanımlayın.' : 'Define target volume and customer economics.')}</p></div></div>
+            {plannerMode === 'price' ? <div className={styles.formGrid}>{(Object.keys(labels) as Array<keyof CostInputs>).map((key) => <Field key={key} label={labels[key][li]} value={costs[key]} onChange={(value) => updateCost(key, value)} suffix={key.endsWith('Rate') || key === 'targetMargin' ? '%' : currency} step={key.endsWith('Rate') || key === 'targetMargin' ? .5 : 1} />)}</div> : <div className={styles.formGrid}>
+              <label className={styles.field}><span>{lang === 'tr' ? 'Hedef türü' : 'Target type'}</span><div><select value={target.targetType} onChange={(e) => updateTarget('targetType', e.target.value)}><option value="revenue">{lang === 'tr' ? 'Ciro' : 'Revenue'}</option><option value="units">{lang === 'tr' ? 'Net satış adedi' : 'Net units sold'}</option></select></div></label>
+              <Field label={lang === 'tr' ? 'Hedef değer' : 'Target value'} value={target.targetValue} onChange={(v) => updateTarget('targetValue', v)} suffix={target.targetType === 'revenue' ? currency : lang === 'tr' ? 'adet' : 'units'} />
+              <Field label={lang === 'tr' ? 'Mevcut müşteri payı' : 'Existing customer share'} value={target.existingCustomerShare} onChange={(v) => updateTarget('existingCustomerShare', v)} suffix="%" step={.5} />
+              <Field label={lang === 'tr' ? 'Yeni müşteri tekrar siparişi' : 'Repeat orders per new customer'} value={target.repeatOrdersPerNewCustomer} onChange={(v) => updateTarget('repeatOrdersPerNewCustomer', v)} step={.1} />
+              <Field label={lang === 'tr' ? 'Organik yeni müşteri payı' : 'Organic new-customer share'} value={target.organicNewCustomerShare} onChange={(v) => updateTarget('organicNewCustomerShare', v)} suffix="%" step={.5} />
+              <Field label={lang === 'tr' ? 'Dönemsel sabit gider' : 'Fixed period costs'} value={target.fixedPeriodCosts} onChange={(v) => updateTarget('fixedPeriodCosts', v)} suffix={currency} />
+              <Field label={lang === 'tr' ? 'CAC aralığı · alt' : 'CAC range · low'} value={target.cacRangeLow} onChange={(v) => updateTarget('cacRangeLow', v)} suffix={currency} />
+              <Field label={lang === 'tr' ? 'CAC aralığı · üst' : 'CAC range · high'} value={target.cacRangeHigh} onChange={(v) => updateTarget('cacRangeHigh', v)} suffix={currency} />
+            </div>}
+          </div>
+          <aside className={`${styles.panel} ${styles.results}`}><div className={styles.panelHead}><span>02</span><div><h2>{lang === 'tr' ? 'Canlı sonuç' : 'Live result'}</h2><p>{active.name} {lang === 'tr' ? 'senaryosu' : 'scenario'}</p></div></div>
+            {plannerMode === 'price' ? <div className={styles.metrics}><Metric label={lang === 'tr' ? 'Minimum fiyat' : 'Minimum price'} value={formatMoney(priceResult.breakEvenSalePrice)} /><Metric label={lang === 'tr' ? 'Hedef satış fiyatı' : 'Target sale price'} value={formatMoney(priceResult.targetSalePrice)} tone="good" /><Metric label={lang === 'tr' ? 'Önerilen liste fiyatı' : 'Suggested list price'} value={formatMoney(priceResult.recommendedListPrice)} /><Metric label={lang === 'tr' ? 'Birim katkı' : 'Unit contribution'} value={formatMoney(priceResult.contribution)} tone={priceResult.contribution >= 0 ? 'good' : 'warn'} /><Metric label={lang === 'tr' ? 'Maksimum indirim' : 'Maximum discount'} value={priceResult.maxDiscountRate === null ? '—' : `%${formatNumber(priceResult.maxDiscountRate)}`} /><Metric label={lang === 'tr' ? 'İzin verilen CAC' : 'Allowable CAC'} value={formatMoney(priceResult.allowedCac)} /></div> : <div className={styles.metrics}><Metric label={lang === 'tr' ? 'Gerekli yeni müşteri' : 'Required new customers'} value={formatNumber(planResults[activeScenario].requiredNewCustomers)} /><Metric label={lang === 'tr' ? 'Gerekli trafik' : 'Required traffic'} value={formatNumber(planResults[activeScenario].requiredVisits)} /><Metric label={lang === 'tr' ? 'Pazarlama bütçesi aralığı' : 'Marketing budget range'} value={`${formatMoney(planResults[activeScenario].marketingBudgetLow)} – ${formatMoney(planResults[activeScenario].marketingBudgetHigh)}`} /><Metric label={lang === 'tr' ? 'Başabaş bütçesi' : 'Break-even budget'} value={formatMoney(planResults[activeScenario].breakEvenMarketingBudget)} /><Metric label={lang === 'tr' ? 'Tahmini ciro' : 'Estimated revenue'} value={formatMoney(planResults[activeScenario].revenue)} /><Metric label={lang === 'tr' ? 'Pazarlama sonrası kâr' : 'Profit after marketing'} value={formatMoney(planResults[activeScenario].estimatedProfit)} tone={planResults[activeScenario].estimatedProfit >= 0 ? 'good' : 'warn'} /></div>}
+            {[...(plannerMode === 'price' ? priceResult.warnings : planResults[activeScenario].warnings)].map((warning) => <p className={styles.warning} key={warning}>! {warning}</p>)}
+          </aside>
+        </div>
+        <section className={styles.scenarioSection}><div className={styles.sectionHead}><span>03</span><div><h2>{lang === 'tr' ? 'Senaryoları karşılaştırın' : 'Compare scenarios'}</h2><p>{lang === 'tr' ? 'Fiyat, indirim, kargo, komisyon, iade ve CAC değiştikçe sonuçları canlı görün.' : 'See the impact as price, discount, shipping, commission, returns and CAC change.'}</p></div></div>
+          <div className={styles.scenarioGrid}>{scenarios.map((scenario, index) => {const result = planResults[index]; const price = calculatePrice(costs, scenario.listPrice, scenario); return <article className={`${styles.scenario} ${activeScenario === index ? styles.activeScenario : ''}`} key={scenario.id} onClick={() => setActiveScenario(index)}><div className={styles.scenarioTitle}><input aria-label={lang === 'tr' ? 'Senaryo adı' : 'Scenario name'} value={scenario.name} onChange={(e) => updateScenario(index, 'name', e.target.value)} onClick={(e) => e.stopPropagation()} /><span>{result.feasible ? (lang === 'tr' ? 'Uygulanabilir' : 'Feasible') : (lang === 'tr' ? 'Riskli' : 'At risk')}</span></div><div className={styles.scenarioFields}>
+              <Field label={lang === 'tr' ? 'Liste fiyatı' : 'List price'} value={scenario.listPrice} onChange={(v) => updateScenario(index, 'listPrice', v)} suffix={currency} />
+              <Field label={lang === 'tr' ? 'İndirim' : 'Discount'} value={scenario.discountRate} onChange={(v) => updateScenario(index, 'discountRate', v)} suffix="%" step={.5} />
+              <Field label={lang === 'tr' ? 'Ücretsiz kargo maliyeti' : 'Free shipping cost'} value={scenario.shippingCost} onChange={(v) => updateScenario(index, 'shippingCost', v)} suffix={currency} />
+              <Field label={lang === 'tr' ? 'Komisyon' : 'Commission'} value={scenario.commissionRate} onChange={(v) => updateScenario(index, 'commissionRate', v)} suffix="%" step={.5} />
+              <Field label={lang === 'tr' ? 'İade' : 'Returns'} value={scenario.returnRate} onChange={(v) => updateScenario(index, 'returnRate', v)} suffix="%" step={.5} />
+              <Field label="CAC" value={scenario.cac} onChange={(v) => updateScenario(index, 'cac', v)} suffix={currency} />
+              <Field label={lang === 'tr' ? 'Dönüşüm' : 'Conversion'} value={scenario.conversionRate} onChange={(v) => updateScenario(index, 'conversionRate', v)} suffix="%" step={.1} />
+              <Field label={lang === 'tr' ? 'Sipariş başı adet' : 'Units per order'} value={scenario.unitsPerOrder} onChange={(v) => updateScenario(index, 'unitsPerOrder', v)} step={.1} />
+            </div><div className={styles.scenarioOutput}><div><span>{lang === 'tr' ? 'Satış fiyatı' : 'Sale price'}</span><strong>{formatMoney(result.salePrice)}</strong></div><div><span>{lang === 'tr' ? 'Birim katkı' : 'Unit contribution'}</span><strong>{formatMoney(price.contribution)}</strong></div><div><span>{lang === 'tr' ? 'Tahmini kâr' : 'Estimated profit'}</span><strong>{formatMoney(result.estimatedProfit)}</strong></div></div></article>})}</div>
+        </section>
+      </>}
+    </section>
+  </main>
+}

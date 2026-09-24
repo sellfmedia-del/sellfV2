@@ -182,8 +182,9 @@ export default async function EngagePage({params}: PageProps) {
     {id: 't1', title: 'Growth Simulator', summary: lang === 'tr' ? 'Büyüme senaryonun ciro, EBITDA ve ROI etkisini canlı modelle.' : 'Model the revenue, EBITDA and ROI impact of your growth scenario.', image: images.tools, href: `/${lang}/engage/tools/growth-simulator`, label: 'SIMULATOR'},
     {id: 't2', title: 'Report Audit', summary: lang === 'tr' ? 'Raporunun doğru metriklerle doğru kararı destekleyip desteklemediğini gör.' : 'See whether your report supports the right decision with the right metrics.', image: images.tools, href: `/${lang}/engage/tools/report-audit`, label: 'AUDIT'},
     {id: 't3', title: 'Sellf Surface', summary: lang === 'tr' ? 'Dijital varlıklarındaki büyüme sızıntılarını kanıtlarıyla gör.' : 'Find evidence-backed growth leaks across your digital assets.', image: images.tools, href: `/${lang}/engage/tools/sellf-surface`, label: 'AUDIT ENGINE'},
-    {id: 't4', title: 'SellfScale', summary: lang === 'tr' ? 'Büyüme sistemini uçtan uca haritala.' : 'Map your growth system from end to end.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
-    {id: 't5', title: 'SellfCompete', summary: lang === 'tr' ? 'Nerede olduğunu ve sıradaki hamleni gör.' : 'See where you stand and where to move next.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
+    {id: 't4', title: 'Sellf MarketFit', summary: lang === 'tr' ? 'Pazar fiyatı, birim ekonomi ve satış hedefini tek kararda birleştir.' : 'Combine market pricing, unit economics and sales targets in one decision.', image: images.tools, href: `/${lang}/engage/tools/sellf-marketfit`, label: 'PRICING SYSTEM'},
+    {id: 't5', title: 'SellfScale', summary: lang === 'tr' ? 'Büyüme sistemini uçtan uca haritala.' : 'Map your growth system from end to end.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
+    {id: 't6', title: 'SellfCompete', summary: lang === 'tr' ? 'Nerede olduğunu ve sıradaki hamleni gör.' : 'See where you stand and where to move next.', image: images.tools, href: '#tools', label: 'SELLF PRODUCT'},
   ]
   const remainingToolItems = data.tools.length
     ? data.tools.slice(0, 4).map((item, index) => fromCms(item, lang, images.tools, toolSeeds[index + 1]?.label || 'TOOL'))
