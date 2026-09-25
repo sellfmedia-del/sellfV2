@@ -1,6 +1,6 @@
 'use client'
 
-import {useDeferredValue, useMemo, useRef, useState, type CSSProperties} from 'react'
+import {useDeferredValue, useEffect, useMemo, useRef, useState, type CSSProperties} from 'react'
 import {auditReport, detectMetrics, type AuditContext} from './engine'
 import {getArea, getPurpose, reportAreas, reportPurposes, type Locale, type ReportAreaId, type ReportPurposeId} from './config'
 import styles from './report-audit.module.css'
