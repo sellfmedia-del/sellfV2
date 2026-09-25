@@ -4,6 +4,7 @@ import Link from 'next/link'
 import {useMemo, useState, type CSSProperties} from 'react'
 import type {AssetInput, AssetKind, BusinessModel, Locale, PrimaryGoal, SurfaceAuditResponse} from './types'
 import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 import styles from './sellf-surface.module.css'
 
 type DraftAsset = AssetInput & {label: string}
@@ -168,6 +169,13 @@ export default function SellfSurfaceTool({lang}: {lang: Locale}) {
         </>}
       </aside>
     </div>
+    {result && <div className="sellf-container"><ToolReportDownload
+      tool="sellf-surface"
+      language={lang}
+      title={lang === 'tr' ? 'Sellf Surface raporu' : 'Sellf Surface report'}
+      input={{businessModel: t.models[businessModel], primaryGoal: t.goals[primaryGoal], assets: assets.map((asset) => ({kind: t.kinds[asset.kind], label: asset.label, url: asset.url || null, evidenceLength: asset.evidenceText?.length ?? 0}))}}
+      result={{score: result.result.score, confidence: t[result.result.confidence], verdict: result.result.verdict, dimensions: result.result.dimensions, pillars: result.result.pillars, assetScores: result.result.assetScores, priorities: result.result.priorities, verificationNotes: result.result.verificationNotes, strengths: result.result.strengths}}
+    /></div>}
   </main>
 }
 

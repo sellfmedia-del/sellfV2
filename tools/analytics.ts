@@ -5,18 +5,18 @@ export type EngageToolKey =
   | 'sellf-marketfit'
   | 'sellf-route'
 
-type ToolRun = {
+export type ToolRun = {
   tool: EngageToolKey
   language: 'tr' | 'en'
   input: Record<string, unknown>
   result: Record<string, unknown>
 }
 
-export function recordToolRun(run: ToolRun) {
-  if (typeof window === 'undefined') return
+export async function persistToolRun(run: ToolRun, clientRunId = crypto.randomUUID()) {
+  if (typeof window === 'undefined') throw new Error('client_only')
 
   const body = JSON.stringify({
-    clientRunId: crypto.randomUUID(),
+    clientRunId,
     tool: run.tool,
     language: run.language,
     input: run.input,
@@ -25,13 +25,21 @@ export function recordToolRun(run: ToolRun) {
     schemaVersion: 1,
   })
 
-  if (body.length > 120_000) return
+  if (body.length > 120_000) throw new Error('payload_too_large')
 
-  void fetch('/api/engage/tool-runs', {
+  const response = await fetch('/api/engage/tool-runs', {
     method: 'POST',
     headers: {'content-type': 'application/json'},
     body,
     cache: 'no-store',
     keepalive: true,
-  }).catch(() => undefined)
+  })
+
+  if (!response.ok && response.status !== 409) throw new Error('run_persistence_failed')
+  return clientRunId
+}
+
+export function recordToolRun(run: ToolRun) {
+  if (typeof window === 'undefined') return
+  void persistToolRun(run).catch(() => undefined)
 }

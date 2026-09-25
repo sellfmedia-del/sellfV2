@@ -6,6 +6,7 @@ import {analyzeNarrative, buildRoute} from './engine'
 import type {BusinessModel, ClarificationId, Locale, Objective, ProblemSignal, Readiness, RouteInputs, ServiceId, Stage} from './types'
 import styles from './sellf-route.module.css'
 import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 
 type Step = 'brief' | 'verify' | 'result'
 type Localized = {tr: string; en: string}
@@ -252,6 +253,13 @@ export default function SellfRouteTool({lang}: {lang: Locale}) {
         </section>
         <aside className={styles.resultSide}><section className={styles.panel}><span>{t.understood}</span><ul>{result.diagnosis.map((item) => <li key={item}>{diagnosisText(item, lang)}</li>)}</ul><button onClick={() => setStep('verify')}>← {t.edit}</button></section><section className={`${styles.panel} ${styles.excluded}`}><span>{t.excluded}</span><p>{t.excludedNote}</p><div>{result.excluded.slice(0, 5).map((id) => <b key={id}>{services[id].title[lang]}</b>)}</div></section><Link className={styles.contact} href={`/${lang}/contact`}>{t.contact}</Link><button className={styles.restart} onClick={restart}>{t.restart}</button></aside>
       </div>}
+      {step === 'result' && <ToolReportDownload
+        tool="sellf-route"
+        language={lang}
+        title={lang === 'tr' ? 'Sellf Route operasyon raporu' : 'Sellf Route operations report'}
+        input={{narrative: narrative.trim().slice(0, 4000), businessModel: valueLabel(modelOptions, businessModel), objective: valueLabel(objectiveOptions, objective), stage: valueLabel(stageOptions, stage), signals: finalSignals.map((signal) => signalLabels[signal][lang]), readiness, trafficState, conversionState}}
+        result={{confidenceScore: result.confidenceScore, diagnosis: result.diagnosis.map((item) => diagnosisText(item, lang)), route: result.items.map((item) => ({service: services[item.id].title[lang], summary: services[item.id].summary[lang], phase: item.phase, state: statusLabel(item.state), reasons: item.reasons.map((reason) => reasonLabels[reason]?.[lang] || reason), blockers: item.blockers.map((blocker) => blockerLabels[blocker][lang])})), excluded: result.excluded.map((id) => services[id].title[lang])}}
+      />}
     </section>
   </main>
 }

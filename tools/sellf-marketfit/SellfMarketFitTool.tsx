@@ -6,6 +6,7 @@ import {assessMarketFit, buildPriceStrategies, calculatePrice, calculateSalesPla
 import type {B2BModel, ChannelEconomics, CostInputs, Currency, MarketScanResult, Marketplace, SalesChannel, SalesTargetInputs, ScenarioInputs, StoreFormat} from './types'
 import styles from './sellf-marketfit.module.css'
 import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 
 type Props = {lang: 'tr' | 'en'}
 type Mode = 'market' | 'planner'
@@ -289,6 +290,13 @@ export default function SellfMarketFitTool({lang}: Props) {
             </div><div className={styles.scenarioOutput}><div><span>{lang === 'tr' ? 'Satış fiyatı' : 'Sale price'}</span><strong>{formatMoney(result.salePrice)}</strong></div><div><span>{lang === 'tr' ? 'Birim katkı' : 'Unit contribution'}</span><strong>{formatMoney(price.contribution)}</strong></div><div><span>{lang === 'tr' ? 'Tahmini kâr' : 'Estimated profit'}</span><strong>{formatMoney(result.estimatedProfit)}</strong></div></div></article>})}</div>
         </section>
       </>}
+      {(mode === 'planner' || marketResult) && <ToolReportDownload
+        tool="sellf-marketfit"
+        language={lang}
+        title={mode === 'market' ? (lang === 'tr' ? 'Sellf MarketFit pazar raporu' : 'Sellf MarketFit market report') : (lang === 'tr' ? 'Sellf MarketFit fiyat ve satış raporu' : 'Sellf MarketFit pricing and sales report')}
+        input={mode === 'market' ? {mode, category, productType, productUrl: productUrl || null, competitorUrlCount: competitorUrls.split(/\r?\n/).filter((line) => line.trim()).length, channel, marketplace, storeFormat, b2bModel, marketArea, currency, ownPackageQuantity, ownUnitAmount, ownUnitLabel, manualEvidenceRows: manualEvidence.split(/\r?\n/).filter((line) => line.trim()).length} : {mode, plannerMode, currency, channel, marketplace, storeFormat, b2bModel, channelEconomics: economics, costs, target: plannerMode === 'target' ? target : null, scenarios, activeScenario}}
+        result={mode === 'market' && marketResult ? {summary: marketResult.summary, discovery: marketResult.discovery, fit: marketFit, positioning, evidence: marketResult.evidence.slice(0, 12).map((item) => ({title: item.title, source: item.source, price: item.price}))} : {price: priceResult, salesPlans: plannerMode === 'target' ? planResults : [], priceStrategies, activeScenario: planResults[activeScenario]}}
+      />}
     </section>
   </main>
 }

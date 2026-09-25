@@ -5,6 +5,7 @@ import {auditReport, detectMetrics, type AuditContext} from './engine'
 import {getArea, getPurpose, reportAreas, reportPurposes, type Locale, type ReportAreaId, type ReportPurposeId} from './config'
 import styles from './report-audit.module.css'
 import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 
 const copy = {
   tr: {
@@ -255,5 +256,12 @@ export default function ReportAuditTool({lang}: {lang: Locale}) {
         </>}
       </aside>
     </div>
+    {hasEvidence && <div className="sellf-container"><ToolReportDownload
+      tool="report-audit"
+      language={lang}
+      title={lang === 'tr' ? 'Report Audit raporu' : 'Report Audit report'}
+      input={{primaryArea: getArea(primaryArea).label[lang], secondaryAreas: secondaryAreas.map((area) => getArea(area).label[lang]), purpose: getPurpose(purpose).label[lang], source: fileName ? 'file' : 'pasted-text', fileExtension: fileName.includes('.') ? fileName.split('.').pop()?.toLowerCase() : null, textLength: deferredReportText.length, confirmedMetrics, excludedMetrics, reviewComplete, context}}
+      result={{score: result.score, confidence: confidenceLabel, dimensions: result.dimensions, verdict: result.narrative.verdict, strengths: result.narrative.strengths, risks: result.narrative.risks, questions: result.narrative.questions, actions: result.narrative.actions}}
+    /></div>}
   </main>
 }

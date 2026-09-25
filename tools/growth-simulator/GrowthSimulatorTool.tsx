@@ -6,6 +6,7 @@ import {calculateTimeline, compareScenarios, type NumericInputs, type SectorId} 
 import {getSector, sectors, type FieldConfig} from './config'
 import styles from './growth-simulator.module.css'
 import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 
 type Locale = 'tr' | 'en'
 type Currency = 'TRY' | 'USD' | 'EUR' | 'GBP'
@@ -306,6 +307,13 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
           <div className={styles.disclaimer}><strong>{t.assumptions}</strong><p>{t.disclaimer}</p></div>
         </section>
       </div>
+      <ToolReportDownload
+        tool="growth-simulator"
+        language={lang}
+        title={lang === 'tr' ? 'Growth Simulator raporu' : 'Growth Simulator report'}
+        input={{sector: sector.name[lang], currency, baseline, scenario}}
+        result={{health: healthLabel, baseline: result.baseline, scenario: result.scenario, ebitdaDelta: result.ebitdaDelta, growthInvestment: result.growthInvestment, growthRoi: result.growthRoi, timeline: timeline ? {kind: timeline.kind, summary: timeline.summary} : null}}
+      />
     </section>
   </div>
 }
