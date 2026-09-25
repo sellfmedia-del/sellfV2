@@ -4,6 +4,7 @@ import {useDeferredValue, useMemo, useRef, useState, type CSSProperties} from 'r
 import {auditReport, detectMetrics, type AuditContext} from './engine'
 import {getArea, getPurpose, reportAreas, reportPurposes, type Locale, type ReportAreaId, type ReportPurposeId} from './config'
 import styles from './report-audit.module.css'
+import {recordToolRun} from '../analytics'
 
 const copy = {
   tr: {
@@ -150,6 +151,49 @@ export default function ReportAuditTool({lang}: {lang: Locale}) {
 
   const hasEvidence = readable || reviewComplete
   const confidenceLabel = result.confidence === 'high' ? t.high : result.confidence === 'medium' ? t.medium : t.needsReview
+  const auditSignatureRef = useRef('')
+
+  useEffect(() => {
+    if (!hasEvidence) return
+    const input = {
+      primaryArea,
+      secondaryAreas,
+      purpose,
+      source: fileName ? 'file' : 'pasted-text',
+      fileExtension: fileName.includes('.') ? fileName.split('.').pop()?.toLowerCase() : null,
+      readable,
+      textLength: deferredReportText.length,
+      detectedMetrics: [...detectedMetrics],
+      confirmedMetrics,
+      excludedMetrics,
+      reviewComplete,
+      context,
+    }
+    const signature = JSON.stringify(input)
+    if (signature === auditSignatureRef.current) return
+    auditSignatureRef.current = signature
+    const timer = window.setTimeout(() => {
+      recordToolRun({
+        tool: 'report-audit',
+        language: lang,
+        input,
+        result: {
+          score: result.score,
+          confidence: result.confidence,
+          detectedCount: result.detectedCount,
+          requiredCount: result.requiredCount,
+          missingRequiredCount: result.missingRequiredCount,
+          dimensions: result.dimensions,
+          verdict: result.narrative.verdict.status,
+          strengthCodes: result.narrative.strengths.map((item) => item.code),
+          riskCodes: result.narrative.risks.map((item) => item.code),
+          questionCodes: result.narrative.questions.map((item) => item.code),
+          actions: result.narrative.actions.map((item) => ({code: item.code, priority: item.priority})),
+        },
+      })
+    }, 1800)
+    return () => window.clearTimeout(timer)
+  }, [hasEvidence, primaryArea, secondaryAreas, purpose, fileName, readable, deferredReportText, detectedMetrics, confirmedMetrics, excludedMetrics, reviewComplete, context, result, lang])
 
   return <main className={styles.page}>
     <section className={styles.hero}><div className={styles.heroGlow} /><div className="sellf-container">
