@@ -10,6 +10,82 @@ const normalize = (value: string) => value
   .trim()
 
 const includesAny = (text: string, values: string[]) => values.some((value) => text.includes(value))
+const matchesAny = (text: string, patterns: RegExp[]) => patterns.some((pattern) => pattern.test(text))
+
+// These patterns only nominate a signal for the confirmation screen. They never
+// select a service on their own, so recall can be broad without turning a phrase
+// into an unverified diagnosis.
+const signalPatterns: Array<{label: string; signal: ProblemSignal; patterns: RegExp[]}> = [
+  {
+    label: 'demand-explicit', signal: 'low-demand', patterns: [
+      /musteri (?:bulam|edinem|kazanam)/, /musteri bulmakta zorlan/, /yeni musteri.{0,30}(?:gelmiyor|bulam|edinem|kazanam|yok|az)/,
+      /(?:lead|talep|siparis|satis).{0,25}(?:gelmiyor|olusmuyor|uretemiyoruz|yok|yetersiz|cok az|azaldi|durdu)/,
+      /(?:satis|siparis|talep) yaratam/, /potansiyel musteri.{0,25}(?:bulam|yok|gelmiyor)/,
+      /(?:cannot|can t|struggl\w* to) (?:find|acquire|win) (?:new )?(?:customers|clients)/,
+      /(?:not enough|no|few) (?:leads|orders|customers|sales|demand)/,
+    ],
+  },
+  {
+    label: 'conversion-explicit', signal: 'low-conversion', patterns: [
+      /(?:trafik|ziyaretci|tiklama).{0,35}(?:geliyor|var|yuksek).{0,35}(?:satis|donusum|form|siparis).{0,20}(?:yok|olmuyor|dusuk|az)/,
+      /(?:siteye|sayfaya).{0,25}(?:ziyaretci|kullanici|trafik).{0,25}(?:geliyor|var).{0,45}(?:satin alan|form dolduran|siparis veren).{0,15}(?:yok|olmuyor)/,
+      /(?:sepete ekliyor|urun inceliyor).{0,30}(?:satin almiyor|siparis vermiyor|terk ediyor)/,
+      /(?:siteye|sayfaya).{0,25}(?:giren|gelen).{0,30}(?:satin almiyor|donusmuyor|form doldurmuyor)/,
+      /(?:traffic|visitors|clicks).{0,35}(?:but|yet).{0,35}(?:no|few|low).{0,15}(?:sales|orders|conversions|forms)/,
+    ],
+  },
+  {
+    label: 'lead-quality-explicit', signal: 'low-quality-leads', patterns: [
+      /lead(?:ler|lerin|lerimiz)?\s*.{0,25}(?:niteliksiz|kalitesiz|alakasiz|uygunsuz|butcesiz|yanlis)/,
+      /(?:nitelikli|kaliteli|uygun) lead.{0,20}(?:gelmiyor|bulam|yok|az)/,
+      /(?:wrong|poor quality|unqualified|irrelevant) leads/,
+      /leads?.{0,25}(?:no budget|not qualified|poor quality|irrelevant)/,
+    ],
+  },
+  {
+    label: 'sales-close-explicit', signal: 'low-close-rate', patterns: [
+      /(?:teklif|fiyat teklifi|proposal).{0,45}(?:askida|cevapsiz|bekliyor|sonuclanmiyor|kapanmiyor|reddediliyor|kabul edilmiyor|satisa donusmuyor|donus yok)/,
+      /teklif (?:gonder|ver).{0,45}(?:sonuc alam|geri donmuyor|cevap gelmiyor|kapanmiyor|anlasma olmuyor|satisa donusmuyor)/,
+      /(?:musteri|lead|gorusme|toplanti).{0,35}(?:var|geliyor|yapiyoruz).{0,35}(?:satisi|anlasmayi|isi).{0,15}(?:kapatam|sonuclandiram)/,
+      /(?:kapanis|close|closing) oran(?:i|imiz)?.{0,20}(?:dusuk|zayif|az)/,
+      /(?:quotes?|proposals?|offers?).{0,40}(?:stuck|unanswered|not closing|not converting|no response)/,
+      /(?:cannot|can t|struggl\w* to) close (?:deals|sales|opportunities)/,
+    ],
+  },
+  {
+    label: 'margin-explicit', signal: 'margin-pressure', patterns: [
+      /(?:ciro|satis).{0,25}(?:var|artiyor|yuksek).{0,30}(?:kar yok|para kazanmiyoruz|kar birakmiyor|zarar)/,
+      /(?:kar|katki) marj(?:i|imiz)?.{0,20}(?:dusuk|zayif|eriyor|az)/, /kar edemiyoruz/, /maliyetler.{0,25}(?:cok yuksek|artti|kari eritiyor)/,
+      /(?:revenue|sales).{0,25}(?:growing|high).{0,30}(?:no profit|unprofitable|losing money)/, /(?:profit|contribution) margin.{0,20}(?:low|weak|shrinking)/,
+    ],
+  },
+  {
+    label: 'retention-explicit', signal: 'low-retention', patterns: [
+      /musteri.{0,25}(?:tekrar gelmiyor|geri gelmiyor|bir daha almiyor|yenilemiyor)/, /tekrar satin alma.{0,15}(?:yok|dusuk|az)/,
+      /(?:churn|musteri kaybi).{0,15}(?:yuksek|artti|fazla)/, /(?:repeat purchase|retention).{0,20}(?:low|poor)/, /customers?.{0,20}(?:do not|don t) (?:return|renew|buy again)/,
+    ],
+  },
+  {
+    label: 'brand-explicit', signal: 'brand-unclear', patterns: [
+      /(?:marka|markamiz|teklif|mesaj|konumlandirma).{0,30}(?:anlasilmiyor|net degil|belirsiz|karisik)/,
+      /(?:ne yaptigimizi|ne sundugumuzu|farkimizi|neden bizi).{0,35}(?:anlatam|aciklayam|gosterem|anlamiyor)/,
+      /(?:brand|offer|message|positioning).{0,25}(?:unclear|confusing|not clear|not understood)/,
+    ],
+  },
+  {
+    label: 'workflow-explicit', signal: 'manual-process', patterns: [
+      /(?:manuel|elle) (?:yapiyor|takip ediyor|giriyor|yonetiyor)/, /excel(?:den|le| uzerinden)?.{0,30}(?:takip|yonet|aktar|gir)/,
+      /(?:etiket|siparis|stok|rapor|veri|fatura|operasyon).{0,25}(?:manuel|elle)/,
+      /entegrasyon.{0,15}(?:yok|eksik|calismiyor)/, /sistemler.{0,20}(?:bagli degil|konusmuyor)/, /(?:manual|spreadsheet).{0,25}(?:process|tracking|workflow)/,
+    ],
+  },
+  {
+    label: 'marketplace-explicit', signal: 'marketplace-complexity', patterns: [
+      /(?:pazaryeri|trendyol|amazon|hepsiburada).{0,35}(?:yonetem|karisik|sorun|stok.{0,10}(?:uyusmuyor|senkron)|liste.{0,10}(?:hata|sorun))/, /urun listeleme.{0,15}(?:sorun|hata)/,
+      /(?:marketplace|amazon).{0,30}(?:listing|inventory|feed|store).{0,20}(?:problem|error|out of sync)/,
+    ],
+  },
+]
 
 export function analyzeNarrative(value: string): NarrativeAssessment {
   const text = normalize(value)
@@ -29,22 +105,17 @@ export function analyzeNarrative(value: string): NarrativeAssessment {
   else if (shippingMention && noOrders && !ordersExist) clarifications.add('shipping-meaning')
   else if (shippingMention) clarifications.add('shipping-meaning')
 
-  if (includesAny(text, ['lead geliyor ama', 'lead var ama', 'teklif veriyoruz ama']) && includesAny(text, ['kapanmiyor', 'satisa donusmuyor', 'donusmuyor'])) mark('sales-close-explicit', 'low-close-rate')
-  else if (includesAny(text, ['lead gelmiyor', 'talep yok', 'musteri gelmiyor', 'siparis gelmiyor'])) mark('demand-explicit', 'low-demand')
+  for (const rule of signalPatterns) {
+    if (matchesAny(text, rule.patterns)) mark(rule.label, rule.signal)
+  }
 
   const adsMention = includesAny(text, ['reklam', 'google ads', 'meta ads', 'medya butcesi'])
   const adsFailure = includesAny(text, ['ise yaramiyor', 'calismiyor', 'satis getirmiyor', 'sonuc alamiyoruz', 'para harciyoruz'])
   if (adsMention && adsFailure) clarifications.add('ads-outcome')
 
   const siteMention = includesAny(text, ['site', 'website', 'web sitesi', 'eticaret sitesi', 'e ticaret sitesi'])
-  if (siteMention && includesAny(text, ['acilmiyor', 'hata veriyor', 'cok yavas', 'bozuk'])) mark('site-technical-explicit', 'site-technical')
+  if (siteMention && includesAny(text, ['acilmiyor', 'hata veriyor', 'hata aliyoruz', 'cok yavas', 'yuklenmiyor', 'bozuk', 'cokuyor', 'crash', 'broken', 'too slow'])) mark('site-technical-explicit', 'site-technical')
   else if (siteMention && includesAny(text, ['calismiyor', 'ise yaramiyor', 'satis getirmiyor'])) clarifications.add('site-meaning')
-
-  if (includesAny(text, ['manuel', 'elle yapiyoruz', 'excelden', 'entegrasyon yok', 'sistemler bagli degil'])) mark('workflow-explicit', 'manual-process')
-  if (includesAny(text, ['satis artiyor ama para kazanmiyoruz', 'ciro var kar yok', 'kar edemiyoruz', 'marjimiz dusuk', 'marj dusuk'])) mark('margin-explicit', 'margin-pressure')
-  if (includesAny(text, ['tekrar satin alma yok', 'musteri geri gelmiyor', 'churn yuksek', 'sadakat dusuk'])) mark('retention-explicit', 'low-retention')
-  if (includesAny(text, ['markamiz anlasilmiyor', 'ne sundugumuz anlasilmiyor', 'konumlandirma belirsiz', 'mesajimiz net degil'])) mark('brand-explicit', 'brand-unclear')
-  if (includesAny(text, ['pazaryeri karmasik', 'trendyol yonet', 'amazon yonet', 'urun listeleme sorunu'])) mark('marketplace-explicit', 'marketplace-complexity')
 
   const confidence = clarifications.size > 0
     ? suggestions.size > 0 ? 'medium' : 'low'
