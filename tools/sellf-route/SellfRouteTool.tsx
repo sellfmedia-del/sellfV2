@@ -157,6 +157,18 @@ export default function SellfRouteTool({lang}: {lang: Locale}) {
 
   const toggleSignal = (signal: ProblemSignal) => setSignals((current) => current.includes(signal) ? current.filter((item) => item !== signal) : [...current, signal])
   const startVerification = () => { setSignals((current) => [...new Set([...current, ...assessment.suggestedSignals])]); setStep('verify') }
+  const restart = () => {
+    setNarrative('')
+    setBusinessModel('ecommerce')
+    setObjective('sales')
+    setStage('established')
+    setSignals([])
+    setClarifications({})
+    setReadiness({offerReady: 'unknown', measurementReady: 'unknown', unitEconomicsReady: 'unknown', capacityReady: 'unknown', conversionPathReady: 'unknown'})
+    setTrafficState('unknown')
+    setConversionState('unknown')
+    setStep('brief')
+  }
   const valueLabel = <T extends string>(options: Array<[T, Localized]>, value: T) => options.find(([id]) => id === value)?.[1][lang] || value
   const statusLabel = (state: RouteItemState) => state === 'required' ? t.required : state === 'next' ? t.next : t.blocked
 
@@ -207,7 +219,7 @@ export default function SellfRouteTool({lang}: {lang: Locale}) {
         <section className={styles.routePanel}><div className={styles.resultHead}><div><span>03</span><h2>{t.result}</h2><p>{t.resultNote}</p></div><div className={styles.score}><strong>{result.confidenceScore}</strong><small>/100<br />{t.confidence}</small></div></div>
           {[1, 2, 3].map((phase) => {const phaseItems = result.items.filter((item) => item.phase === phase); if (!phaseItems.length) return null; return <div className={styles.phase} key={phase}><div className={styles.phaseLabel}><span>{t.phase} 0{phase}</span><i /></div><div className={styles.routeItems}>{phaseItems.map((item, index) => {const service = services[item.id]; return <article className={item.state === 'blocked' ? styles.blocked : ''} key={item.id}><em>{String(index + 1).padStart(2, '0')}</em><div><div className={styles.itemTitle}><h3>{service.title[lang]}</h3><span>{statusLabel(item.state)}</span></div><p>{service.summary[lang]}</p>{item.reasons.map((reason) => <small key={reason}>{reasonLabels[reason]?.[lang] || reason}</small>)}{item.blockers.length > 0 && <div className={styles.blockers}><b>{t.blockers}:</b>{item.blockers.map((blocker) => <span key={blocker}>{blockerLabels[blocker][lang]}</span>)}</div>}<Link href={`/${lang}/services/${service.href}`}>{lang === 'tr' ? 'Operasyonu incele' : 'Explore operation'} →</Link></div></article>})}</div></div>})}
         </section>
-        <aside className={styles.resultSide}><section className={styles.panel}><span>{t.understood}</span><ul>{result.diagnosis.map((item) => <li key={item}>{diagnosisText(item, lang)}</li>)}</ul><button onClick={() => setStep('verify')}>← {t.edit}</button></section><section className={`${styles.panel} ${styles.excluded}`}><span>{t.excluded}</span><p>{t.excludedNote}</p><div>{result.excluded.slice(0, 5).map((id) => <b key={id}>{services[id].title[lang]}</b>)}</div></section><Link className={styles.contact} href={`/${lang}/contact`}>{t.contact}</Link><button className={styles.restart} onClick={() => {setNarrative(''); setSignals([]); setClarifications({}); setStep('brief')}}>{t.restart}</button></aside>
+        <aside className={styles.resultSide}><section className={styles.panel}><span>{t.understood}</span><ul>{result.diagnosis.map((item) => <li key={item}>{diagnosisText(item, lang)}</li>)}</ul><button onClick={() => setStep('verify')}>← {t.edit}</button></section><section className={`${styles.panel} ${styles.excluded}`}><span>{t.excluded}</span><p>{t.excludedNote}</p><div>{result.excluded.slice(0, 5).map((id) => <b key={id}>{services[id].title[lang]}</b>)}</div></section><Link className={styles.contact} href={`/${lang}/contact`}>{t.contact}</Link><button className={styles.restart} onClick={restart}>{t.restart}</button></aside>
       </div>}
     </section>
   </main>
