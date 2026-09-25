@@ -30,6 +30,7 @@ const tools = [
   {title: 'Report Audit', tr: 'Raporunuzu alanına ve amacına uygun metriklerle değerlendirin.', en: 'Evaluate your report with metrics tailored to its area and purpose.', slug: 'report-audit', ready: true},
   {title: 'Sellf Surface', tr: 'Website, landing page ve sosyal profillerinizdeki büyüme sızıntılarını kanıtlarıyla görün.', en: 'Find evidence-backed growth leaks across websites, landing pages and social profiles.', slug: 'sellf-surface', ready: true},
   {title: 'Sellf MarketFit', tr: 'Pazar fiyatını, kârlı fiyatınızı ve satış hedefinizi aynı sistemde karşılaştırın.', en: 'Compare market pricing, profitable pricing and sales targets in one system.', slug: 'sellf-marketfit', ready: true},
+  {title: 'Sellf Route', tr: 'İşletmeniz için gerekli operasyonları doğru sırayla belirleyin.', en: 'Identify the operations your business needs—in the right order.', slug: 'sellf-route', ready: true},
   {title: 'SellfScale', tr: 'Büyüme sisteminizi uçtan uca haritalayın.'},
   {title: 'SellfCompete', tr: 'Pazardaki konumunuzu ve sıradaki hamlenizi görün.'},
 ] as const
