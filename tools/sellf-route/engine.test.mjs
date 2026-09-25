@@ -27,6 +27,37 @@ test('advertising complaints open clarification instead of selecting media servi
   assert.equal(result.suggestedSignals.length, 0)
 })
 
+test('natural B2B complaint can nominate demand and closing signals together', () => {
+  const result = analyzeNarrative('Müşteri bulmakta zorlanıyoruz. Teklif gönderdiğimiz müşteriler askıda kalıyor, sonuç alamıyoruz.')
+  assert.deepEqual(new Set(result.suggestedSignals), new Set(['low-demand', 'low-close-rate']))
+  assert.equal(result.confidence, 'high')
+})
+
+test('common user language is recognized across every problem family', () => {
+  const cases = [
+    ['Siteye ziyaretçi geliyor ama form dolduran ve satın alan yok.', ['low-conversion']],
+    ['Gelen leadler alakasız ve bütçesiz.', ['low-quality-leads']],
+    ['Toplantı yapıyoruz ama anlaşmayı kapatamıyoruz.', ['low-close-rate']],
+    ['Ciromuz artıyor ancak iş kâr bırakmıyor.', ['margin-pressure']],
+    ['Müşteri bir kez alıyor ama tekrar gelmiyor.', ['low-retention']],
+    ['Stok ve siparişleri Excel üzerinden takip ediyoruz.', ['manual-process']],
+    ['Web sitemiz hata veriyor ve çok yavaş.', ['site-technical']],
+    ['Ne yaptığımızı müşteriye anlatamıyoruz.', ['brand-unclear']],
+    ['Trendyol ürün listelerinde hata ve stok senkron sorunu yaşıyoruz.', ['marketplace-complexity']],
+  ]
+
+  for (const [narrative, expected] of cases) {
+    const result = analyzeNarrative(narrative)
+    for (const signal of expected) assert.ok(result.suggestedSignals.includes(signal), `${narrative} should suggest ${signal}`)
+  }
+})
+
+test('English narratives receive the same deterministic coverage', () => {
+  const result = analyzeNarrative('We struggle to find new clients, and our proposals remain unanswered.')
+  assert.ok(result.suggestedSignals.includes('low-demand'))
+  assert.ok(result.suggestedSignals.includes('low-close-rate'))
+})
+
 test('ads are blocked until commercial, offer, measurement, path and capacity foundations exist', () => {
   const result = buildRoute({...base, offerReady: 'no', measurementReady: 'no', unitEconomicsReady: 'unknown', capacityReady: 'partial', conversionPathReady: 'no', trafficState: 'low'})
   const ads = result.items.find((item) => item.id === 'performance')
