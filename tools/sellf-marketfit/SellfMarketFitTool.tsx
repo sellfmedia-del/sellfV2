@@ -204,7 +204,7 @@ export default function SellfMarketFitTool({lang}: Props) {
         result: {
           summary: scanResult.summary,
           evidenceCount: scanResult.evidence.length,
-          warnings: scanResult.warnings,
+          discovery: scanResult.discovery,
           fit,
           positioning: derivePositioning(scanResult.evidence, scanResult.summary, targetComparisonPrice, channel, lang),
         },
