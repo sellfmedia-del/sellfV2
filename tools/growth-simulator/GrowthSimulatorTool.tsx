@@ -1,10 +1,11 @@
 'use client'
 
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import {Bar, BarChart, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
 import {calculateTimeline, compareScenarios, type NumericInputs, type SectorId} from './engine'
 import {getSector, sectors, type FieldConfig} from './config'
 import styles from './growth-simulator.module.css'
+import {recordToolRun} from '../analytics'
 
 type Locale = 'tr' | 'en'
 type Currency = 'TRY' | 'USD' | 'EUR' | 'GBP'
@@ -145,6 +146,49 @@ export default function GrowthSimulatorTool({lang}: {lang: Locale}) {
     {label: t.derivedFinance, value: money(timeline.summary.derivedFinanceCost ?? 0)},
   ] : []
   const timelineNote = timeline?.kind === 'b2b' ? t.b2bTimeNote : timeline?.kind === 'retail' ? t.retailTimeNote : t.realEstateTimeNote
+  const runSignatureRef = useRef('')
+
+  useEffect(() => {
+    const input = {sectorId, currency, baseline, scenario}
+    const signature = JSON.stringify(input)
+    if (!runSignatureRef.current) {
+      runSignatureRef.current = signature
+      return
+    }
+    if (signature === runSignatureRef.current) return
+    runSignatureRef.current = signature
+    const timer = window.setTimeout(() => {
+      recordToolRun({
+        tool: 'growth-simulator',
+        language: lang,
+        input,
+        result: {
+          baseline: {
+            revenue: result.baseline.revenue,
+            expenses: result.baseline.expenses,
+            ebitda: result.baseline.ebitda,
+            ebitdaMargin: result.baseline.ebitdaMargin,
+            roas: result.baseline.roas,
+            breakEvenRevenue: result.baseline.breakEvenRevenue,
+          },
+          scenario: {
+            revenue: result.scenario.revenue,
+            expenses: result.scenario.expenses,
+            ebitda: result.scenario.ebitda,
+            ebitdaMargin: result.scenario.ebitdaMargin,
+            roas: result.scenario.roas,
+            breakEvenRevenue: result.scenario.breakEvenRevenue,
+            warnings: result.scenario.warnings,
+          },
+          ebitdaDelta: result.ebitdaDelta,
+          growthInvestment: result.growthInvestment,
+          growthRoi: result.growthRoi,
+          timeline: timeline ? {kind: timeline.kind, summary: timeline.summary} : null,
+        },
+      })
+    }, 1800)
+    return () => window.clearTimeout(timer)
+  }, [sectorId, currency, baseline, scenario, result, timeline, lang])
 
   return <div className={styles.shell}>
     <section className={styles.hero}>
