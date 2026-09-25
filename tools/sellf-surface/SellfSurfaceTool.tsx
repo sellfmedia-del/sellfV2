@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import {useMemo, useState, type CSSProperties} from 'react'
 import type {AssetInput, AssetKind, BusinessModel, Locale, PrimaryGoal, SurfaceAuditResponse} from './types'
+import {recordToolRun} from '../analytics'
 import styles from './sellf-surface.module.css'
 
 type DraftAsset = AssetInput & {label: string}
@@ -92,7 +93,34 @@ export default function SellfSurfaceTool({lang}: {lang: Locale}) {
       })
       const payload = await response.json()
       if (!response.ok) throw new Error(typeof payload?.error === 'string' ? payload.error : t.genericError)
-      setResult(payload as SurfaceAuditResponse)
+      const audit = payload as SurfaceAuditResponse
+      setResult(audit)
+      recordToolRun({
+        tool: 'sellf-surface',
+        language: lang,
+        input: {
+          businessModel,
+          primaryGoal,
+          assets: validAssets.map((asset) => ({
+            kind: asset.kind,
+            url: asset.url.slice(0, 2048),
+            evidenceProvided: Boolean(asset.evidenceText?.trim()),
+            evidenceLength: asset.evidenceText?.length || 0,
+          })),
+        },
+        result: {
+          score: audit.result.score,
+          confidence: audit.result.confidence,
+          scannedAssets: audit.result.scannedAssets,
+          requestedAssets: audit.result.requestedAssets,
+          scannedPages: audit.result.scannedPages,
+          verdict: audit.result.verdict.status,
+          dimensions: Object.fromEntries(Object.entries(audit.result.dimensions).map(([key, value]) => [key, value.score])),
+          pillars: Object.fromEntries(Object.entries(audit.result.pillars).map(([key, value]) => [key, value.score])),
+          assetScores: audit.result.assetScores,
+          findingCodes: audit.result.findings.map((item) => item.code),
+        },
+      })
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : t.genericError)
     } finally {
