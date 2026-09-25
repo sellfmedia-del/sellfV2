@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import {assessMarketFit, buildPriceStrategies, calculatePrice, calculateSalesPlan, defaultCosts, derivePositioning, normalizeMarketPrice} from './engine'
 import type {B2BModel, ChannelEconomics, CostInputs, Currency, MarketScanResult, Marketplace, SalesChannel, SalesTargetInputs, ScenarioInputs, StoreFormat} from './types'
 import styles from './sellf-marketfit.module.css'
+import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 
 type Props = {lang: 'tr' | 'en'}
 type Mode = 'market' | 'planner'
@@ -111,6 +113,40 @@ export default function SellfMarketFitTool({lang}: Props) {
   const comparableTargetPrice = marketResult?.summary.comparisonUnit === ownComparisonUnit ? normalizeMarketPrice(priceResult.targetSalePrice, ownUnitAmount, ownUnitLabel, ownPackageQuantity) : null
   const marketFit = marketResult ? assessMarketFit(marketResult.summary, priceResult, comparableTargetPrice) : null
   const positioning = marketResult ? derivePositioning(marketResult.evidence, marketResult.summary, comparableTargetPrice, channel, lang) : null
+  const plannerSignatureRef = useRef('')
+
+  useEffect(() => {
+    if (mode !== 'planner') return
+    const input = {
+      plannerMode,
+      currency,
+      channel,
+      marketplace,
+      storeFormat,
+      b2bModel,
+      channelEconomics: economics,
+      costs,
+      target: plannerMode === 'target' ? target : undefined,
+      scenarios,
+      activeScenario,
+    }
+    const signature = JSON.stringify(input)
+    if (signature === plannerSignatureRef.current) return
+    const timer = window.setTimeout(() => {
+      plannerSignatureRef.current = signature
+      recordToolRun({
+        tool: 'sellf-marketfit',
+        language: lang,
+        input: {mode: 'planner', ...input},
+        result: {
+          price: priceResult,
+          salesPlans: plannerMode === 'target' ? planResults : [],
+          priceStrategies,
+        },
+      })
+    }, 1800)
+    return () => window.clearTimeout(timer)
+  }, [mode, plannerMode, currency, channel, marketplace, storeFormat, b2bModel, economics, costs, target, scenarios, activeScenario, priceResult, planResults, priceStrategies, lang])
 
   function updateCost(key: keyof CostInputs, value: number) { setCosts((current) => ({...current, [key]: value})) }
   function updateTarget(key: keyof SalesTargetInputs, value: number | string) { setTarget((current) => ({...current, [key]: value})) }
@@ -139,7 +175,41 @@ export default function SellfMarketFitTool({lang}: Props) {
       const response = await fetch('/api/engage/marketfit', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({category, productType, productUrl, competitorUrls: competitorUrls.split(/\r?\n/).map((item) => item.trim()).filter(Boolean), channel, marketplace, storeFormat, b2bModel, marketArea, currency, manualEvidence})})
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Analysis failed')
-      setMarketResult(data)
+      const scanResult = data as MarketScanResult
+      setMarketResult(scanResult)
+      const comparisonUnit = ['g', 'gr', 'gram', 'kg'].includes(ownUnitLabel) ? '100 g' : ['ml', 'l', 'lt'].includes(ownUnitLabel) ? '100 ml' : 'adet'
+      const targetComparisonPrice = scanResult.summary.comparisonUnit === comparisonUnit
+        ? normalizeMarketPrice(priceResult.targetSalePrice, ownUnitAmount, ownUnitLabel, ownPackageQuantity)
+        : null
+      const fit = assessMarketFit(scanResult.summary, priceResult, targetComparisonPrice)
+      recordToolRun({
+        tool: 'sellf-marketfit',
+        language: lang,
+        input: {
+          mode: 'market',
+          category: category.slice(0, 160),
+          productType: productType.slice(0, 160),
+          productUrl: productUrl.slice(0, 2048),
+          competitorUrls: competitorUrls.split(/\\r?\\n/).map((item) => item.trim().slice(0, 2048)).filter(Boolean).slice(0, 12),
+          channel,
+          marketplace,
+          storeFormat,
+          b2bModel,
+          marketArea: marketArea.slice(0, 120),
+          currency,
+          ownPackageQuantity,
+          ownUnitAmount,
+          ownUnitLabel: ownUnitLabel.slice(0, 20),
+          manualEvidenceRows: manualEvidence.split(/\\r?\\n/).filter((line) => line.trim()).length,
+        },
+        result: {
+          summary: scanResult.summary,
+          evidenceCount: scanResult.evidence.length,
+          discovery: scanResult.discovery,
+          fit,
+          positioning: derivePositioning(scanResult.evidence, scanResult.summary, targetComparisonPrice, channel, lang),
+        },
+      })
     } catch (error) { setMarketError(error instanceof Error ? error.message : 'Analysis failed') }
     finally { setMarketLoading(false) }
   }
@@ -220,6 +290,13 @@ export default function SellfMarketFitTool({lang}: Props) {
             </div><div className={styles.scenarioOutput}><div><span>{lang === 'tr' ? 'Satış fiyatı' : 'Sale price'}</span><strong>{formatMoney(result.salePrice)}</strong></div><div><span>{lang === 'tr' ? 'Birim katkı' : 'Unit contribution'}</span><strong>{formatMoney(price.contribution)}</strong></div><div><span>{lang === 'tr' ? 'Tahmini kâr' : 'Estimated profit'}</span><strong>{formatMoney(result.estimatedProfit)}</strong></div></div></article>})}</div>
         </section>
       </>}
+      {(mode === 'planner' || marketResult) && <ToolReportDownload
+        tool="sellf-marketfit"
+        language={lang}
+        title={mode === 'market' ? (lang === 'tr' ? 'Sellf MarketFit pazar raporu' : 'Sellf MarketFit market report') : (lang === 'tr' ? 'Sellf MarketFit fiyat ve satış raporu' : 'Sellf MarketFit pricing and sales report')}
+        input={mode === 'market' ? {mode, category, productType, productUrl: productUrl || null, competitorUrlCount: competitorUrls.split(/\r?\n/).filter((line) => line.trim()).length, channel, marketplace, storeFormat, b2bModel, marketArea, currency, ownPackageQuantity, ownUnitAmount, ownUnitLabel, manualEvidenceRows: manualEvidence.split(/\r?\n/).filter((line) => line.trim()).length} : {mode, plannerMode, currency, channel, marketplace, storeFormat, b2bModel, channelEconomics: economics, costs, target: plannerMode === 'target' ? target : null, scenarios, activeScenario}}
+        result={mode === 'market' && marketResult ? {summary: marketResult.summary, discovery: marketResult.discovery, fit: marketFit, positioning, evidence: marketResult.evidence.slice(0, 12).map((item) => ({title: item.title, source: item.source, price: item.price}))} : {price: priceResult, salesPlans: plannerMode === 'target' ? planResults : [], priceStrategies, activeScenario: planResults[activeScenario]}}
+      />}
     </section>
   </main>
 }

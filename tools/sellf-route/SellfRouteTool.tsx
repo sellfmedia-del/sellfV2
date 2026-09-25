@@ -5,6 +5,8 @@ import {useMemo, useState} from 'react'
 import {analyzeNarrative, buildRoute} from './engine'
 import type {BusinessModel, ClarificationId, Locale, Objective, ProblemSignal, Readiness, RouteInputs, ServiceId, Stage} from './types'
 import styles from './sellf-route.module.css'
+import {recordToolRun} from '../analytics'
+import ToolReportDownload from '../ToolReportDownload'
 
 type Step = 'brief' | 'verify' | 'result'
 type Localized = {tr: string; en: string}
@@ -157,6 +159,36 @@ export default function SellfRouteTool({lang}: {lang: Locale}) {
 
   const toggleSignal = (signal: ProblemSignal) => setSignals((current) => current.includes(signal) ? current.filter((item) => item !== signal) : [...current, signal])
   const startVerification = () => { setSignals((current) => [...new Set([...current, ...assessment.suggestedSignals])]); setStep('verify') }
+  const createRoute = () => {
+    recordToolRun({
+      tool: 'sellf-route',
+      language: lang,
+      input: {
+        narrative: narrative.trim().slice(0, 4000),
+        businessModel,
+        objective,
+        stage,
+        signals: finalSignals,
+        clarifications,
+        readiness,
+        trafficState,
+        conversionState,
+      },
+      result: {
+        confidenceScore: result.confidenceScore,
+        diagnosis: result.diagnosis,
+        route: result.items.map((item) => ({
+          id: item.id,
+          phase: item.phase,
+          state: item.state,
+          reasons: item.reasons,
+          blockers: item.blockers,
+        })),
+        excluded: result.excluded,
+      },
+    })
+    setStep('result')
+  }
   const restart = () => {
     setNarrative('')
     setBusinessModel('ecommerce')
@@ -210,7 +242,7 @@ export default function SellfRouteTool({lang}: {lang: Locale}) {
             <Select label={t.traffic} value={trafficState} onChange={(value) => setTrafficState(value as RouteInputs['trafficState'])} options={[["low", lang === 'tr' ? 'Yetersiz' : 'Low'], ["adequate", lang === 'tr' ? 'Yeterli' : 'Adequate'], ["unknown", lang === 'tr' ? 'Bilmiyorum' : 'Unknown']]} compact />
             <Select label={t.conversion} value={conversionState} onChange={(value) => setConversionState(value as RouteInputs['conversionState'])} options={[["weak", lang === 'tr' ? 'Zayıf' : 'Weak'], ["healthy", lang === 'tr' ? 'Sağlıklı' : 'Healthy'], ["unknown", lang === 'tr' ? 'Bilmiyorum' : 'Unknown']]} compact />
           </div></div>
-          <button className={styles.primary} disabled={assessment.clarificationIds.some((id) => !clarifications[id])} onClick={() => setStep('result')}>{t.create}</button>
+          <button className={styles.primary} disabled={assessment.clarificationIds.some((id) => !clarifications[id])} onClick={createRoute}>{t.create}</button>
         </section>
         <aside className={`${styles.panel} ${styles.summary}`}><span>{lang === 'tr' ? 'MEVCUT YORUM' : 'CURRENT INTERPRETATION'}</span><h3>{valueLabel(modelOptions, businessModel)}</h3><p>{valueLabel(objectiveOptions, objective)} · {valueLabel(stageOptions, stage)}</p><div>{finalSignals.length ? finalSignals.map((signal) => <b key={signal}>{signalLabels[signal][lang]}</b>) : <small>{lang === 'tr' ? 'Henüz doğrulanmış problem sinyali yok.' : 'No confirmed problem signal yet.'}</small>}</div><button onClick={() => setStep('brief')}>← {lang === 'tr' ? 'Anlatımı düzenle' : 'Edit description'}</button></aside>
       </div>}
@@ -221,6 +253,13 @@ export default function SellfRouteTool({lang}: {lang: Locale}) {
         </section>
         <aside className={styles.resultSide}><section className={styles.panel}><span>{t.understood}</span><ul>{result.diagnosis.map((item) => <li key={item}>{diagnosisText(item, lang)}</li>)}</ul><button onClick={() => setStep('verify')}>← {t.edit}</button></section><section className={`${styles.panel} ${styles.excluded}`}><span>{t.excluded}</span><p>{t.excludedNote}</p><div>{result.excluded.slice(0, 5).map((id) => <b key={id}>{services[id].title[lang]}</b>)}</div></section><Link className={styles.contact} href={`/${lang}/contact`}>{t.contact}</Link><button className={styles.restart} onClick={restart}>{t.restart}</button></aside>
       </div>}
+      {step === 'result' && <ToolReportDownload
+        tool="sellf-route"
+        language={lang}
+        title={lang === 'tr' ? 'Sellf Route operasyon raporu' : 'Sellf Route operations report'}
+        input={{narrative: narrative.trim().slice(0, 4000), businessModel: valueLabel(modelOptions, businessModel), objective: valueLabel(objectiveOptions, objective), stage: valueLabel(stageOptions, stage), signals: finalSignals.map((signal) => signalLabels[signal][lang]), readiness, trafficState, conversionState}}
+        result={{confidenceScore: result.confidenceScore, diagnosis: result.diagnosis.map((item) => diagnosisText(item, lang)), route: result.items.map((item) => ({service: services[item.id].title[lang], summary: services[item.id].summary[lang], phase: item.phase, state: statusLabel(item.state), reasons: item.reasons.map((reason) => reasonLabels[reason]?.[lang] || reason), blockers: item.blockers.map((blocker) => blockerLabels[blocker][lang])})), excluded: result.excluded.map((id) => services[id].title[lang])}}
+      />}
     </section>
   </main>
 }
