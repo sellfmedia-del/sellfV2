@@ -1,6 +1,7 @@
 'use server'
 
 import {getEngageDetail, type EngageLocale} from '@/sanity/lib/engage'
+import {mailer, table} from '@/lib/contact-mail'
 
 export type CalendarEvent = {
   title: string
@@ -78,7 +79,31 @@ export async function registerForEngage(
   })
 
   const result = await response.json().catch(() => null) as {status?: string; calendar?: CalendarEvent} | null
-  if (response.ok && result?.status === 'registered' && result.calendar) return {status: 'success', calendar: result.calendar}
+  if (response.ok && result?.status === 'registered' && result.calendar) {
+    if (section === 'webinars') {
+      try {
+        await mailer().sendMail({
+          from: `"Sellf Engage" <${process.env.GMAIL_USER}>`,
+          to: 'sellfmedia@gmail.com',
+          replyTo: email,
+          subject: `Yeni Webinar Kaydı — ${item.title.replace(/[\r\n]/g, ' ')}`,
+          html: `<div style="font-family:Arial,sans-serif;padding:24px;background:#f4f3ef"><h2>Yeni Webinar Kaydı</h2>${table([
+            ['Webinar', item.title],
+            ['Ad Soyad', fullName],
+            ['E-posta', email],
+            ['Dil', lang.toUpperCase()],
+            ['Webinar tarihi', new Date(item.date).toLocaleString('tr-TR', {timeZone: 'Europe/Istanbul'})],
+            ['Kayıt zamanı', new Date().toLocaleString('tr-TR', {timeZone: 'Europe/Istanbul'})],
+            ['Slug', slug],
+          ])}</div>`,
+        })
+      } catch (error) {
+        console.error('Engage webinar registration notification failed', error)
+      }
+    }
+
+    return {status: 'success', calendar: result.calendar}
+  }
   if (result?.status === 'duplicate') return {status: 'duplicate', message: lang === 'tr' ? 'Bu e-posta adresiyle daha önce kayıt yapılmış.' : 'This email address is already registered.'}
   if (result?.status === 'full') return {status: 'error', message: lang === 'tr' ? 'Bu etkinliğin kontenjanı doldu.' : 'This event has reached capacity.'}
   if (result?.status === 'closed') return {status: 'error', message: lang === 'tr' ? 'Bu içerik için kayıt şu anda kapalı.' : 'Registration is currently closed for this item.'}
