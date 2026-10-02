@@ -11,6 +11,29 @@ export type PortfolioItem = {
   gallery?: string[]; 
 };
 
+export const portfolioVideos = {
+  umuOfficial: portfolioVideos.umuOfficial,
+  daysBy1: portfolioVideos.daysBy1,
+  daysBy2: portfolioVideos.daysBy2,
+  daysBy3: portfolioVideos.daysBy3,
+  lvmhShoot: portfolioVideos.lvmhShoot,
+  otopartShoot: portfolioVideos.otopartShoot,
+  monsteraShoot: portfolioVideos.monsteraShoot,
+  qasheVid1: portfolioVideos.qasheVid1,
+  qasheVid2: portfolioVideos.qasheVid2,
+  qasheVid3: portfolioVideos.qasheVid3,
+  qasheVid4: portfolioVideos.qasheVid4,
+  volvoKafa: portfolioVideos.volvoKafa,
+  stilevsShoot: portfolioVideos.stilevsShoot,
+  cominify1: portfolioVideos.cominify1,
+  cominify2: portfolioVideos.cominify2,
+  cominify3: portfolioVideos.cominify3,
+  cominify4: portfolioVideos.cominify4,
+  cominify5: portfolioVideos.cominify5,
+  cominify6: portfolioVideos.cominify6,
+  cominify7: portfolioVideos.cominify7,
+} as const;
+
 export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioItem[]> = {
   
   "Samples": [
@@ -319,16 +342,16 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
       id: "content-1",
       title: { tr: "UMU Resmi Kampanya Videosu", en: "UMU Official Campaign Video" },
       type: "video", 
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/umu-official_2oJLs2EL.mp4"
+      url: portfolioVideos.umuOfficial
     },
     {
       id: "content-2",
       title: { tr: "Days By Wyndham İçerikleri", en: "Days By Wyndham Contents" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/daysby1.mp4",
+      url: portfolioVideos.daysBy1,
       gallery: [
-        "https://cdn.sellfmedia.workers.dev/portfolio/daysby2.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/daysby3.mp4",
+        portfolioVideos.daysBy2,
+        portfolioVideos.daysBy3,
         "https://cdn.sellfmedia.workers.dev/portfolio/daysby4.jpg",
         "https://cdn.sellfmedia.workers.dev/portfolio/daysby5.jpg",
         "https://cdn.sellfmedia.workers.dev/portfolio/daysby6.jpg",
@@ -339,7 +362,7 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
       id: "content-3",
       title: { tr: "LVMH Moda Çekimi", en: "LVMH Fashion Shot" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/lvmh-shoot_NUXe0Qbi.mp4"
+      url: portfolioVideos.lvmhShoot
     },
     {
       id: "content-4",
@@ -359,30 +382,30 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
       id: "content-5",
       title: { tr: "Otopart Giriş Çekimi", en: "otopart Entry Shot" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/otopart-shoot_zg7ZAYUw.mp4"
+      url: portfolioVideos.otopartShoot
     },
      {
       id: "content-6",
       title: { tr: "Monstera İçerik Videosu", en: "Monstera Content Video" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/monstera-shoot_IZUUfoVA.mp4"
+      url: portfolioVideos.monsteraShoot
     },
     {
       id: "content-7",
       title: { tr: "Qashe Reels Gönderileri", en: "Qashe Reel Posts" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/qashevid1.mp4",
+      url: portfolioVideos.qasheVid1,
       gallery: [
-        "https://cdn.sellfmedia.workers.dev/portfolio/qashevid2.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/qashevid3.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/qashevid4.mp4"
+        portfolioVideos.qasheVid2,
+        portfolioVideos.qasheVid3,
+        portfolioVideos.qasheVid4
       ]
     },
      {
       id: "content-8",
       title: { tr: "Volvo - Kafa Dergisi Çekimi", en: "Volvo - Kafa Magazine Shoot" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/volvo-kafa-dergisi-720p_9dsCwe7l.mp4"
+      url: portfolioVideos.volvoKafa
     },
     {
       id: "content-9",
@@ -407,7 +430,7 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
       id: "content-10",
       title: { tr: "Stilevs Ürün Çekimi", en: "Stilevs Product Shooting" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/Stilevs_21_Kas%C4%B1m_23_2.2.mp4"
+      url: portfolioVideos.stilevsShoot
     },
         {
       id: "content-11",
@@ -430,14 +453,14 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
       id: "content-12",
       title: { tr: "Cominify İçerikleri", en: "Cominify Contents" },
       type: "video",
-      url: "https://cdn.sellfmedia.workers.dev/portfolio/cominify1.mp4",
+      url: portfolioVideos.cominify1,
       gallery: [
-        "https://cdn.sellfmedia.workers.dev/portfolio/cominify2.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/cominify3.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/cominify4.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/cominify5.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/cominify6.mp4",
-        "https://cdn.sellfmedia.workers.dev/portfolio/cominify7.mp4"
+        portfolioVideos.cominify2,
+        portfolioVideos.cominify3,
+        portfolioVideos.cominify4,
+        portfolioVideos.cominify5,
+        portfolioVideos.cominify6,
+        portfolioVideos.cominify7
       ]
     },
         {
