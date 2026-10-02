@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { portfolioData, PortfolioItem } from "@/data/portfolioData";
 import PortfolioDetailOverlay from "@/components/PortfolioDetailOverlay";
+import PortfolioVideo from "@/components/PortfolioVideo";
 
 type Category = "All" | "Samples" | "Designs" | "Content";
 
@@ -69,7 +70,7 @@ function PortfolioCard({ item, onClick, currentLang }: { item: PortfolioItem; on
       className="relative w-full text-left break-inside-avoid group overflow-hidden bg-[#deddd8] border border-black/10"
     >
       {item.type === "video" ? (
-        <video src={item.url} muted loop autoPlay playsInline className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
+        <PortfolioVideo url={item.url} title={item.title[currentLang]} variant="card" className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
       ) : (
         <Image src={item.url} alt={item.title[currentLang]} width={800} height={1200} className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]" unoptimized />
       )}
