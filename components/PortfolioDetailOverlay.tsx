@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { PortfolioItem } from "@/data/portfolioData";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import PortfolioVideo, { isPortfolioVideo } from "@/components/PortfolioVideo";
 
 const dict = {
   tr: { endOfProject: "Proje Sonu — Sellf Media" },
@@ -20,7 +21,6 @@ export default function PortfolioDetailOverlay({ item, onClose }: Props) {
   const params = useParams();
   const currentLang = (params?.lang as "tr" | "en") || "tr";
   const t = dict[currentLang];
-  const isVideo = (url: string) => url.match(/\.(mp4|webm|mov|ogg)$/i);
   const title = typeof item.title === "string" ? item.title : item.title[currentLang];
 
   return (
@@ -42,7 +42,7 @@ export default function PortfolioDetailOverlay({ item, onClose }: Props) {
       <div className="sellf-container py-8 md:py-12">
         <motion.div layoutId={item.id} className="w-full bg-[#deddd8] border border-black/10 overflow-hidden mb-4">
           {item.type === "video" ? (
-            <video src={item.url} autoPlay loop controls className="w-full h-auto max-h-[82vh] object-contain bg-black" />
+            <PortfolioVideo url={item.url} title={title} variant="detail" />
           ) : (
             <Image src={item.url} alt={title} width={1800} height={1200} className="w-full h-auto object-contain" priority unoptimized />
           )}
@@ -58,8 +58,8 @@ export default function PortfolioDetailOverlay({ item, onClose }: Props) {
                 transition={{ delay: Math.min(index * 0.04, 0.4) }}
                 className="bg-[#deddd8] border border-black/10 overflow-hidden"
               >
-                {isVideo(mediaUrl) ? (
-                  <video src={mediaUrl} muted loop autoPlay playsInline className="w-full h-auto object-contain" />
+                {isPortfolioVideo(mediaUrl) ? (
+                  <PortfolioVideo url={mediaUrl} title={`${title} — ${index + 1}`} variant="gallery" className="w-full h-auto object-contain" />
                 ) : (
                   <Image src={mediaUrl} alt={`${title} — ${index + 1}`} width={1200} height={900} className="w-full h-auto object-contain" unoptimized />
                 )}
