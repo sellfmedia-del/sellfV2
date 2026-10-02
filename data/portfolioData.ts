@@ -11,6 +11,21 @@ export type PortfolioItem = {
   gallery?: string[]; 
 };
 
+export const portfolioVimeoVideos = {
+  batch1: [
+    "https://vimeo.com/1232376520",
+    "https://vimeo.com/1232376543",
+    "https://vimeo.com/1232376495",
+    "https://vimeo.com/1232376545",
+    "https://vimeo.com/1232376552",
+    "https://vimeo.com/1232376541",
+    "https://vimeo.com/1232376534",
+    "https://vimeo.com/1232376525",
+    "https://vimeo.com/1232376515",
+    "https://vimeo.com/1232376509",
+  ],
+} as const;
+
 export const portfolioVideos = {
   umuOfficial: "https://cdn.sellfmedia.workers.dev/portfolio/umu-official_2oJLs2EL.mp4",
   daysBy1: "https://cdn.sellfmedia.workers.dev/portfolio/daysby1.mp4",
