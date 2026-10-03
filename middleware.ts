@@ -42,6 +42,34 @@ const legacyRedirectMap: Record<string, string> = {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Engage Admin is an internal, locale-independent application.
+  // Protect it before public-site locale redirects run.
+  if (pathname === '/engage/admin' || pathname.startsWith('/engage/admin/')) {
+    const adminUser = process.env.ENGAGE_ADMIN_USERNAME
+    const adminPassword = process.env.ENGAGE_ADMIN_PASSWORD
+
+    if (!adminUser || !adminPassword) {
+      return new NextResponse('Engage admin is not configured.', {status: 503})
+    }
+
+    const authorization = request.headers.get('authorization')
+    if (authorization?.startsWith('Basic ')) {
+      try {
+        const [username, password] = atob(authorization.slice(6)).split(':')
+        if (username === adminUser && password === adminPassword) {
+          return NextResponse.next()
+        }
+      } catch {
+        // Invalid basic-auth payload falls through to the challenge below.
+      }
+    }
+
+    return new NextResponse('Authentication required.', {
+      status: 401,
+      headers: {'WWW-Authenticate': 'Basic realm="Sellf Engage Admin", charset="UTF-8"'},
+    })
+  }
+
   // Sanity Studio is an internal, locale-independent application.
   // Keep its base path and nested tool routes out of the public-site redirects.
   if (pathname === '/engage-studio' || pathname.startsWith('/engage-studio/')) {
