@@ -1,56 +1,40 @@
 name: Deploy Sellf Engage Studio
+
 on:
+  workflow_dispatch:
   push:
     branches:
       - codex/engage-foundation
     paths:
+      - "engage-studio/**"
+      - "sanity/engage/**"
       - ".github/workflows/deploy-engage-studio.yml"
+      - "package.json"
+
 concurrency:
-  group: publish-iamlovein-showcase
-  cancel-in-progress: false
+  group: deploy-sellf-engage-studio
+  cancel-in-progress: true
+
 jobs:
-  publish:
-    name: Publish IAMLOVEIN showcase to Sanity
+  deploy:
+    name: Deploy Engage Studio
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/setup-node@v4
+      - name: Check out Engage branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Upload cover and publish requested showcase
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Deploy Studio to Sanity
+        working-directory: engage-studio
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-        run: |
-          node --input-type=commonjs <<'NODE'
-          (async () => {
-          const assert = require('node:assert/strict');
-          const token = process.env.SANITY_AUTH_TOKEN;
-          assert(token, 'Missing Sanity credential');
-          const base = 'https://qozgfxrm.api.sanity.io/v2026-03-05';
-          const headers = {Authorization: 'Bearer ' + token};
-          const doc = {"_id":"engage-showcase-iamlovein-700-roi","_type":"engageShowcase","title_tr":"İAMLOVEİN: Bir ayda %700 ROI","slug":{"_type":"slug","current":"iamlovein-bir-ayda-700-roi"},"summary_tr":"Romanya, Bulgaristan ve Bosna-Hersek’e açılan İAMLOVEİN, ilk haftada 1,3 milyon TL ciro elde etti; bir ayda %700 ROI’ye ulaştı.","publishedAt":"2026-10-12T08:20:17.875Z","featured":false,"clientName":"İAMLOVEİN","format":"article","layoutPreset":"metricFirst","cardStyle":"wide","metrics":[{"_key":"roi","_type":"object","value":"%700","label_tr":"Bir ayda ROI"},{"_key":"revenue","_type":"object","value":"1,3 milyon TL","label_tr":"İlk haftada ciro"},{"_key":"stock","_type":"object","value":"%100","label_tr":"İlk haftada tükenen stok"}],"body_tr":[{"_key":"heading0","_type":"block","style":"h2","markDefs":[],"children":[{"_key":"heading0span","_type":"span","marks":[],"text":"Durum"}]},{"_key":"text0","_type":"block","style":"normal","markDefs":[],"children":[{"_key":"text0span","_type":"span","marks":[],"text":"İAMLOVEİN, Türkiye’de yoğun rekabetin ve daralan marjların büyümeyi zorlaştırdığı bir e-ticaret markasıydı. Büyüme alanını doymuş iç pazarın dışında aradık."}]},{"_key":"heading1","_type":"block","style":"h2","markDefs":[],"children":[{"_key":"heading1span","_type":"span","marks":[],"text":"Yaklaşım"}]},{"_key":"text1","_type":"block","style":"normal","markDefs":[],"children":[{"_key":"text1span","_type":"span","marks":[],"text":"Markayı Romanya, Bulgaristan ve Bosna-Hersek’e taşırken, talep yaratmadan önce siparişleri karşılayacak fulfillment altyapısını kurduk. Ardından Bükreş sokaklarındaki QR kodlu fiziksel ürün yerleştirmelerini, 50 mikro ve nano influencer’ın içerikleriyle birleştirerek Threads, X ve TikTok’ta organik bir yayılım döngüsü oluşturduk. Konuma göre kurguladığımız satış hunileri ve lansman indirimleriyle bu etkileşimi doğrudan satın almaya yönlendirdik."}]},{"_key":"heading2","_type":"block","style":"h2","markDefs":[],"children":[{"_key":"heading2span","_type":"span","marks":[],"text":"Sonuç"}]},{"_key":"text2","_type":"block","style":"normal","markDefs":[],"children":[{"_key":"text2span","_type":"span","marks":[],"text":"İlk haftada 1,3 milyon TL ciro elde edildi; stok tamamen tükendi. Talep tedarikten hızlı büyüdü: Kampanyadan önce hazırladığımız teslimat altyapısının ardından, büyümenin bir sonraki sınırı stok oldu."}]},{"_key":"heading3","_type":"block","style":"h2","markDefs":[],"children":[{"_key":"heading3span","_type":"span","marks":[],"text":"Genel çıkarım"}]},{"_key":"text3","_type":"block","style":"normal","markDefs":[],"children":[{"_key":"text3span","_type":"span","marks":[],"text":"Bu vaka, ses çıkarmadan önce talebi satışa ve teslimata bağlayan sistemi kurmanın neden belirleyici olduğunu gösteriyor."}]}]};
-          async function json(url, options) {
-            const response = await fetch(url, options);
-            if (!response.ok) throw new Error('Sanity request failed: HTTP ' + response.status);
-            return response.json();
-          }
-          const query = '*[_type=="engageShowcase" && (_id==$id || slug.current==$slug)]';
-          const url = base + '/data/query/production?query=' + encodeURIComponent(query) + '&$id=' + encodeURIComponent(JSON.stringify(doc._id)) + '&$slug=' + encodeURIComponent(JSON.stringify(doc.slug.current));
-          const existing = (await json(url, {headers})).result;
-          assert.equal(existing.length, 0, 'Showcase already exists; refusing overwrite');
-          const source = await fetch('https://cdn.sellfmedia.workers.dev/blog/showcase42.png');
-          assert(source.ok, 'Cover download failed');
-          const bytes = Buffer.from(await source.arrayBuffer());
-          assert(bytes.length > 1000 && bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])), 'Invalid PNG');
-          const asset = (await json(base + '/assets/images/production?filename=showcase42.png', {method:'POST', headers:{...headers,'Content-Type':'image/png'},body:bytes})).document;
-          assert(asset && asset._id, 'Cover upload failed');
-          doc.coverImage = {_type:'image',asset:{_type:'reference',_ref:asset._id}};
-          doc.seo = {_type:'engageSeo', title_tr:doc.title_tr, description_tr:doc.summary_tr, image:doc.coverImage, noIndex:false};
-          await json(base + '/data/mutate/production?returnDocuments=true', {method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({mutations:[{create:doc}]})});
-          const saved = (await json(url,{headers})).result;
-          assert.equal(saved.length,1);
-          for(const key of Object.keys(doc)) assert.deepEqual(saved[0][key],doc[key], 'Content differs: ' + key);
-          console.log('Published and verified: ' + doc._id + ' | ' + doc.title_tr);
-          })().catch(error => { console.error(error.message); process.exit(1); });
-          NODE
+        run: npx sanity deploy --yes --title "Sellf Engage" --url sellf-engage
