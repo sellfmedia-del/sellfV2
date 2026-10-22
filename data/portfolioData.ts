@@ -16,6 +16,7 @@ export const portfolioVideos = {
   qasheVid2: "https://cdn.sellfmedia.workers.dev/portfolio/qashevid2.mp4",
   qasheVid3: "https://cdn.sellfmedia.workers.dev/portfolio/qashevid3.mp4",
   qasheVid4: "https://cdn.sellfmedia.workers.dev/portfolio/qashevid4.mp4",
+  badBearSeasonTrailer: "https://vimeo.com/1238521833",
   vimeo1: "https://vimeo.com/1232376520",
   vimeo2: "https://vimeo.com/1232376543",
   vimeo3: "https://vimeo.com/1232376495",
@@ -332,6 +333,12 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
   ],
 
   "Content": [
+    {
+      id: "content-bad-bear-season-trailer",
+      title: { tr: "Bad Bear Season Trailer Shoot", en: "Bad Bear Season Trailer Shoot" },
+      type: "video",
+      url: portfolioVideos.badBearSeasonTrailer
+    },
     {
       id: "content-vimeo-1",
       title: { tr: "Video Çalışması 01", en: "Video Work 01" },
