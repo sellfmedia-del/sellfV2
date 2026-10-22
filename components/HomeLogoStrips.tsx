@@ -21,6 +21,7 @@ const logoRow2 = [
   "https://cdn.sellfmedia.workers.dev/essentials/logonarpos.png",
   "https://cdn.sellfmedia.workers.dev/essentials/logonutralen.png",
   "https://cdn.sellfmedia.workers.dev/essentials/logoshevec.png",
+  "/logos/bad-bear-transparent.png",
   "https://cdn.sellfmedia.workers.dev/essentials/logophilips.png",
   "https://cdn.sellfmedia.workers.dev/essentials/logophysio.png",
   "https://cdn.sellfmedia.workers.dev/essentials/logoqashe.png",
