@@ -197,6 +197,22 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Designs": [
     {
+      id: "pelin-demir-bodrum-loft",
+      title: { tr: "Bodrum Loft - Pelin Demir", en: "Bodrum Loft - Pelin Demir" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-01.webp",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-02.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-03.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-04.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-05.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-06.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-07.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-08.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bodrum-loft-09.webp"
+      ]
+    },
+    {
       id: "pelin-demir-bahceden",
       title: { tr: "Bahçeden Logo & Design - Pelin Demir", en: "Bahçeden Logo & Design - Pelin Demir" },
       type: "image",
