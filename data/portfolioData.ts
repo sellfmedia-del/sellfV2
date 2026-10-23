@@ -197,6 +197,19 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Designs": [
     {
+      id: "pelin-demir-baby-carnet",
+      title: { tr: "Baby Carnet - Pelin Demir", en: "Baby Carnet - Pelin Demir" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-22-pelin-demir-baby-carnet-06.png",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-22-pelin-demir-baby-carnet-01.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-22-pelin-demir-baby-carnet-02.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-22-pelin-demir-baby-carnet-03.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-22-pelin-demir-baby-carnet-04.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-22-pelin-demir-baby-carnet-05.png"
+      ]
+    },
+    {
       id: "design-1",
       title: { tr: "Ambalaj Tasarımları", en: "Packaging Designs" },
       type: "image",
