@@ -197,6 +197,17 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Designs": [
     {
+      id: "pelin-demir-bahceden",
+      title: { tr: "Bahçeden Logo & Design - Pelin Demir", en: "Bahçeden Logo & Design - Pelin Demir" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bahceden-01.png",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bahceden-02.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bahceden-03.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bahceden-04.png"
+      ]
+    },
+    {
       id: "pelin-demir-baby-carnet",
       title: { tr: "Baby Carnet - Pelin Demir", en: "Baby Carnet - Pelin Demir" },
       type: "image",
