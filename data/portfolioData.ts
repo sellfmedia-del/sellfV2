@@ -358,6 +358,29 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Content": [
     {
+      id: "pelin-demir-bionnex-socials",
+      title: { tr: "Bionnex Socials - Pelin Demir", en: "Bionnex Socials - Pelin Demir" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-01.png",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-02.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-03.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-04.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-05.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-06.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-07.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-08.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-09.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-10.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-11.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-12.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-13.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-14.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-bionnex-15.png"
+      ]
+    },
+
+    {
       id: "content-bad-bear-socials",
       title: { tr: "Bad Bear Socials", en: "Bad Bear Socials" },
       type: "image",
