@@ -197,6 +197,25 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Designs": [
     {
+      id: "pelin-demir-pino",
+      title: { tr: "Pino'nun rüyası - Pelin Demir", en: "Pino'nun rüyası - Pelin Demir" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-01.webp",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-02.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-03.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-04.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-05.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-06.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-07.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-08.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-09.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-10.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-11.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-pino-12.webp"
+      ]
+    },
+    {
       id: "pelin-demir-hangii",
       title: { tr: "Hangii IOS App - Pelin Demir", en: "Hangii IOS App - Pelin Demir" },
       type: "image",
