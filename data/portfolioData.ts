@@ -347,6 +347,17 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Content": [
     {
+      id: "content-bad-bear-socials",
+      title: { tr: "Bad Bear Socials", en: "Bad Bear Socials" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-bad-bear-socials-01.jpg",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-bad-bear-socials-02.jpg",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-bad-bear-socials-03.jpg",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-bad-bear-socials-04.jpg"
+      ]
+    },
+    {
       id: "content-bad-bear-season-trailer",
       title: { tr: "Bad Bear Season Trailer Shoot", en: "Bad Bear Season Trailer Shoot" },
       type: "video",
