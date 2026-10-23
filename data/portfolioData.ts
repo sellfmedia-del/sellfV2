@@ -197,6 +197,17 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Designs": [
     {
+      id: "sauce-up-packaging",
+      title: { tr: "Sauce Up Ambalaj Tasarımı", en: "Sauce Up Packaging Design" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-sauce-up-01.png",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-sauce-up-02.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-sauce-up-03.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-sauce-up-04.png"
+      ]
+    },
+    {
       id: "pelin-demir-pino",
       title: { tr: "Pino'nun rüyası - Pelin Demir", en: "Pino'nun rüyası - Pelin Demir" },
       type: "image",
