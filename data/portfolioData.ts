@@ -427,6 +427,28 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Content": [
     {
+      id: "pelin-demir-vio-watch-social",
+      title: { tr: "Vio Watch - Pelin Demir Social", en: "Vio Watch - Pelin Demir Social" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-01.webp",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-02.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-03.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-04.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-05.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-06.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-07.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-08.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-09.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-10.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-11.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-12.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-13.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-14.webp",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-vio-watch-15.webp"
+      ]
+    },
+    {
       id: "pelin-demir-bionnex-socials",
       title: { tr: "Bionnex Socials - Pelin Demir", en: "Bionnex Socials - Pelin Demir" },
       type: "image",
