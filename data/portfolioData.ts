@@ -197,6 +197,16 @@ export const portfolioData: Record<"Samples" | "Designs" | "Content", PortfolioI
 
   "Designs": [
     {
+      id: "pelin-demir-cumbali",
+      title: { tr: "Cumbalı Logo & Branding - Pelin Demir", en: "Cumbalı Logo & Branding - Pelin Demir" },
+      type: "image",
+      url: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-cumbali-01.png",
+      gallery: [
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-cumbali-02.png",
+        "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-pelin-demir-cumbali-03.png"
+      ]
+    },
+    {
       id: "pelin-demir-bodrum-loft",
       title: { tr: "Bodrum Loft - Pelin Demir", en: "Bodrum Loft - Pelin Demir" },
       type: "image",
