@@ -42,7 +42,7 @@ export function PartnerCard({partner, hasOffer = false, lang, small = false}: {p
       <p className={styles.categoryLabel}>{partner.categories.map((category) => t.categories[category]).filter(Boolean).join(' · ')}</p>
       <h3><Link href={`/${lang}/partners/${partner.slug}`}>{partner.name}</Link></h3>
       {partner.summary ? <p>{partner.summary}</p> : null}
-      <div className={styles.cardBottom}><span className={hasOffer ? styles.offerBadge : styles.quietBadge}>{hasOffer ? (partner.demo ? t.exampleOfferAvailable : t.offerAvailable) : t.introAvailable}</span><Link href={`/${lang}/partners/${partner.slug}`} className={styles.textLink}>{t.viewPartner}<span aria-hidden="true">↗</span></Link></div>
+      <div className={styles.cardBottom}><span className={hasOffer ? styles.offerBadge : styles.quietBadge}>{hasOffer ? (partner.demo ? t.exampleOfferAvailable : t.offerAvailable) : t.introAvailable}</span><Link href={`/${lang}/partners/${partner.slug}`} className={styles.textLink}>{t.viewPartner}<span aria-hidden="true">↗︎</span></Link></div>
     </div>
   </article>
 }

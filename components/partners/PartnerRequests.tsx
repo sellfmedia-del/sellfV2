@@ -16,7 +16,7 @@ export function PartnerRequestProvider({lang, partners, campaigns, children}: {l
 
 export function PartnerRequestButton({children, kind = 'intro', partnerId, campaignId, className}: {children: ReactNode; kind?: 'intro' | 'join'; partnerId?: string; campaignId?: string; className?: string}) {
   const open = useContext(RequestContext)
-  return <button type="button" className={className || styles.button} onClick={() => open?.({kind, partnerId, campaignId})}>{children}<span aria-hidden="true">↗</span></button>
+  return <button type="button" className={className || styles.button} onClick={() => open?.({kind, partnerId, campaignId})}>{children}<span aria-hidden="true">↗︎</span></button>
 }
 
 function RequestDialog({selection, lang, partners, campaigns, onClose, onGeneral}: {selection: RequestSelection; lang: PartnerLocale; partners: NetworkPartner[]; campaigns: PartnerCampaign[]; onClose: () => void; onGeneral: () => void}) {
@@ -66,7 +66,7 @@ function RequestDialog({selection, lang, partners, campaigns, onClose, onGeneral
         <label>{t.phone}<input name="phone" type="tel" autoComplete="tel" maxLength={80}/></label>
         {selection.kind === 'join' ? <label className={styles.fullField}>{t.companyWebsite} *<input name="website" type="url" required placeholder="https://" maxLength={500}/></label> : !selection.partnerId && partners.some((item) => !item.demo) ? <label className={styles.fullField}>{t.partner}<select name="partnerId" defaultValue=""><option value="">{t.matchingOption}</option>{partners.filter((item) => !item.demo).map((item) => <option key={item._id} value={item._id}>{item.name}</option>)}</select></label> : null}
         <label className={styles.fullField}>{selection.kind === 'join' ? t.expertise : t.need} *<textarea name="brief" required rows={4} maxLength={3000}/></label>
-        <label className={styles.consent}><input type="checkbox" name="consent" value="yes" required/><span>{t.consent} <Link href={`/${lang}/privacy-policy`} target="_blank" rel="noopener noreferrer">{t.privacy} ↗</Link></span></label>
+        <label className={styles.consent}><input type="checkbox" name="consent" value="yes" required/><span>{t.consent} <Link href={`/${lang}/privacy-policy`} target="_blank" rel="noopener noreferrer">{t.privacy} ↗︎</Link></span></label>
         <div className={styles.formActions}><button type="submit" className={styles.button} disabled={status === 'sending'}>{status === 'sending' ? t.sending : t.submit}<span aria-hidden="true">→</span></button><p role="status" aria-live="polite">{status === 'error' ? t.error : ''}</p></div>
       </form>
     </>}

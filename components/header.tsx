@@ -79,7 +79,7 @@ export default function Header() {
             <Link href={`${langPrefix}/portfolio`} className="hover:opacity-60 transition-opacity">{t.portfolio}</Link>
             <Link href={`${langPrefix}/engage`} className="hover:opacity-60 transition-opacity">{t.engage}</Link>
             <Link href={`${langPrefix}/about`} className="hover:opacity-60 transition-opacity">{t.about}</Link>
-            <Link href={`${langPrefix}/partners`} aria-current={isPartners ? "page" : undefined} className="hover:opacity-60 transition-opacity">{t.partners}{isPartners && <span aria-hidden="true" className="ml-1 text-[#6ea7d5]">↗</span>}</Link>
+            <Link href={`${langPrefix}/partners`} aria-current={isPartners ? "page" : undefined} className="hover:opacity-60 transition-opacity">{t.partners}{isPartners && <span aria-hidden="true" className="ml-1 text-[#6ea7d5]">↗︎</span>}</Link>
             <Link href={`${langPrefix}/blog`} className="hover:opacity-60 transition-opacity">{t.blog}</Link>
           </nav>
 
@@ -113,7 +113,7 @@ export default function Header() {
         </div>
       </header>
 
-      <div className={`fixed inset-0 z-[70] bg-[#0b0d0d] text-white transition-all duration-500 lg:hidden ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+      <div className={`fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-[#0b0d0d] text-white transition-all duration-500 lg:hidden ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
         <div className="sellf-container pt-28 pb-10 min-h-full flex flex-col justify-between">
           <nav className="flex flex-col border-t border-white/15">
             {[
