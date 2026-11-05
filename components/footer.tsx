@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, usePathname } from "next/navigation";
+import PartnersFooter from "./partners/PartnersFooter";
 
 const dict = {
   tr: {
@@ -33,6 +34,7 @@ export default function Footer() {
   const langPrefix = `/${currentLang}`;
 
   if (pathname?.includes("/engage")) return null;
+  if (pathname?.startsWith(`${langPrefix}/partners`)) return <PartnersFooter lang={currentLang}/>;
 
   return (
     <footer className="bg-[#0b0d0d] text-white border-t border-white/10">
@@ -48,6 +50,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-xs">
             <div className="flex flex-col gap-3">
               <Link href={`${langPrefix}/contact`} className="hover:text-white/55 transition-colors">{t.contact}</Link>
+              <Link href={`${langPrefix}/partners`} className="hover:text-white/55 transition-colors">{currentLang === "tr" ? "İş Ortaklarımız" : "Partners"}</Link>
               <Link href={`${langPrefix}/privacy-policy`} className="hover:text-white/55 transition-colors">{t.privacy}</Link>
               <Link href={`${langPrefix}/cookie-policy`} className="hover:text-white/55 transition-colors">{t.cookie}</Link>
             </div>

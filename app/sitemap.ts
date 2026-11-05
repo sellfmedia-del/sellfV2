@@ -24,6 +24,7 @@ const staticPaths = [
   "/engage/events",
   "/engage/content",
   "/engage/tools",
+  "/partners",
   "/blog",
   "/contact",
   "/privacy-policy",
@@ -87,6 +88,15 @@ function languageAlternates(path: string) {
       en: `${baseUrl}/en${path}`,
     },
   };
+}
+
+async function getPartnerSlugs(): Promise<BlogSlugEntry[]> {
+  try {
+    return await client.fetch(`*[_type == "networkPartner" && active != false && seo.noIndex != true && defined(slug.current)]{"slug": slug.current, "updatedAt": coalesce(_updatedAt, _createdAt)}`, {}, {cache: "no-store"});
+  } catch (error) {
+    console.error("sitemap.ts: Partner slug fetch başarısız oldu", error);
+    return [];
+  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -156,6 +166,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "monthly",
         priority: 0.65,
       });
+    }
+  }
+
+  const partnerSlugs = await getPartnerSlugs();
+  for (const locale of locales) {
+    for (const {slug, updatedAt} of partnerSlugs) {
+      const path = `/partners/${slug}`;
+      entries.push({url: `${baseUrl}/${locale}${path}`, lastModified: new Date(updatedAt), alternates: languageAlternates(path), changeFrequency: "monthly", priority: 0.65});
     }
   }
 

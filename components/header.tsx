@@ -8,6 +8,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 const dict = {
   tr: {
     about: "Hakkımızda",
+    partners: "İş Ortaklarımız",
     services: "Neler Yapıyoruz",
     portfolio: "Portfolyo",
     engage: "Engage",
@@ -18,6 +19,7 @@ const dict = {
   },
   en: {
     about: "About Us",
+    partners: "Partners",
     services: "What We Do",
     portfolio: "Portfolio",
     engage: "Engage",
@@ -38,6 +40,7 @@ export default function Header() {
   const t = dict[currentLang];
   const langPrefix = `/${currentLang}`;
   const isEngage = pathname?.includes("/engage") ?? false;
+  const isPartners = pathname?.startsWith(`${langPrefix}/partners`) ?? false;
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24);
@@ -59,13 +62,13 @@ export default function Header() {
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-[80] transition-all duration-300 ${isEngage ? (isScrolled ? "pt-2" : "pt-0") : isScrolled ? "pt-3" : "pt-5 md:pt-6"}`}>
+      <header className={`fixed inset-x-0 top-0 z-[80] transition-all duration-300 ${isEngage ? (isScrolled ? "pt-2" : "pt-0") : isScrolled ? "pt-3" : isPartners ? "pt-9 md:pt-10" : "pt-5 md:pt-6"}`}>
         <div className={`sellf-container flex items-center justify-between transition-all duration-300 ${isEngage ? (isScrolled ? "h-14 rounded-[14px] px-3 text-white md:px-4" : "h-20 rounded-none border-b border-white/10 px-0 text-white") : "h-14 rounded-full px-4 md:px-5"} ${
           isEngage && !isScrolled
             ? "bg-transparent"
             : isScrolled
             ? "bg-[#0b0d0d]/92 text-white shadow-[0_12px_40px_rgba(0,0,0,.18)] backdrop-blur-xl border border-white/10"
-            : "bg-[#0b0d0d]/78 text-white backdrop-blur-md border border-white/10"
+            : isPartners ? "bg-[#0b0d0d] text-white border border-white/10" : "bg-[#0b0d0d]/78 text-white backdrop-blur-md border border-white/10"
         }`}>
           <Link href={langPrefix} aria-label="Sellf Media" onClick={() => setIsMenuOpen(false)} className={isEngage ? `flex shrink-0 items-center transition-[gap] duration-300 ${isScrolled ? "gap-2" : "gap-3"}` : "relative h-7 w-[74px] md:w-[82px] shrink-0"}>
             {isEngage ? <><span className={`relative block shrink-0 transition-[width,height] duration-300 ${isScrolled ? "h-7 w-7" : "h-9 w-9"}`}><Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority sizes="36px" className="object-contain" /></span><span className={`border-l border-white/30 font-semibold tracking-[.22em] transition-all duration-300 ${isScrolled ? "pl-2 text-[9px]" : "pl-3 text-[10px]"}`}>ENGAGE</span></> : <Image src="/logo-beyaz.png" alt="Sellf Media Logo" fill priority className="object-contain object-left" />}
@@ -76,6 +79,7 @@ export default function Header() {
             <Link href={`${langPrefix}/portfolio`} className="hover:opacity-60 transition-opacity">{t.portfolio}</Link>
             <Link href={`${langPrefix}/engage`} className="hover:opacity-60 transition-opacity">{t.engage}</Link>
             <Link href={`${langPrefix}/about`} className="hover:opacity-60 transition-opacity">{t.about}</Link>
+            <Link href={`${langPrefix}/partners`} aria-current={isPartners ? "page" : undefined} className="hover:opacity-60 transition-opacity">{t.partners}{isPartners && <span aria-hidden="true" className="ml-1 text-[#6ea7d5]">↗</span>}</Link>
             <Link href={`${langPrefix}/blog`} className="hover:opacity-60 transition-opacity">{t.blog}</Link>
           </nav>
 
@@ -117,6 +121,7 @@ export default function Header() {
               [t.portfolio, `${langPrefix}/portfolio`],
               [t.engage, `${langPrefix}/engage`],
               [t.about, `${langPrefix}/about`],
+              [t.partners, `${langPrefix}/partners`],
               [t.blog, `${langPrefix}/blog`],
               [t.contact, `${langPrefix}/contact`],
             ].map(([label, href], i) => (
