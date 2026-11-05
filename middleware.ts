@@ -47,6 +47,9 @@ export function middleware(request: NextRequest) {
   if (pathname === '/engage-studio' || pathname.startsWith('/engage-studio/')) {
     return NextResponse.next()
   }
+  if (pathname === '/partners-studio' || pathname.startsWith('/partners-studio/')) {
+    return NextResponse.next()
+  }
 
   if (legacyRedirectMap[pathname]) {
     request.nextUrl.pathname = legacyRedirectMap[pathname]
