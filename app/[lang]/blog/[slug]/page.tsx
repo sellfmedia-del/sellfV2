@@ -210,7 +210,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
         </div>
       )}
 
-      <article className="max-w-2xl mx-auto px-6 prose prose-lg prose-zinc">
+      <article className="max-w-2xl mx-auto px-6 prose prose-lg prose-zinc [&_a[href^='https://www.sellfmedia.com/'][href*='/services/']]:text-[#1f5f9f] [&_a[href^='https://www.sellfmedia.com/'][href*='/services/']]:underline [&_a[href^='https://www.sellfmedia.com/'][href*='/services/']]:underline-offset-4">
         {post.content ? (
           <PortableText value={post.content} components={portableTextComponents} />
         ) : (
