@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 // ===== 1. SÖZLÜK MİMARİSİ (DICTIONARY) =====
@@ -8,6 +9,7 @@ const dictionary = {
   tr: {
     mainTitle1: "KANITIMIZ,",
     mainTitle2: "İŞLERİMİZDİR.",
+    readCaseStudy: "Vaka Yazısını Oku",
     items: {
       badbear: {
         tag: "UÇTAN UCA E-TİCARET OPERASYONU",
@@ -217,6 +219,7 @@ const dictionary = {
   en: {
     mainTitle1: "THE PROOF IS IN",
     mainTitle2: "OUR WORK.",
+    readCaseStudy: "Read the Case Study",
     items: {
       badbear: {
         tag: "END-TO-END E-COMMERCE OPERATIONS",
@@ -434,6 +437,7 @@ interface GridConfig {
   schematicType: "funnel" | "loop" | "matrix" | "steps" | "flow" | "dual";
   logoUrl: string | null;
   bgImage: string | null;
+  caseStudySlug?: string;
 }
 
 const gridLayoutData: GridConfig[] = [
@@ -485,6 +489,7 @@ const gridLayoutData: GridConfig[] = [
   { 
     id: "goldium", 
     title: "GOLDİUM", 
+    caseStudySlug: "67-revenue-growth-at-goldium-build-the-foundation-then-accelerate",
     tagColor: "bg-amber-50 text-amber-600 border-amber-200", 
     gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]", 
     schematicType: "flow",
@@ -512,6 +517,7 @@ const gridLayoutData: GridConfig[] = [
   { 
     id: "philips", 
     title: "PHİLİPS NAM", 
+    caseStudySlug: "usd12-million-in-additional-gross-profit-for-philips-nam",
     tagColor: "bg-sky-50 text-sky-600 border-sky-200", 
     gridClass: "lg:col-span-2 lg:row-span-2 min-h-[460px]", 
     schematicType: "dual",
@@ -602,6 +608,7 @@ const gridLayoutData: GridConfig[] = [
   {
     id: "asceinwest",
     title: "INWEST",
+    caseStudySlug: "try-130m-in-revenue-from-24-villas-three-channels-one-sales-system",
     tagColor: "bg-orange-50 text-orange-700 border-orange-200",
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "flow",
@@ -843,6 +850,17 @@ export default function BentoGrid() {
                         <span key={idx} className="text-[11px] font-bold tracking-tight text-black">{metric}</span>
                       ))}
                     </div>
+
+                    {config.caseStudySlug && (
+                      <Link
+                        href={`/${currentLang}/blog/${config.caseStudySlug}`}
+                        className="mt-3 inline-flex min-h-9 w-fit items-center gap-2 rounded-full bg-sellf-primary/[.07] px-3 text-[10px] font-semibold uppercase tracking-[.1em] text-sellf-primary transition-colors hover:bg-sellf-primary/[.13] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sellf-primary"
+                      >
+                        {t.readCaseStudy}
+                        <span className="sr-only"> ({config.title})</span>
+                        <span aria-hidden="true">→</span>
+                      </Link>
+                    )}
                   </div>
                 </div>
               </article>
