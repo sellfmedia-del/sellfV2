@@ -9,6 +9,13 @@ const dictionary = {
     mainTitle1: "KANITIMIZ,",
     mainTitle2: "İŞLERİMİZDİR.",
     items: {
+      badbear: {
+        tag: "UÇTAN UCA E-TİCARET OPERASYONU",
+        shortDesc: "Düşen ciroyu toparlamak için e-ticaret operasyonunu baştan ele aldık.",
+        longDesc: "Bad Bear’ın hedefi, cirosunu geçen yılın son çeyreğindeki seviyenin üzerine çıkarmaktı. Ticimax altyapısı, ödeme entegrasyonu, stok, maliyet ve ürün fiyatlama yönetiminin yanı sıra influencer pazarlaması, SEO, sosyal medya, dijital reklamlar ve pazaryeri yönetimini üstlendik. Önce aksaklıkları giderdik, ardından tüm kanalları performans ve verimlilik odağıyla birlikte yönettik. Bazı kampanyalarda ROAS 163×’e ulaştı. Reklam bazında ölçülen en düşük ROAS 9× oldu. Trafik ve mağaza görüntülenmesi dahil takip edilen diğer metriklerde artış en az %35 oldu.",
+        metrics: ["Ekim–Kasım %1.300 ROI", "+%15 Kârlılık", "163×’e Varan Kampanya ROAS’ı"],
+        schematicData: ["Altyapı ve Ödeme", "Stok, Maliyet ve Fiyatlama", "Pazarlama ve Pazaryerleri"]
+      },
       evepack: {
         tag: "FUNNEL REYAPILANDIRMA",
         shortDesc: "“Bütçe yanıyordu. Sonuç gelmiyordu.”",
@@ -211,6 +218,13 @@ const dictionary = {
     mainTitle1: "THE PROOF IS IN",
     mainTitle2: "OUR WORK.",
     items: {
+      badbear: {
+        tag: "END-TO-END E-COMMERCE OPERATIONS",
+        shortDesc: "We overhauled e-commerce operations to help Bad Bear recover lost sales.",
+        longDesc: "Bad Bear wanted to bring revenue above the previous year’s fourth-quarter level. We took over the Ticimax platform, payment integration, inventory, costs and product pricing, alongside influencer marketing, SEO, social media, digital advertising and marketplace management. After fixing operational issues, we ran these functions together with a focus on performance and efficiency. Some campaigns reached 163× ROAS. The lowest ROAS recorded for an individual ad was 9×. Other tracked metrics, including traffic and store views, improved by at least 35%.",
+        metrics: ["1,300% ROI in Oct–Nov", "+15% Profitability", "Up to 163× Campaign ROAS"],
+        schematicData: ["Platform and Payments", "Inventory, Costs and Pricing", "Marketing and Marketplaces"]
+      },
       evepack: {
         tag: "FUNNEL RECONSTRUCTION",
         shortDesc: "“The budget was burning. No results were coming.”",
@@ -413,7 +427,7 @@ const dictionary = {
 
 // ===== 2. FERAH / AÇIK RENKLİ STRÜKTÜR KONFİGÜRASYONU (GÖRSEL VE LOGOLAR DAHİL) =====
 interface GridConfig {
-  id: "evepack" | "canias" | "iamlovein" | "qashe" | "goldium" | "fizyohol" | "elitehair" | "philips" | "colins" | "sfera" | "greymanner" | "ascegyo" | "gkc" | "gotradego" | "monstera" | "social2024" | "beautycommerce" | "asceinwest" | "schnitzel" | "sermandbarr" | "lealkaravan" | "wyndhamgrand" | "softhotels" | "nutralen" | "lionsdarwin" | "farmhouse" | "muratbey" | "uko";
+  id: "badbear" | "evepack" | "canias" | "iamlovein" | "qashe" | "goldium" | "fizyohol" | "elitehair" | "philips" | "colins" | "sfera" | "greymanner" | "ascegyo" | "gkc" | "gotradego" | "monstera" | "social2024" | "beautycommerce" | "asceinwest" | "schnitzel" | "sermandbarr" | "lealkaravan" | "wyndhamgrand" | "softhotels" | "nutralen" | "lionsdarwin" | "farmhouse" | "muratbey" | "uko";
   title: string;
   tagColor: string;
   gridClass: string;
@@ -423,6 +437,15 @@ interface GridConfig {
 }
 
 const gridLayoutData: GridConfig[] = [
+  {
+    id: "badbear",
+    title: "Bad Bear",
+    tagColor: "bg-zinc-100 text-zinc-700 border-zinc-300",
+    gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
+    schematicType: "flow",
+    logoUrl: "/logos/bad-bear-transparent.png",
+    bgImage: "https://cdn.sellfmedia.workers.dev/portfolio/2026-10-23-bad-bear-socials-01.jpg"
+  },
   { 
     id: "evepack", 
     title: "EVEPACK", 
