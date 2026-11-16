@@ -437,7 +437,7 @@ interface GridConfig {
   schematicType: "funnel" | "loop" | "matrix" | "steps" | "flow" | "dual";
   logoUrl: string | null;
   bgImage: string | null;
-  caseStudySlug?: string;
+  caseStudyPath?: `/blog/${string}` | `/engage/showcases/${string}`;
 }
 
 const gridLayoutData: GridConfig[] = [
@@ -471,6 +471,7 @@ const gridLayoutData: GridConfig[] = [
   { 
     id: "iamlovein", 
     title: "İAMLOVEİN", 
+    caseStudyPath: "/engage/showcases/iamlovein-bir-ayda-700-roi",
     tagColor: "bg-emerald-50 text-emerald-600 border-emerald-200", 
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]", 
     schematicType: "steps",
@@ -489,7 +490,7 @@ const gridLayoutData: GridConfig[] = [
   { 
     id: "goldium", 
     title: "GOLDİUM", 
-    caseStudySlug: "67-revenue-growth-at-goldium-build-the-foundation-then-accelerate",
+    caseStudyPath: "/blog/67-revenue-growth-at-goldium-build-the-foundation-then-accelerate",
     tagColor: "bg-amber-50 text-amber-600 border-amber-200", 
     gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]", 
     schematicType: "flow",
@@ -517,7 +518,7 @@ const gridLayoutData: GridConfig[] = [
   { 
     id: "philips", 
     title: "PHİLİPS NAM", 
-    caseStudySlug: "usd12-million-in-additional-gross-profit-for-philips-nam",
+    caseStudyPath: "/blog/usd12-million-in-additional-gross-profit-for-philips-nam",
     tagColor: "bg-sky-50 text-sky-600 border-sky-200", 
     gridClass: "lg:col-span-2 lg:row-span-2 min-h-[460px]", 
     schematicType: "dual",
@@ -608,7 +609,7 @@ const gridLayoutData: GridConfig[] = [
   {
     id: "asceinwest",
     title: "INWEST",
-    caseStudySlug: "try-130m-in-revenue-from-24-villas-three-channels-one-sales-system",
+    caseStudyPath: "/blog/try-130m-in-revenue-from-24-villas-three-channels-one-sales-system",
     tagColor: "bg-orange-50 text-orange-700 border-orange-200",
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "flow",
@@ -618,6 +619,7 @@ const gridLayoutData: GridConfig[] = [
   {
     id: "schnitzel",
     title: "SCHNITZEL LANDMANN",
+    caseStudyPath: "/engage/showcases/schnitzel-landmann-franchise-buyume-sistemi",
     tagColor: "bg-red-50 text-red-700 border-red-200",
     gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]",
     schematicType: "dual",
@@ -636,6 +638,7 @@ const gridLayoutData: GridConfig[] = [
   {
     id: "lealkaravan",
     title: "LEAL KARAVAN / DETHLEFFS",
+    caseStudyPath: "/engage/showcases/leal-dethleffs-entegre-buyume-sistemi",
     tagColor: "bg-teal-50 text-teal-700 border-teal-200",
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "steps",
@@ -663,6 +666,7 @@ const gridLayoutData: GridConfig[] = [
   {
     id: "nutralen",
     title: "NUTRALEN",
+    caseStudyPath: "/engage/showcases/nutralen-entegre-e-ticaret-buyumesi",
     tagColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
     gridClass: "lg:col-span-1 lg:row-span-1 min-h-[240px]",
     schematicType: "flow",
@@ -699,6 +703,7 @@ const gridLayoutData: GridConfig[] = [
   {
     id: "uko",
     title: "UKO",
+    caseStudyPath: "/engage/showcases/uko-uctan-uca-dijital-donusum",
     tagColor: "bg-zinc-100 text-zinc-700 border-zinc-300",
     gridClass: "lg:col-span-2 lg:row-span-1 min-h-[240px]",
     schematicType: "flow",
@@ -851,9 +856,9 @@ export default function BentoGrid() {
                       ))}
                     </div>
 
-                    {config.caseStudySlug && (
+                    {config.caseStudyPath && (
                       <Link
-                        href={`/${currentLang}/blog/${config.caseStudySlug}`}
+                        href={`/${currentLang}${config.caseStudyPath}`}
                         className="mt-3 inline-flex min-h-9 w-fit items-center gap-2 rounded-full bg-sellf-primary/[.07] px-3 text-[10px] font-semibold uppercase tracking-[.1em] text-sellf-primary transition-colors hover:bg-sellf-primary/[.13] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sellf-primary"
                       >
                         {t.readCaseStudy}
